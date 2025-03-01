@@ -1,5 +1,5 @@
 
-import Button from '../ui/Button';
+import Button from '../ui/button';
 import { ArrowDown } from 'lucide-react';
 
 export default function Hero() {
@@ -36,7 +36,7 @@ export default function Hero() {
             mit ganzheitlichen Heilmethoden verbindet – für nachhaltiges Wohlbefinden und neue Vitalität.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button size="lg" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
+            <Button variant="default" size="lg" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
               Termin vereinbaren
             </Button>
             <Button variant="outline" size="lg" onClick={() => document.getElementById('therapy')?.scrollIntoView({ behavior: 'smooth' })}>
