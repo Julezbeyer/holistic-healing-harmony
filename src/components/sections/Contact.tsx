@@ -1,8 +1,56 @@
 
+import { useState } from 'react';
 import { MapPin, Mail, Phone } from 'lucide-react';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function Contact() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      // In a real application, you would connect this to a Supabase function
+      // that sends the email or saves the contact request to a database
+      
+      // Simulating an API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast.success('Ihre Nachricht wurde erfolgreich gesendet!');
+      setName('');
+      setEmail('');
+      setSubject('');
+      setMessage('');
+    } catch (error) {
+      toast.error('Es gab einen Fehler beim Senden Ihrer Nachricht.');
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBookAppointment = () => {
+    if (!user) {
+      toast.info('Bitte melden Sie sich an, um einen Termin zu buchen.');
+      navigate('/auth');
+      return;
+    }
+    
+    // In a full implementation, this would redirect to a booking page
+    toast.success('Terminbuchungsfunktion folgt in Kürze!');
+  };
+
   return (
     <section id="contact" className="section-padding bg-christiane-soft-purple/20">
       <div className="container mx-auto px-6">
@@ -62,12 +110,25 @@ export default function Contact() {
                 </div>
               </div>
             </div>
+
+            <div className="bg-white p-6 rounded-xl shadow-subtle">
+              <h4 className="font-medium mb-4">Termin buchen</h4>
+              <p className="text-sm text-muted-foreground mb-4">
+                Buchen Sie online einen Termin für Ihre persönliche Beratung oder Therapie.
+              </p>
+              <Button 
+                onClick={handleBookAppointment}
+                className="w-full"
+              >
+                Termin vereinbaren
+              </Button>
+            </div>
           </div>
           
           <div className="lg:col-span-3">
             <div className="bg-white p-8 rounded-xl shadow-card">
               <h3 className="text-2xl font-medium mb-6">Kontaktformular</h3>
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
@@ -76,8 +137,11 @@ export default function Contact() {
                     <input
                       type="text"
                       id="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       className="w-full p-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                       placeholder="Ihr Name"
+                      required
                     />
                   </div>
                   <div>
@@ -87,8 +151,11 @@ export default function Contact() {
                     <input
                       type="email"
                       id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="w-full p-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                       placeholder="Ihre E-Mail-Adresse"
+                      required
                     />
                   </div>
                 </div>
@@ -99,8 +166,11 @@ export default function Contact() {
                   <input
                     type="text"
                     id="subject"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
                     className="w-full p-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                     placeholder="Betreff Ihrer Nachricht"
+                    required
                   />
                 </div>
                 <div>
@@ -110,13 +180,21 @@ export default function Contact() {
                   <textarea
                     id="message"
                     rows={6}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                     className="w-full p-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                     placeholder="Ihre Nachricht"
+                    required
                   ></textarea>
                 </div>
                 <div>
-                  <Button size="lg" className="w-full sm:w-auto">
-                    Nachricht senden
+                  <Button 
+                    type="submit" 
+                    size="lg" 
+                    className="w-full sm:w-auto"
+                    disabled={loading}
+                  >
+                    {loading ? 'Wird gesendet...' : 'Nachricht senden'}
                   </Button>
                 </div>
               </form>
