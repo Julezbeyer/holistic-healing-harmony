@@ -2,10 +2,11 @@
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
+import { User } from '@supabase/supabase-js';
 
 interface AuthUser {
   id: string;
-  email: string;
+  email: string | null; // Changed from required to optional to match Supabase User type
 }
 
 interface AuthContextType {
@@ -27,7 +28,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      setUser(session?.user ?? null);
+      if (session?.user) {
+        const authUser: AuthUser = {
+          id: session.user.id,
+          email: session.user.email
+        };
+        setUser(authUser);
+      } else {
+        setUser(null);
+      }
       setLoading(false);
     });
 
@@ -35,7 +44,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
-        setUser(session?.user ?? null);
+        if (session?.user) {
+          const authUser: AuthUser = {
+            id: session.user.id,
+            email: session.user.email
+          };
+          setUser(authUser);
+        } else {
+          setUser(null);
+        }
         setLoading(false);
       }
     );
