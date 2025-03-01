@@ -1,5 +1,4 @@
-
-import { Brain, CheckCheck, Flower, HeartPulse, Stethoscope, Therapy } from 'lucide-react';
+import { Brain, CheckCheck, Flower, HeartPulse, Stethoscope, Leaf } from 'lucide-react';
 import TestimonialCard from '../ui/TestimonialCard';
 
 export default function TherapyApproaches() {
@@ -47,7 +46,7 @@ export default function TherapyApproaches() {
 
           <div className="bg-christiane-soft-green/40 rounded-xl p-8 md:p-10">
             <div className="w-14 h-14 flex items-center justify-center rounded-full bg-white mb-6">
-              <Therapy className="h-7 w-7 text-christiane-medium-blue" />
+              <Leaf className="h-7 w-7 text-christiane-medium-blue" />
             </div>
             <h3 className="text-2xl font-medium mb-4">Ganzheitliche Therapie</h3>
             <p className="text-pretty mb-6">

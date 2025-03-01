@@ -1,5 +1,4 @@
-
-import { Brain, HeartPulse, Plant } from 'lucide-react';
+import { Brain, HeartPulse, Flower } from 'lucide-react';
 import FeatureCard from '../ui/FeatureCard';
 
 export default function About() {
@@ -29,7 +28,7 @@ export default function About() {
             description="Mein Ansatz berücksichtigt die psychologischen Hintergründe von Beschwerden, die oft zu körperlichen Symptomen führen können."
           />
           <FeatureCard
-            icon={Plant}
+            icon={Flower}
             title="Integrativer Ansatz"
             description="Ich kombiniere das Beste aus Schulmedizin und alternativen Heilmethoden für eine umfassende Gesundheit und nachhaltige Vitalität."
           />
