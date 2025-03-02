@@ -16,16 +16,16 @@ export default function Hero() {
           alt="Sonnenstrahlen durch den Wald - symbolisiert Heilung und Wohlbefinden"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-christiane-soft-blue/70 via-transparent to-christiane-soft-purple/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-200/70 via-transparent to-purple-200/50"></div>
       </div>
       
       {/* Decorative circles */}
-      <div className="absolute top-[10%] right-[10%] w-60 h-60 bg-christiane-soft-green rounded-full blur-3xl opacity-40 animate-float" />
-      <div className="absolute bottom-[15%] left-[5%] w-40 h-40 bg-christiane-soft-purple rounded-full blur-3xl opacity-30 animate-float animation-delay-2000" />
+      <div className="absolute top-[10%] right-[10%] w-60 h-60 bg-green-100 rounded-full blur-3xl opacity-40 animate-float" />
+      <div className="absolute bottom-[15%] left-[5%] w-40 h-40 bg-purple-200 rounded-full blur-3xl opacity-30 animate-float animation-delay-2000" />
       
       <div className="container mx-auto px-6 py-12 relative z-10">
         <div className="fade-in-cascade p-8 rounded-lg bg-white/30 backdrop-blur-sm">
-          <span className="inline-block text-sm font-medium py-1 px-3 rounded-full bg-christiane-soft-cream mb-6">
+          <span className="inline-block text-sm font-medium py-1 px-3 rounded-full bg-amber-100 mb-6">
             Ganzheitliches Gesundheitskonzept
           </span>
           <h1 className="heading-xl mb-6 max-w-4xl text-white text-shadow">
