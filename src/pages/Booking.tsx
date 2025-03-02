@@ -8,6 +8,13 @@ import { generateTimeSlots } from '@/lib/date-utils';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { Navbar } from "@/components/ui/Navbar";
+import { useLanguage } from "@/hooks/useLanguage";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 enum BookingStep {
   SELECT_DATE,
@@ -17,6 +24,7 @@ enum BookingStep {
 }
 
 export default function Booking() {
+  const { t, dir } = useLanguage();
   const [currentStep, setCurrentStep] = useState<BookingStep>(BookingStep.SELECT_DATE);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
@@ -203,190 +211,90 @@ export default function Booking() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold mb-4">Termin buchen</h1>
-          <p className="text-muted-foreground">
-            Wählen Sie einen passenden Termin für Ihre persönliche Beratung oder Therapie.
-          </p>
-        </div>
-
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-6">
-            <div className="flex space-x-2">
-              {[...Array(3)].map((_, i) => (
-                <div
-                  key={i}
-                  className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    i < currentStep ? 'bg-primary text-primary-foreground' : 
-                    i === currentStep ? 'bg-primary/20 text-primary border border-primary' : 
-                    'bg-muted text-muted-foreground'
-                  }`}
-                >
-                  {i + 1}
-                </div>
-              ))}
-            </div>
-
-            <span className="text-sm text-muted-foreground">
-              Schritt {currentStep + 1} von {Object.keys(BookingStep).length / 2}
-            </span>
-          </div>
-        </div>
-
-        {currentStep === BookingStep.SELECT_DATE && (
-          <DatePicker onDateSelect={handleDateSelect} />
-        )}
-
-        {currentStep === BookingStep.SELECT_TIME && (
-          <>
-            <button
-              onClick={() => setCurrentStep(BookingStep.SELECT_DATE)}
-              className="mb-4 text-sm text-primary flex items-center"
-            >
-              ← Zurück zur Datumsauswahl
-            </button>
-
-            {isLoading ? (
-              <div className="text-center py-8">Lade Verfügbarkeiten...</div>
-            ) : (
-              <TimeSlotPicker 
-                timeSlots={timeSlots} 
-                onTimeSlotSelect={handleTimeSlotSelect} 
-              />
-            )}
-          </>
-        )}
-
-        {currentStep === BookingStep.FILL_FORM && selectedTimeSlot && (
-          <>
-            <button
-              onClick={() => setCurrentStep(BookingStep.SELECT_TIME)}
-              className="mb-4 text-sm text-primary flex items-center"
-            >
-              ← Zurück zur Zeitauswahl
-            </button>
-
-            <BookingForm 
-              selectedTimeSlot={selectedTimeSlot}
-              onSubmit={handleFormSubmit}
-              isSubmitting={isSubmitting}
-            />
-          </>
-        )}
-
-        {currentStep === BookingStep.CONFIRMATION && bookingResult.success && bookingResult.appointment && selectedTimeSlot && (
-          <BookingConfirmation 
-            appointment={bookingResult.appointment}
-            timeSlot={selectedTimeSlot}
-            onDone={resetBooking}
-          />
-        )}
-      </div>
-    </div>
-  );
-}
-import { useState } from "react";
-import { Navbar } from "@/components/ui/Navbar";
-import { useLanguage } from "@/hooks/useLanguage";
-import { DatePicker } from "@/components/booking/DatePicker";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-
-export default function Booking() {
-  const { t, dir } = useLanguage();
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
-  
-  // Mock time slots - in a real app, you'd fetch these from your API
-  const timeSlots = selectedDate ? ["09:00", "10:00", "11:00", "14:00", "15:00"] : [];
-  
-  return (
     <div className="min-h-screen" dir={dir}>
       <Navbar />
-      <main className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-6">{t('booking')}</h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('selectDate')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <DatePicker onDateSelect={setSelectedDate} />
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('selectTime')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {selectedDate ? (
-                <>
-                  <h3 className="mb-4">{t('availableTimeSlots')}</h3>
-                  <div className="grid grid-cols-2 gap-2">
-                    {timeSlots.map((time) => (
-                      <Button
-                        key={time}
-                        variant={selectedTimeSlot === time ? "default" : "outline"}
-                        onClick={() => setSelectedTimeSlot(time)}
-                      >
-                        {time}
-                      </Button>
-                    ))}
+      <div className="container mx-auto px-4 py-12">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-10">
+            <h1 className="text-3xl font-bold mb-4">{t('booking')}</h1>
+            <p className="text-muted-foreground">
+              {t('bookingDescription')}
+            </p>
+          </div>
+
+          <div className="mb-8">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex space-x-2">
+                {[...Array(3)].map((_, i) => (
+                  <div
+                    key={i}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      i < currentStep ? 'bg-primary text-primary-foreground' : 
+                      i === currentStep ? 'bg-primary/20 text-primary border border-primary' : 
+                      'bg-muted text-muted-foreground'
+                    }`}
+                  >
+                    {i + 1}
                   </div>
-                </>
+                ))}
+              </div>
+
+              <span className="text-sm text-muted-foreground">
+                {t('step')} {currentStep + 1} {t('of')} {Object.keys(BookingStep).length / 2}
+              </span>
+            </div>
+          </div>
+
+          {currentStep === BookingStep.SELECT_DATE && (
+            <DatePicker onDateSelect={handleDateSelect} />
+          )}
+
+          {currentStep === BookingStep.SELECT_TIME && (
+            <>
+              <button
+                onClick={() => setCurrentStep(BookingStep.SELECT_DATE)}
+                className="mb-4 text-sm text-primary flex items-center"
+              >
+                ← {t('backToDateSelection')}
+              </button>
+
+              {isLoading ? (
+                <div className="text-center py-8">{t('loadingAvailability')}</div>
               ) : (
-                <p>{t('selectDate')}</p>
+                <TimeSlotPicker 
+                  timeSlots={timeSlots} 
+                  onTimeSlotSelect={handleTimeSlotSelect} 
+                />
               )}
-              {selectedDate && timeSlots.length === 0 && (
-                <p>{t('noTimeSlotsAvailable')}</p>
-              )}
-            </CardContent>
-          </Card>
+            </>
+          )}
+
+          {currentStep === BookingStep.FILL_FORM && selectedTimeSlot && (
+            <>
+              <button
+                onClick={() => setCurrentStep(BookingStep.SELECT_TIME)}
+                className="mb-4 text-sm text-primary flex items-center"
+              >
+                ← {t('backToTimeSelection')}
+              </button>
+
+              <BookingForm 
+                selectedTimeSlot={selectedTimeSlot}
+                onSubmit={handleFormSubmit}
+                isSubmitting={isSubmitting}
+              />
+            </>
+          )}
+
+          {currentStep === BookingStep.CONFIRMATION && bookingResult.success && bookingResult.appointment && selectedTimeSlot && (
+            <BookingConfirmation 
+              appointment={bookingResult.appointment}
+              timeSlot={selectedTimeSlot}
+              onDone={resetBooking}
+            />
+          )}
         </div>
-        
-        {selectedTimeSlot && (
-          <Card className="mt-6">
-            <CardHeader>
-              <CardTitle>{t('personalInfo')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form className="space-y-4">
-                <div className="grid w-full items-center gap-1.5">
-                  <Label htmlFor="name">{t('name')}</Label>
-                  <Input id="name" placeholder={t('name')} />
-                </div>
-                
-                <div className="grid w-full items-center gap-1.5">
-                  <Label htmlFor="email">{t('email')}</Label>
-                  <Input id="email" type="email" placeholder={t('email')} />
-                </div>
-                
-                <div className="grid w-full items-center gap-1.5">
-                  <Label htmlFor="phone">{t('phone')}</Label>
-                  <Input id="phone" placeholder={t('phone')} />
-                </div>
-                
-                <div className="grid w-full items-center gap-1.5">
-                  <Label htmlFor="notes">{t('notes')}</Label>
-                  <Textarea id="notes" placeholder={t('notes')} />
-                </div>
-                
-                <div className="flex justify-end gap-2">
-                  <Button variant="outline">{t('cancel')}</Button>
-                  <Button>{t('submit')}</Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        )}
-      </main>
+      </div>
     </div>
   );
 }
