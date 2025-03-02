@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -24,12 +23,12 @@ export default function AdminDashboard() {
     // Fetch data
     async function fetchData() {
       setLoading(true);
-      
+
       // Fetch appointments
       const { data: appointmentsData, error: appointmentsError } = await supabase
         .from('appointments')
         .select('*, time_slots(*)');
-      
+
       if (!appointmentsError) {
         setAppointments(appointmentsData);
       }
@@ -39,7 +38,7 @@ export default function AdminDashboard() {
         .from('time_slots')
         .select('*')
         .order('date', { ascending: true });
-      
+
       if (!timeSlotsError) {
         setTimeSlots(timeSlotsData);
       }
@@ -188,7 +187,7 @@ export default function AdminDashboard() {
                   </CardContent>
                 </Card>
               </div>
-              
+
               <Button>Bericht generieren</Button>
             </CardContent>
           </Card>
