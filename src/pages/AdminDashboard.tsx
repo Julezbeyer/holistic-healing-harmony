@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/lib/supabase-client';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function AdminDashboard() {
   const { user, isAdmin } = useAuth();
