@@ -6,7 +6,6 @@ import Hero from '@/components/sections/Hero';
 import About from '@/components/sections/About';
 import TherapyApproaches from '@/components/sections/TherapyApproaches';
 import Contact from '@/components/sections/Contact';
-import { Brain, HeartPulse } from 'lucide-react';
 
 export default function Index() {
   // Helper function to handle smooth scrolling

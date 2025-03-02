@@ -8,8 +8,6 @@ import Booking from '@/pages/Booking';
 import Auth from '@/pages/Auth';
 import NotFound from '@/pages/NotFound';
 
-import { Navbar } from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
 import { AuthProvider } from '@/hooks/useAuth';
 import Admin from '@/pages/Admin';
 import { AdminRoute } from '@/components/auth/AdminRoute';
@@ -18,7 +16,6 @@ function App() {
   return (
     <div className="app">
       <AuthProvider>
-        <Navbar />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/booking" element={<Booking />} />
@@ -30,7 +27,6 @@ function App() {
           } />
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <Footer />
         <Toaster />
       </AuthProvider>
     </div>

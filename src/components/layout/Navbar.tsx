@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link, NavLink as RouterNavLink } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -14,7 +15,7 @@ interface NavLinkProps {
 function NavLink({ to, children, onClick }: NavLinkProps) {
   return (
     <RouterNavLink
-      to={to}
+      to={to.startsWith('#') ? to : to}
       onClick={onClick}
       className={({ isActive }) =>
         cn(
@@ -51,7 +52,7 @@ export function Navbar() {
         <nav className={`hidden md:flex space-x-6 text-base ${mobileMenuOpen ? 'flex' : 'hidden'}`}>
           <NavLink to="/">Startseite</NavLink>
           <NavLink to="#about">Über uns</NavLink>
-          <NavLink to="#approaches">Therapieansätze</NavLink>
+          <NavLink to="#therapy">Therapieansätze</NavLink>
           <NavLink to="#contact">Kontakt</NavLink>
           <NavLink to="/booking">Termin buchen</NavLink>
           {user && <NavLink to="/admin">Admin</NavLink>}
@@ -71,7 +72,7 @@ export function Navbar() {
               <div className="flex flex-col space-y-4">
                 <NavLink to="/" onClick={closeMobileMenu}>Startseite</NavLink>
                 <NavLink to="#about" onClick={closeMobileMenu}>Über uns</NavLink>
-                <NavLink to="#approaches" onClick={closeMobileMenu}>Therapieansätze</NavLink>
+                <NavLink to="#therapy" onClick={closeMobileMenu}>Therapieansätze</NavLink>
                 <NavLink to="#contact" onClick={closeMobileMenu}>Kontakt</NavLink>
                 <NavLink to="/booking" onClick={closeMobileMenu}>Termin buchen</NavLink>
                 {user && <NavLink to="/admin" onClick={closeMobileMenu}>Admin</NavLink>}
