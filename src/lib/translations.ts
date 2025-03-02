@@ -1,4 +1,6 @@
 
+export type Language = 'de' | 'en' | 'ar';
+
 type TranslationKey = 
   | 'home'
   | 'booking'
@@ -14,9 +16,8 @@ type TranslationKey =
   | 'bookingSuccess'
   | 'bookingError'
   | 'availableTimeSlots'
-  | 'noTimeSlotsAvailable';
-
-export type Language = 'en' | 'ar';
+  | 'noTimeSlotsAvailable'
+  | 'Page not found';
 
 type Translations = {
   [key in Language]: {
@@ -25,6 +26,24 @@ type Translations = {
 };
 
 export const translations: Translations = {
+  de: {
+    home: 'Startseite',
+    booking: 'Termin buchen',
+    selectDate: 'Datum auswählen',
+    selectTime: 'Uhrzeit auswählen',
+    personalInfo: 'Persönliche Informationen',
+    name: 'Name',
+    email: 'E-Mail',
+    phone: 'Telefon',
+    notes: 'Anmerkungen',
+    submit: 'Abschicken',
+    cancel: 'Abbrechen',
+    bookingSuccess: 'Buchung erfolgreich!',
+    bookingError: 'Ein Fehler ist während der Buchung aufgetreten.',
+    availableTimeSlots: 'Verfügbare Zeitfenster',
+    noTimeSlotsAvailable: 'Keine Zeitfenster für das gewählte Datum verfügbar.',
+    'Page not found': 'Seite nicht gefunden'
+  },
   en: {
     home: 'Home',
     booking: 'Booking',
@@ -40,7 +59,8 @@ export const translations: Translations = {
     bookingSuccess: 'Booking successful!',
     bookingError: 'An error occurred during booking.',
     availableTimeSlots: 'Available Time Slots',
-    noTimeSlotsAvailable: 'No time slots available for the selected date.'
+    noTimeSlotsAvailable: 'No time slots available for the selected date.',
+    'Page not found': 'Page not found'
   },
   ar: {
     home: 'الرئيسية',
@@ -55,8 +75,9 @@ export const translations: Translations = {
     submit: 'إرسال',
     cancel: 'إلغاء',
     bookingSuccess: 'تم الحجز بنجاح!',
-    bookingError: 'حدث خطأ أثناء الحجز.',
-    availableTimeSlots: 'الأوقات المتاحة',
-    noTimeSlotsAvailable: 'لا توجد أوقات متاحة للتاريخ المحدد.'
+    bookingError: 'حدث خطأ أثناء الحجز',
+    availableTimeSlots: 'المواعيد المتاحة',
+    noTimeSlotsAvailable: 'لا توجد مواعيد متاحة للتاريخ المحدد.',
+    'Page not found': 'الصفحة غير موجودة'
   }
 };
