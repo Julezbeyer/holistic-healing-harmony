@@ -162,6 +162,21 @@ export default function Booking() {
         throw new Error(`Error updating time slot: ${JSON.stringify(updateError)}`);
       }
 
+      // E-Mail-Bestätigung senden
+      try {
+        import('@/lib/email-utils').then(({ sendConfirmationEmail }) => {
+          sendConfirmationEmail(data[0], selectedTimeSlot).then(() => {
+            console.log('Bestätigungs-E-Mail gesendet');
+          }).catch((emailError) => {
+            console.error('Fehler beim Senden der Bestätigungs-E-Mail:', emailError);
+            // Buchung wird trotzdem fortgesetzt, auch wenn E-Mail fehlschlägt
+          });
+        });
+      } catch (emailError) {
+        console.error('Fehler beim Senden der Bestätigungs-E-Mail:', emailError);
+        // Buchung wird trotzdem fortgesetzt, auch wenn E-Mail fehlschlägt
+      }
+
       setBookingResult({
         success: true,
         appointment: data,

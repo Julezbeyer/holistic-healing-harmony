@@ -8,20 +8,17 @@ export const sendConfirmationEmail = async (
   timeSlot: TimeSlot
 ) => {
   try {
-    // In einer richtigen Implementierung würden Sie hier Supabase Edge Functions
-    // oder einen E-Mail-Dienst wie SendGrid verwenden
-
-    // Beispiel mit Supabase Edge Function:
-    // const { error } = await supabase.functions.invoke('send-confirmation-email', {
-    //   body: { 
-    //     appointment,
-    //     timeSlot,
-    //     recipient: appointment.email,
-    //     subject: 'Ihre Terminbestätigung'
-    //   }
-    // });
+    // Supabase Edge Function aufrufen
+    const { data, error } = await supabase.functions.invoke('send-confirmation-email', {
+      body: { 
+        appointment,
+        timeSlot,
+        recipient: appointment.email,
+        subject: 'Ihre Terminbestätigung'
+      }
+    });
     
-    // if (error) throw error;
+    if (error) throw error;
     
     console.log('Bestätigungs-E-Mail gesendet an:', appointment.email);
     return true;
@@ -36,7 +33,18 @@ export const sendReminderEmail = async (
   timeSlot: TimeSlot
 ) => {
   try {
-    // Ähnlich wie bei der Bestätigungsmail
+    // Supabase Edge Function aufrufen
+    const { data, error } = await supabase.functions.invoke('send-confirmation-email', {
+      body: { 
+        appointment,
+        timeSlot,
+        recipient: appointment.email,
+        subject: 'Erinnerung an Ihren Termin'
+      }
+    });
+    
+    if (error) throw error;
+    
     console.log('Erinnerungs-E-Mail gesendet an:', appointment.email);
     return true;
   } catch (error) {
