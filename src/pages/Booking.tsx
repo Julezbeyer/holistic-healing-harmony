@@ -287,3 +287,106 @@ export default function Booking() {
     </div>
   );
 }
+import { useState } from "react";
+import { Navbar } from "@/components/ui/Navbar";
+import { useLanguage } from "@/hooks/useLanguage";
+import { DatePicker } from "@/components/booking/DatePicker";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+
+export default function Booking() {
+  const { t, dir } = useLanguage();
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
+  
+  // Mock time slots - in a real app, you'd fetch these from your API
+  const timeSlots = selectedDate ? ["09:00", "10:00", "11:00", "14:00", "15:00"] : [];
+  
+  return (
+    <div className="min-h-screen" dir={dir}>
+      <Navbar />
+      <main className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold mb-6">{t('booking')}</h1>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('selectDate')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <DatePicker onDateSelect={setSelectedDate} />
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('selectTime')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {selectedDate ? (
+                <>
+                  <h3 className="mb-4">{t('availableTimeSlots')}</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    {timeSlots.map((time) => (
+                      <Button
+                        key={time}
+                        variant={selectedTimeSlot === time ? "default" : "outline"}
+                        onClick={() => setSelectedTimeSlot(time)}
+                      >
+                        {time}
+                      </Button>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <p>{t('selectDate')}</p>
+              )}
+              {selectedDate && timeSlots.length === 0 && (
+                <p>{t('noTimeSlotsAvailable')}</p>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+        
+        {selectedTimeSlot && (
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle>{t('personalInfo')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form className="space-y-4">
+                <div className="grid w-full items-center gap-1.5">
+                  <Label htmlFor="name">{t('name')}</Label>
+                  <Input id="name" placeholder={t('name')} />
+                </div>
+                
+                <div className="grid w-full items-center gap-1.5">
+                  <Label htmlFor="email">{t('email')}</Label>
+                  <Input id="email" type="email" placeholder={t('email')} />
+                </div>
+                
+                <div className="grid w-full items-center gap-1.5">
+                  <Label htmlFor="phone">{t('phone')}</Label>
+                  <Input id="phone" placeholder={t('phone')} />
+                </div>
+                
+                <div className="grid w-full items-center gap-1.5">
+                  <Label htmlFor="notes">{t('notes')}</Label>
+                  <Textarea id="notes" placeholder={t('notes')} />
+                </div>
+                
+                <div className="flex justify-end gap-2">
+                  <Button variant="outline">{t('cancel')}</Button>
+                  <Button>{t('submit')}</Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        )}
+      </main>
+    </div>
+  );
+}

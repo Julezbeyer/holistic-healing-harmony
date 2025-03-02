@@ -25,3 +25,20 @@ const NotFound = () => {
 };
 
 export default NotFound;
+import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/hooks/useLanguage";
+import { Link } from "react-router-dom";
+
+export default function NotFound() {
+  const { t, dir } = useLanguage();
+  
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center p-4" dir={dir}>
+      <h1 className="text-4xl font-bold mb-2">404</h1>
+      <p className="text-xl mb-6">Page not found</p>
+      <Button asChild>
+        <Link to="/">{t('home')}</Link>
+      </Button>
+    </div>
+  );
+}
