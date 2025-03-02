@@ -33,18 +33,64 @@ export default function Booking() {
       setIsLoading(true);
 
       try {
-        // For demo, we'll generate time slots and mark some as unavailable
-        // In a real app, you would fetch this from Supabase
-        const generatedSlots = generateTimeSlots(selectedDate).map(slot => ({
-          ...slot,
-          id: uuidv4(),
-          isAvailable: Math.random() > 0.3 // Randomly mark some as unavailable for demo
-        }));
-
-        setTimeSlots(generatedSlots);
+        // Formatiere das Datum für Supabase (YYYY-MM-DD)
+        const formattedDate = selectedDate.toISOString().split('T')[0];
+        
+        // Prüfe, ob bereits Zeitfenster für diesen Tag existieren
+        const { data: existingSlots, error: fetchError } = await supabase
+          .from('time_slots')
+          .select('*')
+          .eq('date', formattedDate);
+        
+        if (fetchError) throw fetchError;
+        
+        // Wenn Zeitfenster existieren, verwende diese
+        if (existingSlots && existingSlots.length > 0) {
+          const mappedSlots = existingSlots.map(slot => ({
+            id: slot.id,
+            date: slot.date,
+            startTime: slot.start_time,
+            endTime: slot.end_time,
+            isAvailable: !slot.is_booked
+          }));
+          
+          setTimeSlots(mappedSlots);
+        } else {
+          // Generiere neue Zeitfenster und speichere sie in Supabase
+          const generatedSlots = generateTimeSlots(selectedDate);
+          
+          // Speichere die Slots in Supabase
+          const { data: savedSlots, error: insertError } = await supabase
+            .from('time_slots')
+            .insert(
+              generatedSlots.map(slot => ({
+                date: formattedDate,
+                start_time: slot.startTime,
+                end_time: slot.endTime,
+                is_booked: false
+              }))
+            )
+            .select();
+          
+          if (insertError) throw insertError;
+          
+          if (savedSlots) {
+            // Mappe die gespeicherten Slots zum Frontend-Format
+            const mappedSlots = savedSlots.map(slot => ({
+              id: slot.id,
+              date: slot.date,
+              startTime: slot.start_time,
+              endTime: slot.end_time,
+              isAvailable: !slot.is_booked
+            }));
+            
+            setTimeSlots(mappedSlots);
+          }
+        }
+        
         setCurrentStep(BookingStep.SELECT_TIME);
       } catch (error) {
-        console.error('Error fetching time slots:', error);
+        console.error('Error fetching/creating time slots:', error);
         toast.error('Fehler beim Laden der Verfügbarkeiten');
       } finally {
         setIsLoading(false);
