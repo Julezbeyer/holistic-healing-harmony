@@ -39,3 +39,6 @@ export type TimeSlotStats = {
   available: number;
   booked: number;
 };
+
+// User Role Types
+export type UserRole = 'admin' | 'user';

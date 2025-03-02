@@ -3,10 +3,11 @@ import { useState, useEffect, createContext, useContext, ReactNode } from 'react
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { User } from '@supabase/supabase-js';
+import { UserRole } from '@/lib/types';
 
 interface AuthUser {
   id: string;
-  email: string | null; // Changed from required to optional to match Supabase User type
+  email: string | null; // Optional to match Supabase User type
 }
 
 interface AuthContextType {
@@ -14,6 +15,7 @@ interface AuthContextType {
   session: any;
   loading: boolean;
   signOut: () => Promise<void>;
+  checkRole: (role: UserRole) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -65,11 +67,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     navigate('/auth');
   };
 
+  const checkRole = async (role: UserRole): Promise<boolean> => {
+    if (!user) return false;
+    
+    try {
+      const { data, error } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .eq('role', role)
+        .single();
+      
+      if (error || !data) {
+        return false;
+      }
+      
+      return true;
+    } catch (error) {
+      console.error(`Error checking ${role} role:`, error);
+      return false;
+    }
+  };
+
   const value = {
     user,
     session,
     loading,
     signOut,
+    checkRole,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
