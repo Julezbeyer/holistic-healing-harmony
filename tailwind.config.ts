@@ -55,12 +55,12 @@ const config: Config = {
           foreground: 'hsl(var(--card-foreground))',
         },
         // Custom Christiane Beyer colors
-        'christiane-soft-blue': '#D3E4FD',
-        'christiane-medium-blue': '#6FB1FC',
-        'christiane-light-blue': '#EBF5FF',
-        'christiane-soft-purple': '#E5DEFF',
-        'christiane-soft-green': '#F2FCE2',
-        'christiane-soft-cream': '#FEF7CD',
+        'christiane-soft-blue': '#C5DFFB',      // Etwas dunkleres Blau
+        'christiane-medium-blue': '#5DA3F0',    // Kräftigeres Blau
+        'christiane-light-blue': '#E8F3FF',     // Helleres Blau
+        'christiane-soft-purple': '#DED6FF',    // Weicheres Lila
+        'christiane-soft-green': '#E8F9D9',     // Helleres Grün
+        'christiane-soft-cream': '#FFEFBE',     // Wärmerer Cremeton
       },
       boxShadow: {
         'subtle': '0 2px 10px rgba(0, 0, 0, 0.05)',
