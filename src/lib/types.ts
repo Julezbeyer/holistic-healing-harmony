@@ -14,7 +14,7 @@ export type Appointment = {
   name: string;
   email: string;
   phone?: string;
-  message?: string;
+  message?: string; // Frontend-Eigenschaft, wird in der DB als 'notes' gespeichert
   status: 'confirmed' | 'cancelled' | 'pending';
   createdAt: string;
 };

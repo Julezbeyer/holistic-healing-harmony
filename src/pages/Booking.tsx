@@ -82,7 +82,7 @@ export default function Booking() {
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
-          message: formData.message, // Assuming 'message' field exists in Supabase
+          notes: formData.message, // 'message' von der Form zu 'notes' in der Datenbank mappen
           time_slot_id: selectedTimeSlot!.id,
           created_at: now.toISOString()
         })
@@ -105,7 +105,7 @@ export default function Booking() {
         name: appointment.name,
         email: appointment.email,
         phone: appointment.phone,
-        message: appointment.message, // Assuming 'message' field exists in Supabase
+        message: appointment.notes, // Von 'notes' in der DB zu 'message' im Frontend mappen
         timeSlotId: appointment.time_slot_id,
         createdAt: new Date(appointment.created_at),
         status: 'confirmed' // Added status field
