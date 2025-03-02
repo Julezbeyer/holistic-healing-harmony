@@ -18,3 +18,24 @@ export type Appointment = {
   status: 'confirmed' | 'cancelled' | 'pending';
   createdAt: string;
 };
+
+export type BookingFormData = {
+  name: string;
+  email: string;
+  phone: string;
+  notes?: string;
+};
+
+// Admin Dashboard Types
+export type AppointmentStats = {
+  total: number;
+  confirmed: number;
+  cancelled: number;
+  pending: number;
+};
+
+export type TimeSlotStats = {
+  total: number;
+  available: number;
+  booked: number;
+};
