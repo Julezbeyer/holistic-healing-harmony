@@ -8,4 +8,48 @@ const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+// Direkten Client erstellen
+export const supabase = createClient<Database>(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+    },
+    global: {
+      headers: {
+        'X-Client-Info': 'supabase-js-react',
+      },
+    },
+  }
+);
+
+// Alternativer Client mit Proxy, falls der direkte Zugriff fehlschlägt
+export const createProxiedClient = () => {
+  // Bestimme, ob wir in einer Replit-Umgebung sind
+  const isReplit = window.location.hostname.includes('replit');
+  
+  // Falls wir in Replit sind, nutze den Proxy für Anfragen
+  if (isReplit) {
+    const proxyUrl = window.location.origin + '/supabase-proxy';
+    return createClient<Database>(
+      proxyUrl,
+      SUPABASE_PUBLISHABLE_KEY,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+        },
+        global: {
+          headers: {
+            'X-Client-Info': 'supabase-js-react-proxied',
+          },
+        },
+      }
+    );
+  }
+  
+  // Sonst den regulären Client zurückgeben
+  return supabase;
+};

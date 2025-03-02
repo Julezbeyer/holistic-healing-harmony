@@ -3,7 +3,7 @@ import { DatePicker } from '@/components/booking/DatePicker';
 import { TimeSlotPicker } from '@/components/booking/TimeSlotPicker';
 import { BookingForm } from '@/components/booking/BookingForm';
 import { BookingConfirmation } from '@/components/booking/BookingConfirmation';
-import { Appointment, TimeSlot } from '@/lib/types';
+import { Appointment, TimeSlot, BookingFormData } from '@/lib/types';
 import { generateTimeSlots } from '@/lib/date-utils';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/integrations/supabase/client';
@@ -24,6 +24,8 @@ export default function Booking() {
   const [appointment, setAppointment] = useState<Appointment | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [bookingResult, setBookingResult] = useState<{ success: boolean; appointment: any | null }>({ success: false, appointment: null });
+
 
   // Fetch time slots for the selected date
   useEffect(() => {
@@ -35,15 +37,15 @@ export default function Booking() {
       try {
         // Formatiere das Datum für Supabase (YYYY-MM-DD)
         const formattedDate = selectedDate.toISOString().split('T')[0];
-        
+
         // Prüfe, ob bereits Zeitfenster für diesen Tag existieren
         const { data: existingSlots, error: fetchError } = await supabase
           .from('time_slots')
           .select('*')
           .eq('date', formattedDate);
-        
+
         if (fetchError) throw fetchError;
-        
+
         // Wenn Zeitfenster existieren, verwende diese
         if (existingSlots && existingSlots.length > 0) {
           const mappedSlots = existingSlots.map(slot => ({
@@ -53,12 +55,12 @@ export default function Booking() {
             endTime: slot.end_time,
             isAvailable: !slot.is_booked
           }));
-          
+
           setTimeSlots(mappedSlots);
         } else {
           // Generiere neue Zeitfenster und speichere sie in Supabase
           const generatedSlots = generateTimeSlots(selectedDate);
-          
+
           // Speichere die Slots in Supabase
           const { data: savedSlots, error: insertError } = await supabase
             .from('time_slots')
@@ -71,9 +73,9 @@ export default function Booking() {
               }))
             )
             .select();
-          
+
           if (insertError) throw insertError;
-          
+
           if (savedSlots) {
             // Mappe die gespeicherten Slots zum Frontend-Format
             const mappedSlots = savedSlots.map(slot => ({
@@ -83,11 +85,11 @@ export default function Booking() {
               endTime: slot.end_time,
               isAvailable: !slot.is_booked
             }));
-            
+
             setTimeSlots(mappedSlots);
           }
         }
-        
+
         setCurrentStep(BookingStep.SELECT_TIME);
       } catch (error) {
         console.error('Error fetching/creating time slots:', error);
@@ -109,75 +111,68 @@ export default function Booking() {
     setCurrentStep(BookingStep.FILL_FORM);
   };
 
-  const handleFormSubmit = async (formData: {
-    name: string;
-    email: string;
-    phone: string;
-    message: string;
-  }) => {
+  const handleFormSubmit = async (formData: BookingFormData) => {
     setIsSubmitting(true);
 
     try {
-      // Die aktuelle Zeit für createdAt
-      const now = new Date();
+      console.log('Submitting booking with time slot ID:', selectedTimeSlot?.id);
 
-      // Erstelle die Buchung in Supabase
-      const { data: appointment, error } = await supabase
+      if (!selectedTimeSlot?.id) {
+        throw new Error('Kein Zeitfenster ausgewählt');
+      }
+
+      // Prüfen, ob der Zeitslot tatsächlich existiert
+      const { data: slotExists, error: slotCheckError } = await supabase
+        .from('time_slots')
+        .select('id')
+        .eq('id', selectedTimeSlot.id)
+        .single();
+
+      if (slotCheckError || !slotExists) {
+        console.error('Time slot check error:', slotCheckError);
+        throw new Error(`Das gewählte Zeitfenster existiert nicht in der Datenbank: ${JSON.stringify(slotCheckError || 'No data')}`);
+      }
+
+      // Create appointment record in Supabase
+      const { data, error } = await supabase
         .from('appointments')
         .insert({
+          time_slot_id: selectedTimeSlot.id,
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
-          notes: formData.message, // 'message' von der Form zu 'notes' in der Datenbank mappen
-          time_slot_id: selectedTimeSlot!.id,
-          created_at: now.toISOString()
+          notes: formData.notes || null,  // Explizit null setzen wenn leer
         })
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Appointment creation error:', error);
+        throw new Error(`Error creating appointment: ${JSON.stringify(error)}`);
+      }
 
-      // Aktualisiere den Slot als gebucht
+      // Update time slot to mark as booked
       const { error: updateError } = await supabase
         .from('time_slots')
         .update({ is_booked: true })
-        .eq('id', selectedTimeSlot!.id);
+        .eq('id', selectedTimeSlot.id);
 
-      if (updateError) throw updateError;
-
-      // Konvertiere das Supabase-Format in unser App-Format
-      const newAppointment: Appointment = {
-        id: appointment.id,
-        name: appointment.name,
-        email: appointment.email,
-        phone: appointment.phone,
-        message: appointment.notes, // Von 'notes' in der DB zu 'message' im Frontend mappen
-        timeSlotId: appointment.time_slot_id,
-        createdAt: new Date(appointment.created_at),
-        status: 'confirmed' // Added status field
-      };
-
-      // E-Mail-Bestätigung senden (im Hintergrund)
-      try {
-        await supabase.functions.invoke('send-confirmation-email', {
-          body: { 
-            appointmentId: newAppointment.id,
-            recipient: newAppointment.email
-          }
-        });
-      } catch (emailError) {
-        console.error('Error sending confirmation email:', emailError);
-        // Wir lassen den Buchungsprozess trotzdem weiterlaufen
+      if (updateError) {
+        console.error('Time slot update error:', updateError);
+        throw new Error(`Error updating time slot: ${JSON.stringify(updateError)}`);
       }
 
-      setAppointment(newAppointment);
+      setBookingResult({
+        success: true,
+        appointment: data,
+      });
+
       setCurrentStep(BookingStep.CONFIRMATION);
-      toast.success('Termin erfolgreich gebucht!');
     } catch (error: any) {
       console.error('Error creating appointment:', error);
-      toast.error(`Fehler bei der Terminbuchung: ${error.message || 'Unbekannter Fehler'}`);
+      toast.error('Fehler bei der Terminbuchung: ' + (error.message || 'Unbekannter Fehler'));
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
 
@@ -189,6 +184,7 @@ export default function Booking() {
     setAppointment(null);
     setIsSubmitting(false);
     setIsLoading(false);
+    setBookingResult({ success: false, appointment: null });
   };
 
   return (
@@ -265,9 +261,9 @@ export default function Booking() {
           </>
         )}
 
-        {currentStep === BookingStep.CONFIRMATION && appointment && selectedTimeSlot && (
+        {currentStep === BookingStep.CONFIRMATION && bookingResult.success && bookingResult.appointment && selectedTimeSlot && (
           <BookingConfirmation 
-            appointment={appointment}
+            appointment={bookingResult.appointment}
             timeSlot={selectedTimeSlot}
             onDone={resetBooking}
           />
