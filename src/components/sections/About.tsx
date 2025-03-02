@@ -21,7 +21,7 @@ export default function About() {
             Als Heilpraktikerin für Psychotherapie (HPP) verbinde ich moderne Frequenztherapie mit
             ganzheitlichen Heilmethoden, um Menschen zu ihrem inneren Gleichgewicht zurückzuführen.
           </p>
-        </div>div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <FeatureCard
