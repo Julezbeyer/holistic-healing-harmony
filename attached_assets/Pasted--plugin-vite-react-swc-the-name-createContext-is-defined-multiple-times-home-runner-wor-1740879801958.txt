@@ -1,0 +1,899 @@
+[plugin:vite:react-swc] × the name `createContext` is defined multiple times
+    ╭─[/home/runner/workspace/src/hooks/useAuth.tsx:2:1]
+  1 │ 
+  2 │ import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+    ·                               ──────┬──────
+    ·                                     ╰── previous definition of `createContext` here
+  3 │ import { supabase } from '@/integrations/supabase/client';
+  4 │ import { useNavigate } from 'react-router-dom';
+  5 │ import { User } from '@supabase/supabase-js';
+  6 │ 
+  7 │ interface AuthUser {
+  8 │   id: string;
+  9 │   email: string | null; // Changed from required to optional to match Supabase User type
+ 10 │ }
+ 11 │ 
+ 12 │ interface AuthContextType {
+ 13 │   user: AuthUser | null;
+ 14 │   session: any;
+ 15 │   loading: boolean;
+ 16 │   signOut: () => Promise<void>;
+ 17 │ }
+ 18 │ 
+ 19 │ const AuthContext = createContext<AuthContextType | undefined>(undefined);
+ 20 │ 
+ 21 │ export function AuthProvider({ children }: { children: ReactNode }) {
+ 22 │   const [user, setUser] = useState<AuthUser | null>(null);
+ 23 │   const [session, setSession] = useState<any>(null);
+ 24 │   const [loading, setLoading] = useState(true);
+ 25 │   const navigate = useNavigate();
+ 26 │ 
+ 27 │   useEffect(() => {
+ 28 │     // Get initial session
+ 29 │     supabase.auth.getSession().then(({ data: { session } }) => {
+ 30 │       setSession(session);
+ 31 │       if (session?.user) {
+ 32 │         const authUser: AuthUser = {
+ 33 │           id: session.user.id,
+ 34 │           email: session.user.email
+ 35 │         };
+ 36 │         setUser(authUser);
+ 37 │       } else {
+ 38 │         setUser(null);
+ 39 │       }
+ 40 │       setLoading(false);
+ 41 │     });
+ 42 │ 
+ 43 │     // Listen for auth changes
+ 44 │     const { data: { subscription } } = supabase.auth.onAuthStateChange(
+ 45 │       (_event, session) => {
+ 46 │         setSession(session);
+ 47 │         if (session?.user) {
+ 48 │           const authUser: AuthUser = {
+ 49 │             id: session.user.id,
+ 50 │             email: session.user.email
+ 51 │           };
+ 52 │           setUser(authUser);
+ 53 │         } else {
+ 54 │           setUser(null);
+ 55 │         }
+ 56 │         setLoading(false);
+ 57 │       }
+ 58 │     );
+ 59 │ 
+ 60 │     return () => subscription.unsubscribe();
+ 61 │   }, []);
+ 62 │ 
+ 63 │   const signOut = async () => {
+ 64 │     await supabase.auth.signOut();
+ 65 │     navigate('/auth');
+ 66 │   };
+ 67 │ 
+ 68 │   const value = {
+ 69 │     user,
+ 70 │     session,
+ 71 │     loading,
+ 72 │     signOut,
+ 73 │   };
+ 74 │ 
+ 75 │   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+ 76 │ }
+ 77 │ 
+ 78 │ export function useAuth() {
+ 79 │   const context = useContext(AuthContext);
+ 80 │   if (context === undefined) {
+ 81 │     throw new Error('useAuth must be used within an AuthProvider');
+ 82 │   }
+ 83 │   return context;
+ 84 │ }
+ 85 │ import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+    ·          ──────┬──────
+    ·                ╰── `createContext` redefined here
+ 86 │ import { useNavigate, useLocation } from 'react-router-dom';
+ 87 │ import { supabase } from '@/lib/supabase-client';
+ 88 │ import { Session, User } from '@supabase/supabase-js';
+    ╰────
+  × the name `useContext` is defined multiple times
+    ╭─[/home/runner/workspace/src/hooks/useAuth.tsx:2:1]
+  1 │ 
+  2 │ import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+    ·                                              ─────┬────
+    ·                                                   ╰── previous definition of `useContext` here
+  3 │ import { supabase } from '@/integrations/supabase/client';
+  4 │ import { useNavigate } from 'react-router-dom';
+  5 │ import { User } from '@supabase/supabase-js';
+  6 │ 
+  7 │ interface AuthUser {
+  8 │   id: string;
+  9 │   email: string | null; // Changed from required to optional to match Supabase User type
+ 10 │ }
+ 11 │ 
+ 12 │ interface AuthContextType {
+ 13 │   user: AuthUser | null;
+ 14 │   session: any;
+ 15 │   loading: boolean;
+ 16 │   signOut: () => Promise<void>;
+ 17 │ }
+ 18 │ 
+ 19 │ const AuthContext = createContext<AuthContextType | undefined>(undefined);
+ 20 │ 
+ 21 │ export function AuthProvider({ children }: { children: ReactNode }) {
+ 22 │   const [user, setUser] = useState<AuthUser | null>(null);
+ 23 │   const [session, setSession] = useState<any>(null);
+ 24 │   const [loading, setLoading] = useState(true);
+ 25 │   const navigate = useNavigate();
+ 26 │ 
+ 27 │   useEffect(() => {
+ 28 │     // Get initial session
+ 29 │     supabase.auth.getSession().then(({ data: { session } }) => {
+ 30 │       setSession(session);
+ 31 │       if (session?.user) {
+ 32 │         const authUser: AuthUser = {
+ 33 │           id: session.user.id,
+ 34 │           email: session.user.email
+ 35 │         };
+ 36 │         setUser(authUser);
+ 37 │       } else {
+ 38 │         setUser(null);
+ 39 │       }
+ 40 │       setLoading(false);
+ 41 │     });
+ 42 │ 
+ 43 │     // Listen for auth changes
+ 44 │     const { data: { subscription } } = supabase.auth.onAuthStateChange(
+ 45 │       (_event, session) => {
+ 46 │         setSession(session);
+ 47 │         if (session?.user) {
+ 48 │           const authUser: AuthUser = {
+ 49 │             id: session.user.id,
+ 50 │             email: session.user.email
+ 51 │           };
+ 52 │           setUser(authUser);
+ 53 │         } else {
+ 54 │           setUser(null);
+ 55 │         }
+ 56 │         setLoading(false);
+ 57 │       }
+ 58 │     );
+ 59 │ 
+ 60 │     return () => subscription.unsubscribe();
+ 61 │   }, []);
+ 62 │ 
+ 63 │   const signOut = async () => {
+ 64 │     await supabase.auth.signOut();
+ 65 │     navigate('/auth');
+ 66 │   };
+ 67 │ 
+ 68 │   const value = {
+ 69 │     user,
+ 70 │     session,
+ 71 │     loading,
+ 72 │     signOut,
+ 73 │   };
+ 74 │ 
+ 75 │   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+ 76 │ }
+ 77 │ 
+ 78 │ export function useAuth() {
+ 79 │   const context = useContext(AuthContext);
+ 80 │   if (context === undefined) {
+ 81 │     throw new Error('useAuth must be used within an AuthProvider');
+ 82 │   }
+ 83 │   return context;
+ 84 │ }
+ 85 │ import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+    ·                         ─────┬────
+    ·                              ╰── `useContext` redefined here
+ 86 │ import { useNavigate, useLocation } from 'react-router-dom';
+ 87 │ import { supabase } from '@/lib/supabase-client';
+ 88 │ import { Session, User } from '@supabase/supabase-js';
+    ╰────
+  × the name `useState` is defined multiple times
+    ╭─[/home/runner/workspace/src/hooks/useAuth.tsx:2:1]
+  1 │ 
+  2 │ import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+    ·          ────┬───
+    ·              ╰── previous definition of `useState` here
+  3 │ import { supabase } from '@/integrations/supabase/client';
+  4 │ import { useNavigate } from 'react-router-dom';
+  5 │ import { User } from '@supabase/supabase-js';
+  6 │ 
+  7 │ interface AuthUser {
+  8 │   id: string;
+  9 │   email: string | null; // Changed from required to optional to match Supabase User type
+ 10 │ }
+ 11 │ 
+ 12 │ interface AuthContextType {
+ 13 │   user: AuthUser | null;
+ 14 │   session: any;
+ 15 │   loading: boolean;
+ 16 │   signOut: () => Promise<void>;
+ 17 │ }
+ 18 │ 
+ 19 │ const AuthContext = createContext<AuthContextType | undefined>(undefined);
+ 20 │ 
+ 21 │ export function AuthProvider({ children }: { children: ReactNode }) {
+ 22 │   const [user, setUser] = useState<AuthUser | null>(null);
+ 23 │   const [session, setSession] = useState<any>(null);
+ 24 │   const [loading, setLoading] = useState(true);
+ 25 │   const navigate = useNavigate();
+ 26 │ 
+ 27 │   useEffect(() => {
+ 28 │     // Get initial session
+ 29 │     supabase.auth.getSession().then(({ data: { session } }) => {
+ 30 │       setSession(session);
+ 31 │       if (session?.user) {
+ 32 │         const authUser: AuthUser = {
+ 33 │           id: session.user.id,
+ 34 │           email: session.user.email
+ 35 │         };
+ 36 │         setUser(authUser);
+ 37 │       } else {
+ 38 │         setUser(null);
+ 39 │       }
+ 40 │       setLoading(false);
+ 41 │     });
+ 42 │ 
+ 43 │     // Listen for auth changes
+ 44 │     const { data: { subscription } } = supabase.auth.onAuthStateChange(
+ 45 │       (_event, session) => {
+ 46 │         setSession(session);
+ 47 │         if (session?.user) {
+ 48 │           const authUser: AuthUser = {
+ 49 │             id: session.user.id,
+ 50 │             email: session.user.email
+ 51 │           };
+ 52 │           setUser(authUser);
+ 53 │         } else {
+ 54 │           setUser(null);
+ 55 │         }
+ 56 │         setLoading(false);
+ 57 │       }
+ 58 │     );
+ 59 │ 
+ 60 │     return () => subscription.unsubscribe();
+ 61 │   }, []);
+ 62 │ 
+ 63 │   const signOut = async () => {
+ 64 │     await supabase.auth.signOut();
+ 65 │     navigate('/auth');
+ 66 │   };
+ 67 │ 
+ 68 │   const value = {
+ 69 │     user,
+ 70 │     session,
+ 71 │     loading,
+ 72 │     signOut,
+ 73 │   };
+ 74 │ 
+ 75 │   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+ 76 │ }
+ 77 │ 
+ 78 │ export function useAuth() {
+ 79 │   const context = useContext(AuthContext);
+ 80 │   if (context === undefined) {
+ 81 │     throw new Error('useAuth must be used within an AuthProvider');
+ 82 │   }
+ 83 │   return context;
+ 84 │ }
+ 85 │ import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+    ·                                     ────┬───
+    ·                                         ╰── `useState` redefined here
+ 86 │ import { useNavigate, useLocation } from 'react-router-dom';
+ 87 │ import { supabase } from '@/lib/supabase-client';
+ 88 │ import { Session, User } from '@supabase/supabase-js';
+    ╰────
+  × the name `useEffect` is defined multiple times
+    ╭─[/home/runner/workspace/src/hooks/useAuth.tsx:2:1]
+  1 │ 
+  2 │ import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+    ·                    ────┬────
+    ·                        ╰── previous definition of `useEffect` here
+  3 │ import { supabase } from '@/integrations/supabase/client';
+  4 │ import { useNavigate } from 'react-router-dom';
+  5 │ import { User } from '@supabase/supabase-js';
+  6 │ 
+  7 │ interface AuthUser {
+  8 │   id: string;
+  9 │   email: string | null; // Changed from required to optional to match Supabase User type
+ 10 │ }
+ 11 │ 
+ 12 │ interface AuthContextType {
+ 13 │   user: AuthUser | null;
+ 14 │   session: any;
+ 15 │   loading: boolean;
+ 16 │   signOut: () => Promise<void>;
+ 17 │ }
+ 18 │ 
+ 19 │ const AuthContext = createContext<AuthContextType | undefined>(undefined);
+ 20 │ 
+ 21 │ export function AuthProvider({ children }: { children: ReactNode }) {
+ 22 │   const [user, setUser] = useState<AuthUser | null>(null);
+ 23 │   const [session, setSession] = useState<any>(null);
+ 24 │   const [loading, setLoading] = useState(true);
+ 25 │   const navigate = useNavigate();
+ 26 │ 
+ 27 │   useEffect(() => {
+ 28 │     // Get initial session
+ 29 │     supabase.auth.getSession().then(({ data: { session } }) => {
+ 30 │       setSession(session);
+ 31 │       if (session?.user) {
+ 32 │         const authUser: AuthUser = {
+ 33 │           id: session.user.id,
+ 34 │           email: session.user.email
+ 35 │         };
+ 36 │         setUser(authUser);
+ 37 │       } else {
+ 38 │         setUser(null);
+ 39 │       }
+ 40 │       setLoading(false);
+ 41 │     });
+ 42 │ 
+ 43 │     // Listen for auth changes
+ 44 │     const { data: { subscription } } = supabase.auth.onAuthStateChange(
+ 45 │       (_event, session) => {
+ 46 │         setSession(session);
+ 47 │         if (session?.user) {
+ 48 │           const authUser: AuthUser = {
+ 49 │             id: session.user.id,
+ 50 │             email: session.user.email
+ 51 │           };
+ 52 │           setUser(authUser);
+ 53 │         } else {
+ 54 │           setUser(null);
+ 55 │         }
+ 56 │         setLoading(false);
+ 57 │       }
+ 58 │     );
+ 59 │ 
+ 60 │     return () => subscription.unsubscribe();
+ 61 │   }, []);
+ 62 │ 
+ 63 │   const signOut = async () => {
+ 64 │     await supabase.auth.signOut();
+ 65 │     navigate('/auth');
+ 66 │   };
+ 67 │ 
+ 68 │   const value = {
+ 69 │     user,
+ 70 │     session,
+ 71 │     loading,
+ 72 │     signOut,
+ 73 │   };
+ 74 │ 
+ 75 │   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+ 76 │ }
+ 77 │ 
+ 78 │ export function useAuth() {
+ 79 │   const context = useContext(AuthContext);
+ 80 │   if (context === undefined) {
+ 81 │     throw new Error('useAuth must be used within an AuthProvider');
+ 82 │   }
+ 83 │   return context;
+ 84 │ }
+ 85 │ import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+    ·                                               ────┬────
+    ·                                                   ╰── `useEffect` redefined here
+ 86 │ import { useNavigate, useLocation } from 'react-router-dom';
+ 87 │ import { supabase } from '@/lib/supabase-client';
+ 88 │ import { Session, User } from '@supabase/supabase-js';
+    ╰────
+  × the name `useNavigate` is defined multiple times
+    ╭─[/home/runner/workspace/src/hooks/useAuth.tsx:4:1]
+  1 │ 
+  2 │ import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+  3 │ import { supabase } from '@/integrations/supabase/client';
+  4 │ import { useNavigate } from 'react-router-dom';
+    ·          ─────┬─────
+    ·               ╰── previous definition of `useNavigate` here
+  5 │ import { User } from '@supabase/supabase-js';
+  6 │ 
+  7 │ interface AuthUser {
+  8 │   id: string;
+  9 │   email: string | null; // Changed from required to optional to match Supabase User type
+ 10 │ }
+ 11 │ 
+ 12 │ interface AuthContextType {
+ 13 │   user: AuthUser | null;
+ 14 │   session: any;
+ 15 │   loading: boolean;
+ 16 │   signOut: () => Promise<void>;
+ 17 │ }
+ 18 │ 
+ 19 │ const AuthContext = createContext<AuthContextType | undefined>(undefined);
+ 20 │ 
+ 21 │ export function AuthProvider({ children }: { children: ReactNode }) {
+ 22 │   const [user, setUser] = useState<AuthUser | null>(null);
+ 23 │   const [session, setSession] = useState<any>(null);
+ 24 │   const [loading, setLoading] = useState(true);
+ 25 │   const navigate = useNavigate();
+ 26 │ 
+ 27 │   useEffect(() => {
+ 28 │     // Get initial session
+ 29 │     supabase.auth.getSession().then(({ data: { session } }) => {
+ 30 │       setSession(session);
+ 31 │       if (session?.user) {
+ 32 │         const authUser: AuthUser = {
+ 33 │           id: session.user.id,
+ 34 │           email: session.user.email
+ 35 │         };
+ 36 │         setUser(authUser);
+ 37 │       } else {
+ 38 │         setUser(null);
+ 39 │       }
+ 40 │       setLoading(false);
+ 41 │     });
+ 42 │ 
+ 43 │     // Listen for auth changes
+ 44 │     const { data: { subscription } } = supabase.auth.onAuthStateChange(
+ 45 │       (_event, session) => {
+ 46 │         setSession(session);
+ 47 │         if (session?.user) {
+ 48 │           const authUser: AuthUser = {
+ 49 │             id: session.user.id,
+ 50 │             email: session.user.email
+ 51 │           };
+ 52 │           setUser(authUser);
+ 53 │         } else {
+ 54 │           setUser(null);
+ 55 │         }
+ 56 │         setLoading(false);
+ 57 │       }
+ 58 │     );
+ 59 │ 
+ 60 │     return () => subscription.unsubscribe();
+ 61 │   }, []);
+ 62 │ 
+ 63 │   const signOut = async () => {
+ 64 │     await supabase.auth.signOut();
+ 65 │     navigate('/auth');
+ 66 │   };
+ 67 │ 
+ 68 │   const value = {
+ 69 │     user,
+ 70 │     session,
+ 71 │     loading,
+ 72 │     signOut,
+ 73 │   };
+ 74 │ 
+ 75 │   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+ 76 │ }
+ 77 │ 
+ 78 │ export function useAuth() {
+ 79 │   const context = useContext(AuthContext);
+ 80 │   if (context === undefined) {
+ 81 │     throw new Error('useAuth must be used within an AuthProvider');
+ 82 │   }
+ 83 │   return context;
+ 84 │ }
+ 85 │ import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+ 86 │ import { useNavigate, useLocation } from 'react-router-dom';
+    ·          ─────┬─────
+    ·               ╰── `useNavigate` redefined here
+ 87 │ import { supabase } from '@/lib/supabase-client';
+ 88 │ import { Session, User } from '@supabase/supabase-js';
+    ╰────
+  × the name `supabase` is defined multiple times
+    ╭─[/home/runner/workspace/src/hooks/useAuth.tsx:3:1]
+  1 │ 
+  2 │ import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+  3 │ import { supabase } from '@/integrations/supabase/client';
+    ·          ────┬───
+    ·              ╰── previous definition of `supabase` here
+  4 │ import { useNavigate } from 'react-router-dom';
+  5 │ import { User } from '@supabase/supabase-js';
+  6 │ 
+  7 │ interface AuthUser {
+  8 │   id: string;
+  9 │   email: string | null; // Changed from required to optional to match Supabase User type
+ 10 │ }
+ 11 │ 
+ 12 │ interface AuthContextType {
+ 13 │   user: AuthUser | null;
+ 14 │   session: any;
+ 15 │   loading: boolean;
+ 16 │   signOut: () => Promise<void>;
+ 17 │ }
+ 18 │ 
+ 19 │ const AuthContext = createContext<AuthContextType | undefined>(undefined);
+ 20 │ 
+ 21 │ export function AuthProvider({ children }: { children: ReactNode }) {
+ 22 │   const [user, setUser] = useState<AuthUser | null>(null);
+ 23 │   const [session, setSession] = useState<any>(null);
+ 24 │   const [loading, setLoading] = useState(true);
+ 25 │   const navigate = useNavigate();
+ 26 │ 
+ 27 │   useEffect(() => {
+ 28 │     // Get initial session
+ 29 │     supabase.auth.getSession().then(({ data: { session } }) => {
+ 30 │       setSession(session);
+ 31 │       if (session?.user) {
+ 32 │         const authUser: AuthUser = {
+ 33 │           id: session.user.id,
+ 34 │           email: session.user.email
+ 35 │         };
+ 36 │         setUser(authUser);
+ 37 │       } else {
+ 38 │         setUser(null);
+ 39 │       }
+ 40 │       setLoading(false);
+ 41 │     });
+ 42 │ 
+ 43 │     // Listen for auth changes
+ 44 │     const { data: { subscription } } = supabase.auth.onAuthStateChange(
+ 45 │       (_event, session) => {
+ 46 │         setSession(session);
+ 47 │         if (session?.user) {
+ 48 │           const authUser: AuthUser = {
+ 49 │             id: session.user.id,
+ 50 │             email: session.user.email
+ 51 │           };
+ 52 │           setUser(authUser);
+ 53 │         } else {
+ 54 │           setUser(null);
+ 55 │         }
+ 56 │         setLoading(false);
+ 57 │       }
+ 58 │     );
+ 59 │ 
+ 60 │     return () => subscription.unsubscribe();
+ 61 │   }, []);
+ 62 │ 
+ 63 │   const signOut = async () => {
+ 64 │     await supabase.auth.signOut();
+ 65 │     navigate('/auth');
+ 66 │   };
+ 67 │ 
+ 68 │   const value = {
+ 69 │     user,
+ 70 │     session,
+ 71 │     loading,
+ 72 │     signOut,
+ 73 │   };
+ 74 │ 
+ 75 │   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+ 76 │ }
+ 77 │ 
+ 78 │ export function useAuth() {
+ 79 │   const context = useContext(AuthContext);
+ 80 │   if (context === undefined) {
+ 81 │     throw new Error('useAuth must be used within an AuthProvider');
+ 82 │   }
+ 83 │   return context;
+ 84 │ }
+ 85 │ import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+ 86 │ import { useNavigate, useLocation } from 'react-router-dom';
+ 87 │ import { supabase } from '@/lib/supabase-client';
+    ·          ────┬───
+    ·              ╰── `supabase` redefined here
+ 88 │ import { Session, User } from '@supabase/supabase-js';
+ 89 │ 
+ 90 │ interface AuthContextType {
+    ╰────
+  × the name `AuthContext` is defined multiple times
+     ╭─[/home/runner/workspace/src/hooks/useAuth.tsx:19:1]
+  16 │   signOut: () => Promise<void>;
+  17 │ }
+  18 │ 
+  19 │ const AuthContext = createContext<AuthContextType | undefined>(undefined);
+     ·       ─────┬─────
+     ·            ╰── previous definition of `AuthContext` here
+  20 │ 
+  21 │ export function AuthProvider({ children }: { children: ReactNode }) {
+  22 │   const [user, setUser] = useState<AuthUser | null>(null);
+  23 │   const [session, setSession] = useState<any>(null);
+  24 │   const [loading, setLoading] = useState(true);
+  25 │   const navigate = useNavigate();
+  26 │ 
+  27 │   useEffect(() => {
+  28 │     // Get initial session
+  29 │     supabase.auth.getSession().then(({ data: { session } }) => {
+  30 │       setSession(session);
+  31 │       if (session?.user) {
+  32 │         const authUser: AuthUser = {
+  33 │           id: session.user.id,
+  34 │           email: session.user.email
+  35 │         };
+  36 │         setUser(authUser);
+  37 │       } else {
+  38 │         setUser(null);
+  39 │       }
+  40 │       setLoading(false);
+  41 │     });
+  42 │ 
+  43 │     // Listen for auth changes
+  44 │     const { data: { subscription } } = supabase.auth.onAuthStateChange(
+  45 │       (_event, session) => {
+  46 │         setSession(session);
+  47 │         if (session?.user) {
+  48 │           const authUser: AuthUser = {
+  49 │             id: session.user.id,
+  50 │             email: session.user.email
+  51 │           };
+  52 │           setUser(authUser);
+  53 │         } else {
+  54 │           setUser(null);
+  55 │         }
+  56 │         setLoading(false);
+  57 │       }
+  58 │     );
+  59 │ 
+  60 │     return () => subscription.unsubscribe();
+  61 │   }, []);
+  62 │ 
+  63 │   const signOut = async () => {
+  64 │     await supabase.auth.signOut();
+  65 │     navigate('/auth');
+  66 │   };
+  67 │ 
+  68 │   const value = {
+  69 │     user,
+  70 │     session,
+  71 │     loading,
+  72 │     signOut,
+  73 │   };
+  74 │ 
+  75 │   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  76 │ }
+  77 │ 
+  78 │ export function useAuth() {
+  79 │   const context = useContext(AuthContext);
+  80 │   if (context === undefined) {
+  81 │     throw new Error('useAuth must be used within an AuthProvider');
+  82 │   }
+  83 │   return context;
+  84 │ }
+  85 │ import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+  86 │ import { useNavigate, useLocation } from 'react-router-dom';
+  87 │ import { supabase } from '@/lib/supabase-client';
+  88 │ import { Session, User } from '@supabase/supabase-js';
+  89 │ 
+  90 │ interface AuthContextType {
+  91 │   user: User | null;
+  92 │   session: Session | null;
+  93 │   isAdmin: boolean;
+  94 │   signIn: (email: string, password: string) => Promise<{ error: any }>;
+  95 │   signOut: () => Promise<void>;
+  96 │   loading: boolean;
+  97 │ }
+  98 │ 
+  99 │ const AuthContext = createContext<AuthContextType | undefined>(undefined);
+     ·       ─────┬─────
+     ·            ╰── `AuthContext` redefined here
+ 100 │ 
+ 101 │ export function AuthProvider({ children }: { children: ReactNode }) {
+ 102 │   const [user, setUser] = useState<User | null>(null);
+     ╰────
+  × the name `AuthProvider` is defined multiple times
+     ╭─[/home/runner/workspace/src/hooks/useAuth.tsx:21:1]
+  18 │ 
+  19 │ const AuthContext = createContext<AuthContextType | undefined>(undefined);
+  20 │ 
+  21 │ export function AuthProvider({ children }: { children: ReactNode }) {
+     ·                 ──────┬─────
+     ·                       ╰── previous definition of `AuthProvider` here
+  22 │   const [user, setUser] = useState<AuthUser | null>(null);
+  23 │   const [session, setSession] = useState<any>(null);
+  24 │   const [loading, setLoading] = useState(true);
+  25 │   const navigate = useNavigate();
+  26 │ 
+  27 │   useEffect(() => {
+  28 │     // Get initial session
+  29 │     supabase.auth.getSession().then(({ data: { session } }) => {
+  30 │       setSession(session);
+  31 │       if (session?.user) {
+  32 │         const authUser: AuthUser = {
+  33 │           id: session.user.id,
+  34 │           email: session.user.email
+  35 │         };
+  36 │         setUser(authUser);
+  37 │       } else {
+  38 │         setUser(null);
+  39 │       }
+  40 │       setLoading(false);
+  41 │     });
+  42 │ 
+  43 │     // Listen for auth changes
+  44 │     const { data: { subscription } } = supabase.auth.onAuthStateChange(
+  45 │       (_event, session) => {
+  46 │         setSession(session);
+  47 │         if (session?.user) {
+  48 │           const authUser: AuthUser = {
+  49 │             id: session.user.id,
+  50 │             email: session.user.email
+  51 │           };
+  52 │           setUser(authUser);
+  53 │         } else {
+  54 │           setUser(null);
+  55 │         }
+  56 │         setLoading(false);
+  57 │       }
+  58 │     );
+  59 │ 
+  60 │     return () => subscription.unsubscribe();
+  61 │   }, []);
+  62 │ 
+  63 │   const signOut = async () => {
+  64 │     await supabase.auth.signOut();
+  65 │     navigate('/auth');
+  66 │   };
+  67 │ 
+  68 │   const value = {
+  69 │     user,
+  70 │     session,
+  71 │     loading,
+  72 │     signOut,
+  73 │   };
+  74 │ 
+  75 │   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  76 │ }
+  77 │ 
+  78 │ export function useAuth() {
+  79 │   const context = useContext(AuthContext);
+  80 │   if (context === undefined) {
+  81 │     throw new Error('useAuth must be used within an AuthProvider');
+  82 │   }
+  83 │   return context;
+  84 │ }
+  85 │ import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+  86 │ import { useNavigate, useLocation } from 'react-router-dom';
+  87 │ import { supabase } from '@/lib/supabase-client';
+  88 │ import { Session, User } from '@supabase/supabase-js';
+  89 │ 
+  90 │ interface AuthContextType {
+  91 │   user: User | null;
+  92 │   session: Session | null;
+  93 │   isAdmin: boolean;
+  94 │   signIn: (email: string, password: string) => Promise<{ error: any }>;
+  95 │   signOut: () => Promise<void>;
+  96 │   loading: boolean;
+  97 │ }
+  98 │ 
+  99 │ const AuthContext = createContext<AuthContextType | undefined>(undefined);
+ 100 │ 
+ 101 │ export function AuthProvider({ children }: { children: ReactNode }) {
+     ·                 ──────┬─────
+     ·                       ╰── `AuthProvider` redefined here
+ 102 │   const [user, setUser] = useState<User | null>(null);
+ 103 │   const [session, setSession] = useState<Session | null>(null);
+ 104 │   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+     ╰────
+  × the name `useAuth` is defined multiple times
+     ╭─[/home/runner/workspace/src/hooks/useAuth.tsx:78:1]
+  75 │   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  76 │ }
+  77 │ 
+  78 │ export function useAuth() {
+     ·                 ───┬───
+     ·                    ╰── previous definition of `useAuth` here
+  79 │   const context = useContext(AuthContext);
+  80 │   if (context === undefined) {
+  81 │     throw new Error('useAuth must be used within an AuthProvider');
+  82 │   }
+  83 │   return context;
+  84 │ }
+  85 │ import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+  86 │ import { useNavigate, useLocation } from 'react-router-dom';
+  87 │ import { supabase } from '@/lib/supabase-client';
+  88 │ import { Session, User } from '@supabase/supabase-js';
+  89 │ 
+  90 │ interface AuthContextType {
+  91 │   user: User | null;
+  92 │   session: Session | null;
+  93 │   isAdmin: boolean;
+  94 │   signIn: (email: string, password: string) => Promise<{ error: any }>;
+  95 │   signOut: () => Promise<void>;
+  96 │   loading: boolean;
+  97 │ }
+  98 │ 
+  99 │ const AuthContext = createContext<AuthContextType | undefined>(undefined);
+ 100 │ 
+ 101 │ export function AuthProvider({ children }: { children: ReactNode }) {
+ 102 │   const [user, setUser] = useState<User | null>(null);
+ 103 │   const [session, setSession] = useState<Session | null>(null);
+ 104 │   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+ 105 │   const [loading, setLoading] = useState<boolean>(true);
+ 106 │   const navigate = useNavigate();
+ 107 │   const location = useLocation();
+ 108 │ 
+ 109 │   useEffect(() => {
+ 110 │     // Initial session check
+ 111 │     supabase.auth.getSession().then(({ data: { session } }) => {
+ 112 │       setSession(session);
+ 113 │       setUser(session?.user ?? null);
+ 114 │       
+ 115 │       // Check if user is admin
+ 116 │       if (session?.user) {
+ 117 │         checkIfAdmin(session.user);
+ 118 │       }
+ 119 │       
+ 120 │       setLoading(false);
+ 121 │     });
+ 122 │ 
+ 123 │     // Listen for auth changes
+ 124 │     const { data: { subscription } } = supabase.auth.onAuthStateChange(
+ 125 │       async (event, session) => {
+ 126 │         setSession(session);
+ 127 │         setUser(session?.user ?? null);
+ 128 │         
+ 129 │         // Check if user is admin
+ 130 │         if (session?.user) {
+ 131 │           await checkIfAdmin(session.user);
+ 132 │           
+ 133 │           // Redirect to admin dashboard if user is admin and just logged in
+ 134 │           if (isAdmin && (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED')) {
+ 135 │             navigate('/admin');
+ 136 │           }
+ 137 │         }
+ 138 │         
+ 139 │         setLoading(false);
+ 140 │       }
+ 141 │     );
+ 142 │ 
+ 143 │     return () => {
+ 144 │       subscription.unsubscribe();
+ 145 │     };
+ 146 │   }, [navigate]);
+ 147 │ 
+ 148 │   async function checkIfAdmin(user: User) {
+ 149 │     try {
+ 150 │       // Query your user roles table or check for admin metadata
+ 151 │       // This is an example; adjust based on your actual database structure
+ 152 │       const { data, error } = await supabase
+ 153 │         .from('user_roles')
+ 154 │         .select('role')
+ 155 │         .eq('user_id', user.id)
+ 156 │         .single();
+ 157 │       
+ 158 │       if (!error && data) {
+ 159 │         setIsAdmin(data.role === 'admin');
+ 160 │         return;
+ 161 │       }
+ 162 │       
+ 163 │       // Fallback: Check user metadata if available
+ 164 │       const isAdminFromMeta = user.app_metadata?.is_admin || user.user_metadata?.is_admin;
+ 165 │       setIsAdmin(!!isAdminFromMeta);
+ 166 │     } catch (error) {
+ 167 │       console.error('Error checking admin status:', error);
+ 168 │       setIsAdmin(false);
+ 169 │     }
+ 170 │   }
+ 171 │ 
+ 172 │   const signIn = async (email: string, password: string) => {
+ 173 │     const { error } = await supabase.auth.signInWithPassword({
+ 174 │       email,
+ 175 │       password,
+ 176 │     });
+ 177 │     return { error };
+ 178 │   };
+ 179 │ 
+ 180 │   const signOut = async () => {
+ 181 │     await supabase.auth.signOut();
+ 182 │     navigate('/');
+ 183 │   };
+ 184 │ 
+ 185 │   const value = {
+ 186 │     user,
+ 187 │     session,
+ 188 │     isAdmin,
+ 189 │     signIn,
+ 190 │     signOut,
+ 191 │     loading,
+ 192 │   };
+ 193 │ 
+ 194 │   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+ 195 │ }
+ 196 │ 
+ 197 │ export function useAuth() {
+     ·                 ───┬───
+     ·                    ╰── `useAuth` redefined here
+ 198 │   const context = useContext(AuthContext);
+ 199 │   if (context === undefined) {
+ 200 │     throw new Error('useAuth must be used within an AuthProvider');
+     ╰────
+/home/runner/workspace/src/hooks/useAuth.tsx:2:1
+1  |  
+2  |  import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+   |            ^
+3  |  import { supabase } from '@/integrations/supabase/client';
+4  |  import { useNavigate } from 'react-router-dom';
