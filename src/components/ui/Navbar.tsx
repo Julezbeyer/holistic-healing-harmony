@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X, User, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -6,6 +5,8 @@ import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { useTranslation } from 'next-i18next';
+
 
 const navItems = [
   { name: 'Home', href: '/' },
@@ -15,6 +16,7 @@ const navItems = [
 ];
 
 export function Navbar() {
+  const { t } = useTranslation('common');
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { user, signOut } = useAuth();
@@ -63,7 +65,7 @@ export function Navbar() {
               className="flex items-center gap-2 ml-0"
             >
               <LogOut className="h-4 w-4" />
-              <span>Abmelden</span>
+              <span>{t('logout')}</span>
             </Button>
           ) : (
             <Link to="/auth">
@@ -73,7 +75,7 @@ export function Navbar() {
                 className="flex items-center gap-2 ml-0"
               >
                 <User className="h-4 w-4" />
-                <span>Anmelden</span>
+                <span>{t('login')}</span>
               </Button>
             </Link>
           )}
@@ -113,11 +115,11 @@ export function Navbar() {
               {item.name}
             </a>
           ))}
-          
+
           <div className="py-2">
             <LanguageSwitcher />
           </div>
-          
+
           {user ? (
             <button
               onClick={() => {
@@ -127,7 +129,7 @@ export function Navbar() {
               className="text-lg font-medium text-foreground/90 py-2 flex items-center gap-2"
             >
               <LogOut className="h-5 w-5" />
-              <span>Abmelden</span>
+              <span>{t('logout')}</span>
             </button>
           ) : (
             <Link
@@ -136,7 +138,7 @@ export function Navbar() {
               onClick={() => setIsOpen(false)}
             >
               <User className="h-5 w-5" />
-              <span>Anmelden</span>
+              <span>{t('login')}</span>
             </Link>
           )}
         </div>

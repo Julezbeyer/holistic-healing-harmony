@@ -1,6 +1,14 @@
 
 import { useLanguage } from "@/hooks/useLanguage";
 import { Language } from "@/lib/translations";
+import { Check, Globe } from "lucide-react";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
+import { Button } from "./button";
 
 export function Footer() {
   const { language, setLanguage } = useLanguage();
@@ -19,26 +27,35 @@ export function Footer() {
             </p>
           </div>
           
-          <div className="flex space-x-4">
-            <button 
-              onClick={() => handleLanguageChange('de')} 
-              className={`text-sm ${language === 'de' ? 'font-bold text-primary' : 'text-gray-600 hover:text-gray-900'}`}
-            >
-              Deutsch
-            </button>
-            <button 
-              onClick={() => handleLanguageChange('en')} 
-              className={`text-sm ${language === 'en' ? 'font-bold text-primary' : 'text-gray-600 hover:text-gray-900'}`}
-            >
-              English
-            </button>
-            <button 
-              onClick={() => handleLanguageChange('ar')} 
-              className={`text-sm ${language === 'ar' ? 'font-bold text-primary' : 'text-gray-600 hover:text-gray-900'}`}
-              dir="rtl"
-            >
-              العربية
-            </button>
+          <div className="flex items-center space-x-4">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                  <Globe className="h-4 w-4" />
+                  <span>{language === 'de' ? 'Deutsch' : language === 'en' ? 'English' : 'العربية'}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => handleLanguageChange('de')}>
+                  <div className="flex items-center justify-between w-full">
+                    <span>Deutsch</span>
+                    {language === 'de' && <Check className="h-4 w-4 ml-2" />}
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
+                  <div className="flex items-center justify-between w-full">
+                    <span>English</span>
+                    {language === 'en' && <Check className="h-4 w-4 ml-2" />}
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleLanguageChange('ar')}>
+                  <div className="flex items-center justify-between w-full">
+                    <span>العربية</span>
+                    {language === 'ar' && <Check className="h-4 w-4 ml-2" />}
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
