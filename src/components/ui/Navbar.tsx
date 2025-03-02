@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X, User, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -17,7 +16,7 @@ const navItems = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { user, signOut } = useAuth();
+  const { user, signOut, isAdmin } = useAuth();
   const { t, language, setLanguage } = useLanguage();
 
   useEffect(() => {
@@ -55,7 +54,15 @@ export function Navbar() {
               {item.name}
             </a>
           ))}
-          
+
+          {isAdmin && (
+            <Link to="/admin">
+              <Button variant="ghost" size="sm" className="flex items-center gap-2 ml-0">
+                <span>Admin Dashboard</span>
+              </Button>
+            </Link>
+          )}
+
           {user ? (
             <Button 
               variant="ghost" 
@@ -114,7 +121,15 @@ export function Navbar() {
               {item.name}
             </a>
           ))}
-          
+
+          {isAdmin && (
+            <Link to="/admin" onClick={() => setIsOpen(false)}>
+              <div className="text-lg font-medium text-foreground/90 py-2 flex items-center gap-2">
+                <span>Admin Dashboard</span>
+              </div>
+            </Link>
+          )}
+
           {user ? (
             <button
               onClick={() => {
