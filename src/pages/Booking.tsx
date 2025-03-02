@@ -5,7 +5,6 @@ import { BookingForm } from '@/components/booking/BookingForm';
 import { BookingConfirmation } from '@/components/booking/BookingConfirmation';
 import { Appointment, TimeSlot, BookingFormData } from '@/lib/types';
 import { generateTimeSlots } from '@/lib/date-utils';
-import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -26,8 +25,6 @@ export default function Booking() {
   const [isLoading, setIsLoading] = useState(false);
   const [bookingResult, setBookingResult] = useState<{ success: boolean; appointment: any | null }>({ success: false, appointment: null });
 
-
-  // Fetch time slots for the selected date
   useEffect(() => {
     if (!selectedDate) return;
 
@@ -35,10 +32,8 @@ export default function Booking() {
       setIsLoading(true);
 
       try {
-        // Formatiere das Datum für Supabase (YYYY-MM-DD)
         const formattedDate = selectedDate.toISOString().split('T')[0];
 
-        // Prüfe, ob bereits Zeitfenster für diesen Tag existieren
         const { data: existingSlots, error: fetchError } = await supabase
           .from('time_slots')
           .select('*')
@@ -46,7 +41,6 @@ export default function Booking() {
 
         if (fetchError) throw fetchError;
 
-        // Wenn Zeitfenster existieren, verwende diese
         if (existingSlots && existingSlots.length > 0) {
           const mappedSlots = existingSlots.map(slot => ({
             id: slot.id,
@@ -58,10 +52,8 @@ export default function Booking() {
 
           setTimeSlots(mappedSlots);
         } else {
-          // Generiere neue Zeitfenster und speichere sie in Supabase
           const generatedSlots = generateTimeSlots(selectedDate);
 
-          // Speichere die Slots in Supabase
           const { data: savedSlots, error: insertError } = await supabase
             .from('time_slots')
             .insert(
@@ -77,7 +69,6 @@ export default function Booking() {
           if (insertError) throw insertError;
 
           if (savedSlots) {
-            // Mappe die gespeicherten Slots zum Frontend-Format
             const mappedSlots = savedSlots.map(slot => ({
               id: slot.id,
               date: slot.date,
@@ -121,7 +112,6 @@ export default function Booking() {
         throw new Error('Kein Zeitfenster ausgewählt');
       }
 
-      // Prüfen, ob der Zeitslot tatsächlich existiert
       const { data: slotExists, error: slotCheckError } = await supabase
         .from('time_slots')
         .select('id')
@@ -133,7 +123,6 @@ export default function Booking() {
         throw new Error(`Das gewählte Zeitfenster existiert nicht in der Datenbank: ${JSON.stringify(slotCheckError || 'No data')}`);
       }
 
-      // Create appointment record in Supabase
       const { data, error } = await supabase
         .from('appointments')
         .insert({
@@ -141,7 +130,7 @@ export default function Booking() {
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
-          notes: formData.notes || null,  // Explizit null setzen wenn leer
+          notes: formData.notes || null
         })
         .select()
         .single();
@@ -151,7 +140,6 @@ export default function Booking() {
         throw new Error(`Error creating appointment: ${JSON.stringify(error)}`);
       }
 
-      // Update time slot to mark as booked
       const { error: updateError } = await supabase
         .from('time_slots')
         .update({ is_booked: true })
@@ -172,7 +160,7 @@ export default function Booking() {
       console.error('Error creating appointment:', error);
       toast.error('Fehler bei der Terminbuchung: ' + (error.message || 'Unbekannter Fehler'));
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
