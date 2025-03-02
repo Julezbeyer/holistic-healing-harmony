@@ -1,8 +1,11 @@
 
 import { Button } from '../ui/button';
 import { ArrowDown } from 'lucide-react';
+import { useLanguage } from '@/hooks/useLanguage';
 
 export default function Hero() {
+  const { language, t } = useLanguage();
+  
   const scrollToAbout = () => {
     document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
   };
