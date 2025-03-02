@@ -1,3 +1,5 @@
+import { TimeSlot } from './types';
+
 export const formatDate = (date: string): string => {
   return new Date(date).toLocaleDateString('de-DE', {
     weekday: 'long',
@@ -37,7 +39,6 @@ export const generateTimeSlots = (
   return slots;
 };
 
-// Hilfsfunktion zum Generieren von Zeitfenstern für einen Tag
 export function generateTimeSlotsSimple(date: Date): { startTime: string; endTime: string; date: string }[] {
   const slots = [];
   const startHour = 9; // 9:00 Uhr
@@ -59,7 +60,6 @@ export function generateTimeSlotsSimple(date: Date): { startTime: string; endTim
 
   return slots;
 }
-
 
 export const getNextNDays = (n: number): Date[] => {
   const days: Date[] = [];

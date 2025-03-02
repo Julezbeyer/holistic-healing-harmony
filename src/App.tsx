@@ -9,7 +9,7 @@ import Auth from '@/pages/Auth';
 import NotFound from '@/pages/NotFound';
 
 import { Navbar } from '@/components/layout/Navbar';
-import { Footer } from '@/components/layout/Footer';
+import Footer from '@/components/layout/Footer';
 import { AuthProvider } from '@/hooks/useAuth';
 import Admin from '@/pages/Admin';
 import { AdminRoute } from '@/components/auth/AdminRoute';
