@@ -44,7 +44,7 @@ export function Navbar() {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-10">
+        <div className="hidden md:flex items-center space-x-6">
           {navItems.map((item) => (
             <a
               key={item.name}
@@ -54,15 +54,13 @@ export function Navbar() {
               {item.name}
             </a>
           ))}
-          
           <LanguageSwitcher />
-          
           {user ? (
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={signOut}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 ml-0"
             >
               <LogOut className="h-4 w-4" />
               <span>Abmelden</span>
@@ -72,7 +70,7 @@ export function Navbar() {
               <Button 
                 variant="ghost" 
                 size="sm"
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 ml-0"
               >
                 <User className="h-4 w-4" />
                 <span>Anmelden</span>
