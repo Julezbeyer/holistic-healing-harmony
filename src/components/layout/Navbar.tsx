@@ -1,86 +1,141 @@
 
-import { useState } from 'react';
-import { Link, NavLink as RouterNavLink } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
-
+import { useState, useEffect } from 'react';
+import { Menu, X, User, LogOut } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
+import { Button } from '@/components/ui/button';
 
-interface NavLinkProps {
-  to: string;
-  children: React.ReactNode;
-  onClick?: () => void;
-}
+const navItems = [
+  { name: 'Home', href: '/' },
+  { name: 'Über Uns', href: '#about' },
+  { name: 'Therapieansätze', href: '#therapy' },
+  { name: 'Kontakt', href: '#contact' }
+];
 
-function NavLink({ to, children, onClick }: NavLinkProps) {
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { user, signOut } = useAuth();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <RouterNavLink
-      to={to.startsWith('#') ? to : to}
-      onClick={onClick}
-      className={({ isActive }) =>
-        cn(
-          'text-base font-medium transition-colors hover:text-primary',
-          isActive ? 'text-primary' : 'text-gray-700'
-        )
-      }
+    <nav 
+      className={cn(
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 lg:px-12", 
+        isScrolled ? "bg-white/70 backdrop-blur-lg shadow-subtle py-4" : "bg-transparent py-6"
+      )}
     >
-      {children}
-    </RouterNavLink>
-  );
-}
-
-export function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
-
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false);
-  };
-  
-  const { user } = useAuth();
-  
-  return (
-    <header className="bg-white py-4 shadow-md sticky top-0 z-10">
-      <div className="container mx-auto px-6 flex items-center justify-between">
-        <Link to="/" className="flex items-center text-2xl font-bold text-primary">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <Link 
+          to="/" 
+          className="font-serif text-xl font-medium tracking-tight"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
           Christiane Beyer
         </Link>
-        
-        <nav className={`hidden md:flex space-x-6 text-base ${mobileMenuOpen ? 'flex' : 'hidden'}`}>
-          <NavLink to="/">Startseite</NavLink>
-          <NavLink to="#about">Über uns</NavLink>
-          <NavLink to="#therapy">Therapieansätze</NavLink>
-          <NavLink to="#contact">Kontakt</NavLink>
-          <NavLink to="/booking">Termin buchen</NavLink>
-          {user && <NavLink to="/admin">Admin</NavLink>}
-        </nav>
-        
-        {/* Mobile Menu */}
-        <div className="md:hidden">
-          <button onClick={toggleMobileMenu} className="text-gray-500 focus:outline-none">
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
-          {mobileMenuOpen && (
-            <div className="absolute top-16 left-0 right-0 bg-white shadow-md p-4 z-20">
-              <div className="flex flex-col space-y-4">
-                <NavLink to="/" onClick={closeMobileMenu}>Startseite</NavLink>
-                <NavLink to="#about" onClick={closeMobileMenu}>Über uns</NavLink>
-                <NavLink to="#therapy" onClick={closeMobileMenu}>Therapieansätze</NavLink>
-                <NavLink to="#contact" onClick={closeMobileMenu}>Kontakt</NavLink>
-                <NavLink to="/booking" onClick={closeMobileMenu}>Termin buchen</NavLink>
-                {user && <NavLink to="/admin" onClick={closeMobileMenu}>Admin</NavLink>}
-              </div>
-            </div>
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center space-x-10">
+          {navItems.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:bg-primary after:origin-left after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
+            >
+              {item.name}
+            </a>
+          ))}
+          
+          {user ? (
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={signOut}
+              className="flex items-center gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Abmelden</span>
+            </Button>
+          ) : (
+            <Link to="/auth">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                <User className="h-4 w-4" />
+                <span>Anmelden</span>
+              </Button>
+            </Link>
+          )}
+        </div>
+
+        {/* Mobile menu button */}
+        <button
+          className="md:hidden flex items-center"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+        >
+          {isOpen ? (
+            <X className="h-6 w-6 text-foreground" />
+          ) : (
+            <Menu className="h-6 w-6 text-foreground" />
+          )}
+        </button>
+      </div>
+
+      {/* Mobile Navigation */}
+      <div
+        className={cn(
+          "fixed inset-0 bg-white z-40 flex flex-col pt-24 px-6 transition-all duration-300 transform md:hidden",
+          isOpen ? "translate-x-0" : "translate-x-full"
+        )}
+      >
+        <div className="flex flex-col space-y-6">
+          {navItems.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              className="text-lg font-medium text-foreground/90 py-2"
+              onClick={() => {
+                setIsOpen(false);
+              }}
+            >
+              {item.name}
+            </a>
+          ))}
+          
+          {user ? (
+            <button
+              onClick={() => {
+                signOut();
+                setIsOpen(false);
+              }}
+              className="text-lg font-medium text-foreground/90 py-2 flex items-center gap-2"
+            >
+              <LogOut className="h-5 w-5" />
+              <span>Abmelden</span>
+            </button>
+          ) : (
+            <Link
+              to="/auth"
+              className="text-lg font-medium text-foreground/90 py-2 flex items-center gap-2"
+              onClick={() => setIsOpen(false)}
+            >
+              <User className="h-5 w-5" />
+              <span>Anmelden</span>
+            </Link>
           )}
         </div>
       </div>
-    </header>
+    </nav>
   );
 }

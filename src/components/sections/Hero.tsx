@@ -1,11 +1,8 @@
 
 import { Button } from '../ui/button';
 import { ArrowDown } from 'lucide-react';
-import { useLanguage } from '@/hooks/useLanguage';
 
 export default function Hero() {
-  const { language, t } = useLanguage();
-  
   const scrollToAbout = () => {
     document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -29,28 +26,21 @@ export default function Hero() {
       <div className="container mx-auto px-6 py-12 relative z-10">
         <div className="fade-in-cascade p-8 rounded-lg bg-white/30 backdrop-blur-sm">
           <span className="inline-block text-sm font-medium py-1 px-3 rounded-full bg-christiane-soft-cream mb-6">
-            {language === 'de' ? 'Ganzheitliches Gesundheitskonzept' : 
-             language === 'en' ? 'Holistic Health Concept' : 
-             'مفهوم الصحة الشاملة'}
+            Ganzheitliches Gesundheitskonzept
           </span>
           <h1 className="heading-xl mb-6 max-w-4xl text-white text-shadow">
-            {language === 'de' ? 'Heilung für Körper, Geist und Seele' : 
-             language === 'en' ? 'Healing for Body, Mind and Soul' : 
-             'علاج للجسم والعقل والروح'}
+            Heilung für Körper, Geist und Seele
           </h1>
           <p className="subtitle mb-10 max-w-2xl text-white">
-            {language === 'de' ? 'Entdecken Sie mit Christiane Beyer einen integrativen Ansatz, der modernste Frequenztherapie mit ganzheitlichen Heilmethoden verbindet – für nachhaltiges Wohlbefinden und neue Vitalität.' : 
-             language === 'en' ? 'Discover with Christiane Beyer an integrative approach that combines modern frequency therapy with holistic healing methods - for sustainable well-being and new vitality.' : 
-             'اكتشف مع كريستيان باير نهجًا متكاملًا يجمع بين العلاج بالترددات الحديثة وطرق الشفاء الشاملة - من أجل رفاهية مستدامة وحيوية جديدة.'}
+            Entdecken Sie mit Christiane Beyer einen integrativen Ansatz, der modernste Frequenztherapie 
+            mit ganzheitlichen Heilmethoden verbindet – für nachhaltiges Wohlbefinden und neue Vitalität.
           </p>
           <div className="flex flex-wrap gap-4">
             <Button variant="default" size="lg" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
-              {t('makeAppointment')}
+              Termin vereinbaren
             </Button>
             <Button variant="outline" size="lg" onClick={() => document.getElementById('therapy')?.scrollIntoView({ behavior: 'smooth' })}>
-              {language === 'de' ? 'Therapieansätze entdecken' : 
-               language === 'en' ? 'Discover therapy approaches' : 
-               'اكتشف أساليب العلاج'}
+              Therapieansätze entdecken
             </Button>
           </div>
         </div>

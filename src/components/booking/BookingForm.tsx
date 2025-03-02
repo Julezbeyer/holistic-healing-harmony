@@ -5,12 +5,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { TimeSlot, BookingFormData } from '@/lib/types';
+import { TimeSlot } from '@/lib/types';
 import { formatDate, formatTime } from '@/lib/date-utils';
 
 interface BookingFormProps {
   selectedTimeSlot: TimeSlot;
-  onSubmit: (formData: BookingFormData) => void;
+  onSubmit: (formData: {
+    name: string;
+    email: string;
+    phone: string;
+    message: string;
+  }) => void;
   isSubmitting: boolean;
 }
 
@@ -22,11 +27,11 @@ export function BookingForm({
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [notes, setNotes] = useState('');
+  const [message, setMessage] = useState('');
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ name, email, phone, notes });
+    onSubmit({ name, email, phone, message });
   };
   
   return (
@@ -73,11 +78,11 @@ export function BookingForm({
           </div>
           
           <div>
-            <Label htmlFor="notes">Nachricht (optional)</Label>
+            <Label htmlFor="message">Nachricht (optional)</Label>
             <Textarea 
-              id="notes"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
+              id="message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
               rows={3}
             />
           </div>

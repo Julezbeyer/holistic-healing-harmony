@@ -1,16 +1,14 @@
 
 import { useEffect } from 'react';
-import { Navbar } from '@/components/layout/Navbar';
+import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import Hero from '@/components/sections/Hero';
 import About from '@/components/sections/About';
 import TherapyApproaches from '@/components/sections/TherapyApproaches';
 import Contact from '@/components/sections/Contact';
-import { useLanguage } from "@/hooks/useLanguage";
+import { Brain, HeartPulse } from 'lucide-react';
 
 export default function Index() {
-  const { t, dir } = useLanguage();
-
   // Helper function to handle smooth scrolling
   useEffect(() => {
     const handleHashChange = () => {
@@ -28,16 +26,16 @@ export default function Index() {
 
     // Add listener for hash changes
     window.addEventListener('hashchange', handleHashChange);
-
+    
     return () => {
       window.removeEventListener('hashchange', handleHashChange);
     };
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col" dir={dir}>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-
+      
       {/* Main content */}
       <main className="flex-grow">
         <Hero />
