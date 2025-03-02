@@ -29,7 +29,7 @@ export default function Hero() {
             Ganzheitliches Gesundheitskonzept
           </span>
           <h1 className="heading-xl mb-6 max-w-4xl text-gray-800 font-bold">
-            Heilung für Körper, Geist und Seele
+            Moderne Frequenztherapie meets ganzheitliche Heilmethoden
           </h1>
           <p className="subtitle mb-10 max-w-2xl text-gray-700">
             Entdecken Sie mit Christiane Beyer einen integrativen Ansatz, der modernste Frequenztherapie 
