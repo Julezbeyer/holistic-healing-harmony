@@ -13,8 +13,8 @@ import './App.css';
 
 function App() {
   return (
-    <LanguageProvider>
-      <TooltipProvider>
+    <TooltipProvider>
+      <LanguageProvider>
         <AuthProvider>
           <Router>
             <div className="flex flex-col min-h-screen">
@@ -31,8 +31,8 @@ function App() {
           </Router>
           <Toaster />
         </AuthProvider>
-      </TooltipProvider>
-    </LanguageProvider>
+      </LanguageProvider>
+    </TooltipProvider>
   );
 }
 

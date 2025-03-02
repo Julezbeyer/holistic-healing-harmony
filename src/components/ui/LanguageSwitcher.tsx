@@ -1,43 +1,45 @@
 
-import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/hooks/useLanguage";
-import { Check, Globe } from "lucide-react";
+import { useLanguage } from '@/hooks/useLanguage';
+import { Language } from '@/lib/translations';
+import { Check, Globe } from 'lucide-react';
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
   DropdownMenuItem, 
   DropdownMenuTrigger 
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
+import { Button } from './button';
 
 export function LanguageSwitcher() {
-  const { language, setLanguage } = useLanguage();
-  
+  const { language, setLanguage, t } = useLanguage();
+
+  const languages = [
+    { code: 'de', name: 'Deutsch' },
+    { code: 'en', name: 'English' },
+    { code: 'ar', name: 'العربية' }
+  ];
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Sprache wählen">
-          <Globe className="h-5 w-5" />
+        <Button variant="ghost" size="sm" className="flex items-center gap-1.5">
+          <Globe className="h-4 w-4" />
+          <span className="hidden sm:inline text-xs">
+            {languages.find(lang => lang.code === language)?.name || 'Deutsch'}
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setLanguage('de')}>
-          <div className="flex items-center justify-between w-full">
-            <span>Deutsch</span>
-            {language === 'de' && <Check className="h-4 w-4 ml-2" />}
-          </div>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage('en')}>
-          <div className="flex items-center justify-between w-full">
-            <span>English</span>
-            {language === 'en' && <Check className="h-4 w-4 ml-2" />}
-          </div>
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage('ar')}>
-          <div className="flex items-center justify-between w-full">
-            <span>العربية</span>
-            {language === 'ar' && <Check className="h-4 w-4 ml-2" />}
-          </div>
-        </DropdownMenuItem>
+        {languages.map((lang) => (
+          <DropdownMenuItem
+            key={lang.code}
+            onClick={() => setLanguage(lang.code as Language)}
+            className="flex items-center gap-2"
+          >
+            {language === lang.code && <Check className="h-4 w-4" />}
+            <span className={language !== lang.code ? "pl-6" : ""}>{lang.name}</span>
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

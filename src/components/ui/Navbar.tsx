@@ -1,12 +1,11 @@
+
 import { useState, useEffect } from 'react';
 import { Menu, X, User, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
-import { LanguageSwitcher } from './LanguageSwitcher';
-import { useTranslation } from 'next-i18next';
-
+import { useLanguage } from '@/hooks/useLanguage';
 
 const navItems = [
   { name: 'Home', href: '/' },
@@ -16,10 +15,10 @@ const navItems = [
 ];
 
 export function Navbar() {
-  const { t } = useTranslation('common');
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { user, signOut } = useAuth();
+  const { t, language, setLanguage } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,7 +55,7 @@ export function Navbar() {
               {item.name}
             </a>
           ))}
-          <LanguageSwitcher />
+          
           {user ? (
             <Button 
               variant="ghost" 
@@ -65,7 +64,7 @@ export function Navbar() {
               className="flex items-center gap-2 ml-0"
             >
               <LogOut className="h-4 w-4" />
-              <span>{t('logout')}</span>
+              <span>Abmelden</span>
             </Button>
           ) : (
             <Link to="/auth">
@@ -75,7 +74,7 @@ export function Navbar() {
                 className="flex items-center gap-2 ml-0"
               >
                 <User className="h-4 w-4" />
-                <span>{t('login')}</span>
+                <span>Anmelden</span>
               </Button>
             </Link>
           )}
@@ -115,11 +114,7 @@ export function Navbar() {
               {item.name}
             </a>
           ))}
-
-          <div className="py-2">
-            <LanguageSwitcher />
-          </div>
-
+          
           {user ? (
             <button
               onClick={() => {
@@ -129,7 +124,7 @@ export function Navbar() {
               className="text-lg font-medium text-foreground/90 py-2 flex items-center gap-2"
             >
               <LogOut className="h-5 w-5" />
-              <span>{t('logout')}</span>
+              <span>Abmelden</span>
             </button>
           ) : (
             <Link
@@ -138,7 +133,7 @@ export function Navbar() {
               onClick={() => setIsOpen(false)}
             >
               <User className="h-5 w-5" />
-              <span>{t('login')}</span>
+              <span>Anmelden</span>
             </Link>
           )}
         </div>
