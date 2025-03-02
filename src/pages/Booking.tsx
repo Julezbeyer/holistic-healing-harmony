@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { DatePicker } from '@/components/booking/DatePicker';
 import { TimeSlotPicker } from '@/components/booking/TimeSlotPicker';
@@ -25,14 +24,14 @@ export default function Booking() {
   const [appointment, setAppointment] = useState<Appointment | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Fetch time slots for the selected date
   useEffect(() => {
     if (!selectedDate) return;
-    
+
     const fetchTimeSlots = async () => {
       setIsLoading(true);
-      
+
       try {
         // For demo, we'll generate time slots and mark some as unavailable
         // In a real app, you would fetch this from Supabase
@@ -41,7 +40,7 @@ export default function Booking() {
           id: uuidv4(),
           isAvailable: Math.random() > 0.3 // Randomly mark some as unavailable for demo
         }));
-        
+
         setTimeSlots(generatedSlots);
         setCurrentStep(BookingStep.SELECT_TIME);
       } catch (error) {
@@ -51,82 +50,101 @@ export default function Booking() {
         setIsLoading(false);
       }
     };
-    
+
     fetchTimeSlots();
   }, [selectedDate]);
-  
+
   const handleDateSelect = (date: Date | undefined) => {
     setSelectedDate(date);
   };
-  
+
   const handleTimeSlotSelect = (timeSlot: TimeSlot) => {
     setSelectedTimeSlot(timeSlot);
     setCurrentStep(BookingStep.FILL_FORM);
   };
-  
+
   const handleFormSubmit = async (formData: {
     name: string;
     email: string;
     phone: string;
     message: string;
   }) => {
-    if (!selectedTimeSlot) return;
-    
     setIsSubmitting(true);
-    
+
     try {
-      // Create a new appointment
+      // Die aktuelle Zeit für createdAt
+      const now = new Date();
+
+      // Erstelle die Buchung in Supabase
+      const { data: appointment, error } = await supabase
+        .from('appointments')
+        .insert({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          message: formData.message, // Assuming 'message' field exists in Supabase
+          time_slot_id: selectedTimeSlot!.id,
+          created_at: now.toISOString()
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      // Aktualisiere den Slot als gebucht
+      const { error: updateError } = await supabase
+        .from('time_slots')
+        .update({ is_booked: true })
+        .eq('id', selectedTimeSlot!.id);
+
+      if (updateError) throw updateError;
+
+      // Konvertiere das Supabase-Format in unser App-Format
       const newAppointment: Appointment = {
-        id: uuidv4(),
-        timeSlotId: selectedTimeSlot.id,
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        message: formData.message,
-        status: 'confirmed',
-        createdAt: new Date().toISOString()
+        id: appointment.id,
+        name: appointment.name,
+        email: appointment.email,
+        phone: appointment.phone,
+        message: appointment.message, // Assuming 'message' field exists in Supabase
+        timeSlotId: appointment.time_slot_id,
+        createdAt: new Date(appointment.created_at),
+        status: 'confirmed' // Added status field
       };
-      
-      // In a real app, you would save this to Supabase
-      // Example:
-      // const { error } = await supabase
-      //   .from('appointments')
-      //   .insert(newAppointment);
-      
-      // if (error) throw error;
-      
-      // Update the time slot to be unavailable
-      // const { error: timeSlotError } = await supabase
-      //   .from('time_slots')
-      //   .update({ isAvailable: false })
-      //   .eq('id', selectedTimeSlot.id);
-      
-      // if (timeSlotError) throw timeSlotError;
-      
-      // For demo, we'll just simulate a server delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Send confirmation email (in a real app)
-      // await sendConfirmationEmail(newAppointment, selectedTimeSlot);
-      
+
+      // E-Mail-Bestätigung senden (im Hintergrund)
+      try {
+        await supabase.functions.invoke('send-confirmation-email', {
+          body: { 
+            appointmentId: newAppointment.id,
+            recipient: newAppointment.email
+          }
+        });
+      } catch (emailError) {
+        console.error('Error sending confirmation email:', emailError);
+        // Wir lassen den Buchungsprozess trotzdem weiterlaufen
+      }
+
       setAppointment(newAppointment);
       setCurrentStep(BookingStep.CONFIRMATION);
-      
-    } catch (error) {
+      toast.success('Termin erfolgreich gebucht!');
+    } catch (error: any) {
       console.error('Error creating appointment:', error);
-      toast.error('Fehler bei der Terminbuchung');
+      toast.error(`Fehler bei der Terminbuchung: ${error.message || 'Unbekannter Fehler'}`);
     } finally {
       setIsSubmitting(false);
     }
   };
-  
+
   const resetBooking = () => {
+    setCurrentStep(BookingStep.SELECT_DATE);
     setSelectedDate(undefined);
+    setTimeSlots([]);
     setSelectedTimeSlot(null);
     setAppointment(null);
-    setCurrentStep(BookingStep.SELECT_DATE);
+    setIsSubmitting(false);
+    setIsLoading(false);
   };
-  
+
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-3xl mx-auto">
@@ -136,7 +154,7 @@ export default function Booking() {
             Wählen Sie einen passenden Termin für Ihre persönliche Beratung oder Therapie.
           </p>
         </div>
-        
+
         <div className="mb-8">
           <div className="flex justify-between items-center mb-6">
             <div className="flex space-x-2">
@@ -153,17 +171,17 @@ export default function Booking() {
                 </div>
               ))}
             </div>
-            
+
             <span className="text-sm text-muted-foreground">
               Schritt {currentStep + 1} von {Object.keys(BookingStep).length / 2}
             </span>
           </div>
         </div>
-        
+
         {currentStep === BookingStep.SELECT_DATE && (
           <DatePicker onDateSelect={handleDateSelect} />
         )}
-        
+
         {currentStep === BookingStep.SELECT_TIME && (
           <>
             <button
@@ -172,7 +190,7 @@ export default function Booking() {
             >
               ← Zurück zur Datumsauswahl
             </button>
-            
+
             {isLoading ? (
               <div className="text-center py-8">Lade Verfügbarkeiten...</div>
             ) : (
@@ -183,7 +201,7 @@ export default function Booking() {
             )}
           </>
         )}
-        
+
         {currentStep === BookingStep.FILL_FORM && selectedTimeSlot && (
           <>
             <button
@@ -192,7 +210,7 @@ export default function Booking() {
             >
               ← Zurück zur Zeitauswahl
             </button>
-            
+
             <BookingForm 
               selectedTimeSlot={selectedTimeSlot}
               onSubmit={handleFormSubmit}
@@ -200,7 +218,7 @@ export default function Booking() {
             />
           </>
         )}
-        
+
         {currentStep === BookingStep.CONFIRMATION && appointment && selectedTimeSlot && (
           <BookingConfirmation 
             appointment={appointment}
