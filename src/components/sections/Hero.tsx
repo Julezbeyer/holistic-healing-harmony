@@ -1,4 +1,3 @@
-
 import { Button } from '../ui/button';
 import { ArrowDown } from 'lucide-react';
 
@@ -24,18 +23,17 @@ export default function Hero() {
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-blue-200/70 via-transparent to-purple-200/50"></div>
       </div>
-      
+
       {/* Decorative circles */}
       <div className="absolute top-[10%] right-[10%] w-60 h-60 bg-green-100 rounded-full blur-3xl opacity-40 animate-float" />
       <div className="absolute bottom-[15%] left-[5%] w-40 h-40 bg-purple-200 rounded-full blur-3xl opacity-30 animate-float animation-delay-2000" />
-      
+
       <div className="container mx-auto px-6 py-12 relative z-10">
-        <div className="fade-in-cascade p-8 rounded-lg bg-white/50 backdrop-blur-sm shadow-lg">
-          <span className="inline-block text-sm font-medium py-1 px-3 rounded-full bg-amber-100 mb-6 text-gray-800">
-            Ganzheitliches Gesundheitskonzept
-          </span>
-          <h1 className="heading-xl mb-6 max-w-4xl text-gray-800 font-bold">
-            Moderne Frequenztherapie meets ganzheitliche Heilmethoden
+        <div className="fade-in-cascade p-5 rounded-lg bg-white/50 backdrop-blur-sm shadow-lg max-w-sm">
+          <h1 className="heading-xl mb-6 max-w-4xl font-bold text-shadow" style={{color: "#acb4cc"}}>
+            Holistic Health
+            <br />
+            Ganzheitliche Gesundheit
           </h1>
           <p className="subtitle mb-10 max-w-2xl text-gray-700">
             Entdecken Sie mit Christiane Beyer einen integrativen Ansatz, der modernste Frequenztherapie 
@@ -51,7 +49,7 @@ export default function Hero() {
           </div>
         </div>
       </div>
-      
+
       {/* Scroll indicator */}
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer z-10" onClick={scrollToAbout}>
         <span className="text-sm mb-2 text-white font-medium">Mehr erfahren</span>
