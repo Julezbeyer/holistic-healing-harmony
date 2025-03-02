@@ -12,8 +12,8 @@ import './App.css';
 function App() {
   return (
     <TooltipProvider>
-      <Router>
-        <LanguageProvider>
+      <LanguageProvider>
+        <Router>
           <AuthProvider>
             <div className="flex flex-col min-h-screen">
               <Navbar />
@@ -24,8 +24,8 @@ function App() {
             </div>
             <Toaster />
           </AuthProvider>
-        </LanguageProvider>
-      </Router>
+        </Router>
+      </LanguageProvider>
     </TooltipProvider>
   );
 }
