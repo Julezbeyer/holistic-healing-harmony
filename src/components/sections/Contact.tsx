@@ -117,7 +117,7 @@ export default function Contact() {
                 Buchen Sie online einen Termin für Ihre persönliche Beratung oder Therapie.
               </p>
               <Button 
-                onClick={handleBookAppointment}
+                onClick={() => navigate('/booking')}
                 className="w-full"
               >
                 Termin vereinbaren
