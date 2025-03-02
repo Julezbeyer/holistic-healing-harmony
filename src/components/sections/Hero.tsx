@@ -24,14 +24,14 @@ export default function Hero() {
       <div className="absolute bottom-[15%] left-[5%] w-40 h-40 bg-purple-200 rounded-full blur-3xl opacity-30 animate-float animation-delay-2000" />
       
       <div className="container mx-auto px-6 py-12 relative z-10">
-        <div className="fade-in-cascade p-8 rounded-lg bg-white/30 backdrop-blur-sm">
-          <span className="inline-block text-sm font-medium py-1 px-3 rounded-full bg-amber-100 mb-6">
+        <div className="fade-in-cascade p-8 rounded-lg bg-white/50 backdrop-blur-sm shadow-lg">
+          <span className="inline-block text-sm font-medium py-1 px-3 rounded-full bg-amber-100 mb-6 text-gray-800">
             Ganzheitliches Gesundheitskonzept
           </span>
-          <h1 className="heading-xl mb-6 max-w-4xl text-white text-shadow">
+          <h1 className="heading-xl mb-6 max-w-4xl text-gray-800 font-bold">
             Heilung für Körper, Geist und Seele
           </h1>
-          <p className="subtitle mb-10 max-w-2xl text-white">
+          <p className="subtitle mb-10 max-w-2xl text-gray-700">
             Entdecken Sie mit Christiane Beyer einen integrativen Ansatz, der modernste Frequenztherapie 
             mit ganzheitlichen Heilmethoden verbindet – für nachhaltiges Wohlbefinden und neue Vitalität.
           </p>
