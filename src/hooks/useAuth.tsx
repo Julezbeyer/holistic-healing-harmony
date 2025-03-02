@@ -1,7 +1,10 @@
+
 import { useState, useEffect, useContext, ReactNode, createContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Session, User } from '@supabase/supabase-js';
+import { toast } from 'sonner';
+import { UserRole } from '@/lib/types';
 
 interface AuthContextType {
   user: User | null;
@@ -10,6 +13,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   loading: boolean;
+  checkRole: (role: UserRole) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -97,6 +101,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     navigate('/');
   };
 
+  const checkRole = async (role: UserRole): Promise<boolean> => {
+    if (!user) return false;
+    
+    try {
+      // Use the has_role function we created in the database
+      const { data, error } = await supabase.rpc('has_role', { 
+        _role: role 
+      });
+      
+      if (error) {
+        console.error('Error checking role:', error);
+        return false;
+      }
+      
+      return !!data;
+    } catch (error) {
+      console.error(`Error checking ${role} role:`, error);
+      return false;
+    }
+  };
+
   const value = {
     user,
     session,
@@ -104,6 +129,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signIn,
     signOut,
     loading,
+    checkRole,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

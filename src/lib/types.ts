@@ -1,20 +1,27 @@
 
-export type TimeSlot = {
-  id: string;
-  date: string; // ISO-Format
-  startTime: string; // Format: "HH:MM"
-  endTime: string; // Format: "HH:MM"
-  isAvailable: boolean;
-};
+export type UserRole = 'admin' | 'user';
 
-export type Appointment = {
+export interface TimeSlot {
   id: string;
-  timeSlotId: string;
-  userId?: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  isAvailable: boolean;
+}
+
+export interface BookingFormData {
   name: string;
   email: string;
-  phone?: string;
-  message?: string; // Frontend-Eigenschaft, wird in der DB als 'notes' gespeichert
-  status: 'confirmed' | 'cancelled' | 'pending';
+  phone: string;
+  notes: string;
+}
+
+export interface Appointment {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  notes?: string;
   createdAt: string;
-};
+  timeSlotId: string;
+}
