@@ -1,8 +1,7 @@
 
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 interface AdminRouteProps {
@@ -10,23 +9,24 @@ interface AdminRouteProps {
 }
 
 export function AdminRoute({ children }: AdminRouteProps) {
-  const { user, loading } = useAuth();
+  const { user, loading, checkRole } = useAuth();
   const navigate = useNavigate();
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const [checkingAdmin, setCheckingAdmin] = useState(true);
   
   useEffect(() => {
-    // Check if user has admin role when component mounts
-    const checkAdminRole = async () => {
-      if (!user) return;
+    const verifyAdminRole = async () => {
+      if (!user) {
+        setIsAdmin(false);
+        setCheckingAdmin(false);
+        return;
+      }
       
       try {
-        const { data, error } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', user.id)
-          .eq('role', 'admin')
-          .single();
+        const hasAdminRole = await checkRole('admin');
+        setIsAdmin(hasAdminRole);
         
-        if (error || !data) {
+        if (!hasAdminRole) {
           toast.error('Sie haben keine Administratorrechte');
           navigate('/');
         }
@@ -34,20 +34,26 @@ export function AdminRoute({ children }: AdminRouteProps) {
         console.error('Error checking admin role:', error);
         toast.error('Fehler bei der Überprüfung der Berechtigungen');
         navigate('/');
+      } finally {
+        setCheckingAdmin(false);
       }
     };
     
-    if (!loading && user) {
-      checkAdminRole();
+    if (!loading) {
+      verifyAdminRole();
     }
-  }, [user, loading, navigate]);
+  }, [user, loading, navigate, checkRole]);
   
-  if (loading) {
+  if (loading || checkingAdmin) {
     return <div className="flex justify-center items-center h-screen">Wird geladen...</div>;
   }
   
   if (!user) {
     return <Navigate to="/auth" replace />;
+  }
+  
+  if (isAdmin === false) {
+    return <Navigate to="/" replace />;
   }
   
   return <>{children}</>;

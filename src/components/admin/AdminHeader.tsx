@@ -5,9 +5,8 @@ import { Shield } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export function AdminHeader() {
-  const { user, signOut } = useAuth();
+  const { user, signOut, checkRole } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
-  const { checkRole } = useAuth();
 
   useEffect(() => {
     const verifyAdminRole = async () => {

@@ -3,11 +3,12 @@ import { useState, useEffect, createContext, useContext, ReactNode } from 'react
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { User } from '@supabase/supabase-js';
+import { toast } from 'sonner';
 import { UserRole } from '@/lib/types';
 
 interface AuthUser {
   id: string;
-  email: string | null; // Optional to match Supabase User type
+  email: string | null;
 }
 
 interface AuthContextType {
@@ -71,18 +72,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!user) return false;
     
     try {
-      const { data, error } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', user.id)
-        .eq('role', role)
-        .single();
+      // Use the has_role function we created in the database
+      const { data, error } = await supabase.rpc('has_role', { 
+        _role: role 
+      });
       
-      if (error || !data) {
+      if (error) {
+        console.error('Error checking role:', error);
         return false;
       }
       
-      return true;
+      return !!data;
     } catch (error) {
       console.error(`Error checking ${role} role:`, error);
       return false;
