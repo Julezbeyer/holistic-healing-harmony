@@ -42,17 +42,8 @@ export default function About() {
         </div>
 
         <div className="mt-20 bg-white rounded-xl p-8 md:p-12 shadow-card">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-center">
-            <div className="md:col-span-2">
-              <div className="aspect-square rounded-xl overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" 
-                  alt="Christiane Beyer Portrait" 
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            </div>
-            <div className="md:col-span-3">
+          <div className="grid grid-cols-1 gap-8">
+            <div>
               <h3 className="heading-md mb-6">Meine Philosophie</h3>
               <p className="text-pretty mb-6">
                 Ich glaube fest daran, dass wahre Heilung mehr als nur die Abwesenheit von Symptomen bedeutet. 
