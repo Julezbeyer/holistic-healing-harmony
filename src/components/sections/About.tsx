@@ -10,11 +10,18 @@ export default function About() {
             Über uns
           </span>
           <h2 className="heading-lg mb-6">Christiane Beyer</h2>
+          <div className="flex justify-center mb-8">
+            <img 
+              src="/christiane-beyer.jpg" 
+              alt="Christiane Beyer - Heilpraktikerin" 
+              className="w-64 h-auto rounded-full shadow-lg border-4 border-white"
+            />
+          </div>
           <p className="subtitle mx-auto">
             Als Heilpraktikerin für Psychotherapie (HPP) verbinde ich moderne Frequenztherapie mit
             ganzheitlichen Heilmethoden, um Menschen zu ihrem inneren Gleichgewicht zurückzuführen.
           </p>
-        </div>
+        </div>div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <FeatureCard
