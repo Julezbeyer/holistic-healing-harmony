@@ -12,8 +12,8 @@ export default function Hero() {
       {/* Background image with overlay */}
       <div className="absolute inset-0 z-0">
         <img 
-          src="https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?auto=format&fit=crop&q=80" 
-          alt="Sonnenstrahlen durch den Wald - symbolisiert Heilung und Wohlbefinden"
+          src="https://images.unsplash.com/photo-1518112166137-85f9979a43aa?auto=format&fit=crop&q=80" 
+          alt="Modernes Heilungs- und Therapiekonzept - symbolisiert Harmonie zwischen Technologie und Natur"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-blue-200/70 via-transparent to-purple-200/50"></div>
