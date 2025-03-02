@@ -9,13 +9,19 @@ export default function Hero() {
 
   return (
     <div className="min-h-[100vh] flex flex-col justify-center relative overflow-hidden">
-      {/* Background image with overlay */}
+      {/* Background video with overlay */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1518112166137-85f9979a43aa?auto=format&fit=crop&q=80" 
-          alt="Modernes Heilungs- und Therapiekonzept - symbolisiert Harmonie zwischen Technologie und Natur"
+        <video 
+          src="/attached_assets/istockphoto-1308208110-640_adpp_is.mp4" 
+          autoPlay 
+          loop 
+          muted 
+          playsInline
           className="w-full h-full object-cover"
-        />
+        >
+          <source src="/attached_assets/istockphoto-1308208110-640_adpp_is.mp4" type="video/mp4" />
+          Ihr Browser unterstützt keine Video-Wiedergabe.
+        </video>
         <div className="absolute inset-0 bg-gradient-to-b from-blue-200/70 via-transparent to-purple-200/50"></div>
       </div>
       
