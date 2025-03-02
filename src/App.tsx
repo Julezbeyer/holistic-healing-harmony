@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,9 +11,6 @@ import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import TestPanel from "./components/TestPanel";
 import Booking from "./pages/Booking";
-import { Navbar } from "@/components/ui/Navbar"; // Assuming Navbar component exists
-import { Footer } from "@/components/ui/Footer"; // Assuming Footer component exists
-
 
 const queryClient = new QueryClient();
 
@@ -25,7 +23,6 @@ const App = () => (
         <BrowserRouter>
           <AuthProvider>
             <div className="w-full">
-              <Navbar /> {/* Added Navbar */}
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
@@ -34,7 +31,6 @@ const App = () => (
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
-              <Footer /> {/* Added Footer */}
             </div>
           </AuthProvider>
         </BrowserRouter>
