@@ -13,12 +13,21 @@ export const isWeekend = (date: Date): boolean => {
  * Formats a date for display
  */
 export const formatDate = (date: string): string => {
+  if (!date) return '';
   return new Date(date).toLocaleDateString('de-DE', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric'
   });
+};
+
+/**
+ * Formats a time string for display
+ */
+export const formatTime = (time: string): string => {
+  if (!time) return '';
+  return time;
 };
 
 /**
@@ -116,3 +125,44 @@ export const generateTimeSlotsForMonth = (
   
   return slots;
 };
+
+/**
+ * Get next N days from today
+ */
+export const getNextNDays = (n: number): Date[] => {
+  const days: Date[] = [];
+  const today = new Date();
+
+  for (let i = 0; i < n; i++) {
+    const date = new Date();
+    date.setDate(today.getDate() + i);
+    days.push(date);
+  }
+
+  return days;
+};
+
+/**
+ * Generates simple time slots with hourly intervals
+ */
+export function generateTimeSlotsSimple(date: Date): { startTime: string; endTime: string; date: string }[] {
+  const slots = [];
+  const startHour = 9; // 9:00 Uhr
+  const endHour = 17; // 17:00 Uhr
+  const slotDuration = 60; // 60 Minuten pro Slot
+
+  const formattedDate = date.toISOString().split('T')[0];
+
+  for (let hour = startHour; hour < endHour; hour++) {
+    const startTime = `${hour.toString().padStart(2, '0')}:00`;
+    const endTime = `${(hour + 1).toString().padStart(2, '0')}:00`;
+
+    slots.push({
+      date: formattedDate,
+      startTime,
+      endTime
+    });
+  }
+
+  return slots;
+}
