@@ -1,0 +1,44 @@
+The above error occurred in the <AppointmentCard> component:
+
+    at AppointmentCard (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/src/components/admin/AdminAppointments.tsx:289:28)
+    at div
+    at div
+    at https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/chunk-FT73PN4C.js?v=38919870:41:13
+    at Presence (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/chunk-SNFYICMR.js?v=38919870:131:11)
+    at https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/@radix-ui_react-tabs.js?v=38919870:167:13
+    at _c4 (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/src/components/ui/tabs.tsx:50:61)
+    at div
+    at https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/chunk-FT73PN4C.js?v=38919870:41:13
+    at Provider (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/chunk-SNFYICMR.js?v=38919870:51:15)
+    at https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/@radix-ui_react-tabs.js?v=38919870:45:7
+    at div
+    at AdminAppointments (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/src/components/admin/AdminAppointments.tsx:23:45)
+    at div
+    at _c8 (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/src/components/ui/card.tsx:84:61)
+    at div
+    at _c (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/src/components/ui/card.tsx:12:53)
+    at div
+    at https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/chunk-FT73PN4C.js?v=38919870:41:13
+    at Presence (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/chunk-SNFYICMR.js?v=38919870:131:11)
+    at https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/@radix-ui_react-tabs.js?v=38919870:167:13
+    at _c4 (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/src/components/ui/tabs.tsx:50:61)
+    at div
+    at https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/chunk-FT73PN4C.js?v=38919870:41:13
+    at Provider (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/chunk-SNFYICMR.js?v=38919870:51:15)
+    at https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/@radix-ui_react-tabs.js?v=38919870:45:7
+    at div
+    at Admin (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/src/pages/Admin.tsx:22:51)
+    at RenderedRoute (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=38919870:4069:5)
+    at Routes (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=38919870:4508:5)
+    at div
+    at AuthProvider (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/src/hooks/useAuth.tsx:15:32)
+    at Router (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=38919870:4451:15)
+    at BrowserRouter (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/react-router-dom.js?v=38919870:5196:5)
+    at Provider (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/chunk-SNFYICMR.js?v=38919870:51:15)
+    at TooltipProvider (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=38919870:56:5)
+    at QueryClientProvider (https://c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev/node_modules/.vite/deps/@tanstack_react-query.js?v=38919870:2794:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+formatDateTime is not defined
