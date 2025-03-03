@@ -2,12 +2,12 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="fixed w-full bg-white/80 backdrop-blur-md z-50 shadow-sm">
+    <header className="fixed w-full bg-white/80 backdrop-blur-md z-50 shadow-sm h-24"> {/* Increased header height */}
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-20">
+        <div className="flex justify-between items-center h-full"> {/* Use h-full to fill the increased height */}
           {/* Logo and Menu Button */}
           <div className="flex items-center">
-            <img src="/logo.svg" alt="Logo" className="h-8 w-auto" />
+            <img src="/logo.svg" alt="Logo" className="h-12 w-auto" /> {/* Increased logo size */}
             {/* Add more spacing here if needed */}
           </div>
 
@@ -42,7 +42,7 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden absolute top-16 right-4 bg-white shadow-lg rounded-md">
+        <div className="md:hidden absolute top-24 right-4 bg-white shadow-lg rounded-md"> {/* Adjusted top position */}
           <a href="/" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
             Home
           </a>

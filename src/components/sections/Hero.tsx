@@ -8,8 +8,9 @@ export default function Hero() {
 
   return (
     <div className="min-h-[100vh] flex flex-col justify-center relative overflow-hidden">
-      {/* Background video */}
+      {/* Background video with overlay */}
       <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-black/20 z-10"></div>
         <video
           src="/attached_assets/istockphoto-1308208110-640_adpp_is.mp4"
           autoPlay
@@ -32,38 +33,40 @@ export default function Hero() {
 
       <div className="container mx-auto px-6 py-12 relative z-10">
         <span className="inline-block text-sm font-medium py-1 px-3 rounded-full bg-amber-100 mb-6 text-gray-800">
-          Ganzheitliches Gesundheitskonzept
+          Ihr Weg zu neuer Lebensenergie
         </span>
         <h1 className="heading-xl mb-6 max-w-4xl text-gray-800 font-bold">
-          Moderne Frequenztherapie meets ganzheitliche Heilmethoden
+          Schluss mit Erschöpfung & Unwohlsein – Spüren Sie den Unterschied!
         </h1>
         <p className="subtitle mb-10 max-w-2xl text-gray-700">
-          Entdecken Sie mit Christiane Beyer einen integrativen Ansatz, der
-          modernste Frequenztherapie mit ganzheitlichen Heilmethoden verbindet
-          – für nachhaltiges Wohlbefinden und neue Vitalität.
+          Entdecken Sie, was tausende Menschen bereits erlebt haben: Die revolutionäre Kombination aus 
+          Meta Vital Frequenztherapie und ganzheitlicher Heilpraxis, die dort ansetzt, wo herkömmliche 
+          Methoden oft an ihre Grenzen stoßen. <span className="font-semibold">Vereinbaren Sie jetzt Ihren persönlichen Kennenlerntermin!</span>
         </p>
         <div className="flex flex-wrap gap-4">
           <Button
             variant="default"
             size="lg"
+            className="text-base font-semibold px-6 py-6 hover:scale-105 transition-transform"
             onClick={() =>
               document
                 .getElementById("contact")
                 ?.scrollIntoView({ behavior: "smooth" })
             }
           >
-            Termin vereinbaren
+            Jetzt kostenfreies Erstgespräch sichern!
           </Button>
           <Button
             variant="outline"
             size="lg"
+            className="text-base hover:bg-primary/10 px-6 py-6"
             onClick={() =>
               document
                 .getElementById("therapy")
                 ?.scrollIntoView({ behavior: "smooth" })
             }
           >
-            Therapieansätze entdecken
+            Entdecken Sie Ihre Behandlungsmöglichkeiten
           </Button>
         </div>
       </div>
