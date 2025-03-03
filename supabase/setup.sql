@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS public.appointments (
   email TEXT NOT NULL,
   phone TEXT NOT NULL,
   notes TEXT,
+  status TEXT DEFAULT 'pending',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -38,7 +39,24 @@ CREATE INDEX IF NOT EXISTS idx_appointments_time_slot_id ON public.appointments(
 ALTER TABLE public.time_slots ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.appointments ENABLE ROW LEVEL SECURITY;
 
--- Policies für anonymen Zugriff (für deine öffentliche App)
+-- Bestehende Policies löschen, falls sie existieren
+DROP POLICY IF EXISTS "Anonymer Lesezugriff auf Zeitfenster" ON public.time_slots;
+DROP POLICY IF EXISTS "Anonymer Schreibzugriff auf Zeitfenster für Besucher" ON public.time_slots;
+DROP POLICY IF EXISTS "Anonymer Aktualisierungszugriff auf Zeitfenster für Besucher" ON public.time_slots;
+DROP POLICY IF EXISTS "Anonymer Lesezugriff auf Buchungen" ON public.appointments;
+DROP POLICY IF EXISTS "Anonymer Schreibzugriff auf Buchungen für Besucher" ON public.appointments;
+DROP POLICY IF EXISTS "Admin Lesezugriff auf Zeitfenster" ON public.time_slots;
+DROP POLICY IF EXISTS "Admin Schreibzugriff auf Zeitfenster" ON public.time_slots;
+DROP POLICY IF EXISTS "Admin Aktualisierungszugriff auf Zeitfenster" ON public.time_slots;
+DROP POLICY IF EXISTS "Admin Löschzugriff auf Zeitfenster" ON public.time_slots;
+DROP POLICY IF EXISTS "Admin Lesezugriff auf Buchungen" ON public.appointments;
+DROP POLICY IF EXISTS "Admin Schreibzugriff auf Buchungen" ON public.appointments;
+DROP POLICY IF EXISTS "Admin Aktualisierungszugriff auf Buchungen" ON public.appointments;
+DROP POLICY IF EXISTS "Admin Löschzugriff auf Buchungen" ON public.appointments;
+DROP POLICY IF EXISTS "Admin kann admin_users ansehen" ON public.admin_users;
+DROP POLICY IF EXISTS "Admin kann admin_users verwalten" ON public.admin_users;
+
+-- Policies für anonymen Zugriff (für deine öffentliche App) neu erstellen
 CREATE POLICY "Anonymer Lesezugriff auf Zeitfenster" 
 ON public.time_slots FOR SELECT 
 TO anon 
