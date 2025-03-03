@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar, Users, Clock, CheckCircle2 } from 'lucide-react';
 
@@ -64,7 +63,7 @@ export function AdminDashboard() {
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold tracking-tight">Dashboard</h2>
-      
+
       {loading ? (
         <div className="flex justify-center py-8">
           <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -81,7 +80,7 @@ export function AdminDashboard() {
               <p className="text-xs text-muted-foreground">Termine gesamt</p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Anstehende Termine</CardTitle>
@@ -92,7 +91,7 @@ export function AdminDashboard() {
               <p className="text-xs text-muted-foreground">Ab heute</p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Verfügbare Zeitfenster</CardTitle>
@@ -103,7 +102,7 @@ export function AdminDashboard() {
               <p className="text-xs text-muted-foreground">Insgesamt</p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Auslastung</CardTitle>
