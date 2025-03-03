@@ -25,8 +25,15 @@ const Header = () => {
             {isAuthenticated && (
               <Link to="/booking" className="text-gray-800 hover:text-gray-500">Termin buchen</Link>
             )}
-            {isAuthenticated && user?.email && (
-              <Link to="/admin" className="text-primary font-medium hover:text-primary/80">Admin</Link>
+            {isAuthenticated && user?.role === 'admin' && (
+              <Link to="/admin" className="text-primary font-medium hover:text-primary/80 flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                  <path d="M12 4L4 8l8 4 8-4-8-4z" />
+                  <path d="M4 12l8 4 8-4" />
+                  <path d="M4 16l8 4 8-4" />
+                </svg>
+                Admin
+              </Link>
             )}
           </div>
 

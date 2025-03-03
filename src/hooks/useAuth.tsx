@@ -1,12 +1,13 @@
-
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { User } from '@supabase/supabase-js';
+import { AuthState } from '@/types/auth'; // Assuming this type is defined elsewhere
 
 interface AuthUser {
   id: string;
-  email: string | null; // Changed from required to optional to match Supabase User type
+  email: string | null;
+  role?: string; // Added role property
 }
 
 interface AuthContextType {
@@ -25,35 +26,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       if (session?.user) {
-        const authUser: AuthUser = {
-          id: session.user.id,
-          email: session.user.email
-        };
-        setUser(authUser);
+        // Fetch user data with role information
+        supabase
+          .from('users')
+          .select('role')
+          .eq('id', session.user.id)
+          .single()
+          .then(({ data: userData, error: userError }) => {
+            const authUser: AuthUser = {
+              id: session.user.id,
+              email: session.user.email,
+              role: userData?.role || 'user',
+            };
+            setUser(authUser);
+            setLoading(false);
+          });
       } else {
         setUser(null);
+        setLoading(false);
       }
-      setLoading(false);
     });
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
         if (session?.user) {
-          const authUser: AuthUser = {
-            id: session.user.id,
-            email: session.user.email
-          };
-          setUser(authUser);
+          supabase
+            .from('users')
+            .select('role')
+            .eq('id', session.user.id)
+            .single()
+            .then(({ data: userData, error: userError }) => {
+              const authUser: AuthUser = {
+                id: session.user.id,
+                email: session.user.email,
+                role: userData?.role || 'user',
+              };
+              setUser(authUser);
+              setLoading(false);
+            });
         } else {
           setUser(null);
+          setLoading(false);
         }
-        setLoading(false);
       }
     );
 
