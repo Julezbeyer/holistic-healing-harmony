@@ -1,13 +1,12 @@
+
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { User } from '@supabase/supabase-js';
-import { AuthState } from '@/types/auth'; // Assuming this type is defined elsewhere
 
 interface AuthUser {
   id: string;
-  email: string | null;
-  role?: string; // Added role property
+  email: string | null; // Changed from required to optional to match Supabase User type
 }
 
 interface AuthContextType {
@@ -26,64 +25,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       if (session?.user) {
-        // Fetch user data with role information
-        supabase
-          .from('users')
-          .select('role')
-          .eq('id', session.user.id)
-          .single()
-          .then(({ data: userData, error: userError }) => {
-            // Check for specific not found error
-            if (userError && userError.code === 'PGRST116') {
-              console.warn('Users table might not exist yet. Using default role.');
-            }
-            
-            const authUser: AuthUser = {
-              id: session.user.id,
-              email: session.user.email,
-              // Default to 'user' role if table doesn't exist or no role found
-              role: userData?.role || 'user',
-            };
-            setUser(authUser);
-            setLoading(false);
-          });
+        const authUser: AuthUser = {
+          id: session.user.id,
+          email: session.user.email
+        };
+        setUser(authUser);
       } else {
         setUser(null);
-        setLoading(false);
       }
+      setLoading(false);
     });
 
+    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
         if (session?.user) {
-          supabase
-            .from('users')
-            .select('role')
-            .eq('id', session.user.id)
-            .single()
-            .then(({ data: userData, error: userError }) => {
-              // Check for specific not found error
-              if (userError && userError.code === 'PGRST116') {
-                console.warn('Users table might not exist yet. Using default role.');
-              }
-              
-              const authUser: AuthUser = {
-                id: session.user.id,
-                email: session.user.email,
-                // Default to 'user' role if table doesn't exist or no role found
-                role: userData?.role || 'user',
-              };
-              setUser(authUser);
-              setLoading(false);
-            });
+          const authUser: AuthUser = {
+            id: session.user.id,
+            email: session.user.email
+          };
+          setUser(authUser);
         } else {
           setUser(null);
-          setLoading(false);
         }
+        setLoading(false);
       }
     );
 

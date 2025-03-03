@@ -1,47 +1,104 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AdminAuth } from '@/components/admin/AdminAuth';
-import { AdminDashboard } from '@/components/admin/AdminDashboard';
-import { useAuth } from '@/hooks/useAuth';
-import { LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AdminAppointments } from '@/components/admin/AdminAppointments';
+import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+import { AdminAuth } from '@/components/admin/AdminAuth';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function Admin() {
-  const { isAuthenticated, user, logout } = useAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Prüfen, ob der Benutzer authentifiziert ist
+  useEffect(() => {
+    const checkAuth = async () => {
+      setIsLoading(true);
+      
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session) {
+          // Für eine einfache Implementierung: Wir prüfen nur, ob der Benutzer eingeloggt ist
+          // In einer vollständigen Implementierung würden wir Rollen prüfen
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error('Auth check error:', error);
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
   const handleLogout = async () => {
-    await logout();
-    navigate('/');
+    try {
+      await supabase.auth.signOut();
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
-  if (!isAuthenticated) {
+  if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <AdminAuth onAuthSuccess={() => {}} />
+      <div className="container mx-auto px-4 py-12 flex justify-center">
+        <p className="text-muted-foreground">Lade...</p>
       </div>
     );
   }
 
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Admin-Bereich</h1>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">
-              Angemeldet als: {user?.email}
-            </span>
-            <Button variant="outline" size="sm" onClick={handleLogout}>
-              <LogOut className="h-4 w-4 mr-2" />
-              Abmelden
-            </Button>
-          </div>
-        </div>
+  // Wenn nicht authentifiziert, zeigen wir den Login-Screen
+  if (!isAuthenticated) {
+    return <AdminAuth onAuthSuccess={() => setIsAuthenticated(true)} />;
+  }
 
-        <AdminDashboard />
+  return (
+    <div className="container mx-auto px-4 py-12">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Admin-Bereich</h1>
+        <Button variant="outline" onClick={handleLogout}>
+          Abmelden
+        </Button>
       </div>
+
+      <Tabs defaultValue="termine">
+        <TabsList className="mb-8">
+          <TabsTrigger value="termine">Termine</TabsTrigger>
+          <TabsTrigger value="zeitfenster">Zeitfenster</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="termine">
+          <Card>
+            <CardHeader>
+              <CardTitle>Terminanfragen</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <AdminAppointments />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="zeitfenster">
+          <Card>
+            <CardHeader>
+              <CardTitle>Verfügbare Zeitfenster</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <AdminTimeSlots />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
