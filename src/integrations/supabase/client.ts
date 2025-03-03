@@ -53,3 +53,12 @@ export const createProxiedClient = () => {
   // Sonst den regulären Client zurückgeben
   return supabase;
 };
+import { createClient } from '@supabase/supabase-js';
+
+// Umgebungsvariablen für die Supabase-Verbindung
+// In einer echten Anwendung würden diese als Env-Variablen gesetzt
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+
+// Erstelle den Supabase-Client
+export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);

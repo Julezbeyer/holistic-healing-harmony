@@ -1,4 +1,7 @@
 
+-- Aktivieren der Supabase Auth Extensions
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- Erstellen der Tabelle für Zeitfenster
 CREATE TABLE IF NOT EXISTS public.time_slots (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -6,6 +9,13 @@ CREATE TABLE IF NOT EXISTS public.time_slots (
   start_time TIME NOT NULL,
   end_time TIME NOT NULL,
   is_booked BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Tabelle für Admin-Benutzer
+CREATE TABLE IF NOT EXISTS public.admin_users (
+  id UUID PRIMARY KEY REFERENCES auth.users(id),
+  name TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -34,12 +44,12 @@ ON public.time_slots FOR SELECT
 TO anon 
 USING (true);
 
-CREATE POLICY "Anonymer Schreibzugriff auf Zeitfenster" 
+CREATE POLICY "Anonymer Schreibzugriff auf Zeitfenster für Besucher" 
 ON public.time_slots FOR INSERT 
 TO anon 
 WITH CHECK (true);
 
-CREATE POLICY "Anonymer Aktualisierungszugriff auf Zeitfenster" 
+CREATE POLICY "Anonymer Aktualisierungszugriff auf Zeitfenster für Besucher" 
 ON public.time_slots FOR UPDATE 
 TO anon 
 USING (true);
@@ -49,7 +59,61 @@ ON public.appointments FOR SELECT
 TO anon 
 USING (true);
 
-CREATE POLICY "Anonymer Schreibzugriff auf Buchungen" 
+CREATE POLICY "Anonymer Schreibzugriff auf Buchungen für Besucher" 
 ON public.appointments FOR INSERT 
 TO anon 
 WITH CHECK (true);
+
+-- Policies für authentifizierte Benutzer (Admins)
+CREATE POLICY "Admin Lesezugriff auf Zeitfenster" 
+ON public.time_slots FOR SELECT 
+TO authenticated 
+USING (true);
+
+CREATE POLICY "Admin Schreibzugriff auf Zeitfenster" 
+ON public.time_slots FOR INSERT 
+TO authenticated 
+WITH CHECK (true);
+
+CREATE POLICY "Admin Aktualisierungszugriff auf Zeitfenster" 
+ON public.time_slots FOR UPDATE 
+TO authenticated 
+USING (true);
+
+CREATE POLICY "Admin Löschzugriff auf Zeitfenster" 
+ON public.time_slots FOR DELETE 
+TO authenticated 
+USING (true);
+
+CREATE POLICY "Admin Lesezugriff auf Buchungen" 
+ON public.appointments FOR SELECT 
+TO authenticated 
+USING (true);
+
+CREATE POLICY "Admin Schreibzugriff auf Buchungen" 
+ON public.appointments FOR INSERT 
+TO authenticated 
+WITH CHECK (true);
+
+CREATE POLICY "Admin Aktualisierungszugriff auf Buchungen" 
+ON public.appointments FOR UPDATE 
+TO authenticated 
+USING (true);
+
+CREATE POLICY "Admin Löschzugriff auf Buchungen" 
+ON public.appointments FOR DELETE 
+TO authenticated 
+USING (true);
+
+-- Tabelle für admin_users
+ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Admin kann admin_users ansehen" 
+ON public.admin_users FOR SELECT 
+TO authenticated 
+USING (true);
+
+CREATE POLICY "Admin kann admin_users verwalten" 
+ON public.admin_users FOR ALL 
+TO authenticated 
+USING (auth.uid() IN (SELECT id FROM public.admin_users));
