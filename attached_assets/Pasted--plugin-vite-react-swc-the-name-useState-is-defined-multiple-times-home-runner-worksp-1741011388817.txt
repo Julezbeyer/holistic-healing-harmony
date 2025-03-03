@@ -1,0 +1,1614 @@
+[plugin:vite:react-swc] × the name `useState` is defined multiple times
+     ╭─[/home/runner/workspace/src/pages/Admin.tsx:2:1]
+   1 │ 
+   2 │ import { useState, useEffect } from 'react';
+     ·          ────┬───
+     ·              ╰── previous definition of `useState` here
+   3 │ import { useNavigate } from 'react-router-dom';
+   4 │ import { Button } from '@/components/ui/button';
+   5 │ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+   6 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+   7 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+   8 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+   9 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+  10 │ import { supabase } from '@/integrations/supabase/client';
+  11 │ 
+  12 │ export default function Admin() {
+  13 │   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  14 │   const [isLoading, setIsLoading] = useState(true);
+  15 │   const navigate = useNavigate();
+  16 │ 
+  17 │   // Prüfen, ob der Benutzer authentifiziert ist
+  18 │   useEffect(() => {
+  19 │     const checkAuth = async () => {
+  20 │       setIsLoading(true);
+  21 │       
+  22 │       try {
+  23 │         const { data: { session } } = await supabase.auth.getSession();
+  24 │         
+  25 │         if (session) {
+  26 │           // Für eine einfache Implementierung: Wir prüfen nur, ob der Benutzer eingeloggt ist
+  27 │           // In einer vollständigen Implementierung würden wir Rollen prüfen
+  28 │           setIsAuthenticated(true);
+  29 │         } else {
+  30 │           setIsAuthenticated(false);
+  31 │         }
+  32 │       } catch (error) {
+  33 │         console.error('Auth check error:', error);
+  34 │         setIsAuthenticated(false);
+  35 │       } finally {
+  36 │         setIsLoading(false);
+  37 │       }
+  38 │     };
+  39 │ 
+  40 │     checkAuth();
+  41 │   }, []);
+  42 │ 
+  43 │   const handleLogout = async () => {
+  44 │     try {
+  45 │       await supabase.auth.signOut();
+  46 │       setIsAuthenticated(false);
+  47 │     } catch (error) {
+  48 │       console.error('Logout error:', error);
+  49 │     }
+  50 │   };
+  51 │ 
+  52 │   if (isLoading) {
+  53 │     return (
+  54 │       <div className="container mx-auto px-4 py-12 flex justify-center">
+  55 │         <p className="text-muted-foreground">Lade...</p>
+  56 │       </div>
+  57 │     );
+  58 │   }
+  59 │ 
+  60 │   // Wenn nicht authentifiziert, zeigen wir den Login-Screen
+  61 │   if (!isAuthenticated) {
+  62 │     return <AdminAuth onAuthSuccess={() => setIsAuthenticated(true)} />;
+  63 │   }
+  64 │ 
+  65 │   return (
+  66 │     <div className="container mx-auto px-4 py-12">
+  67 │       <div className="flex justify-between items-center mb-8">
+  68 │         <h1 className="text-3xl font-bold">Admin-Bereich</h1>
+  69 │         <Button variant="outline" onClick={handleLogout}>
+  70 │           Abmelden
+  71 │         </Button>
+  72 │       </div>
+  73 │ 
+  74 │       <Tabs defaultValue="termine">
+  75 │         <TabsList className="mb-8">
+  76 │           <TabsTrigger value="termine">Termine</TabsTrigger>
+  77 │           <TabsTrigger value="zeitfenster">Zeitfenster</TabsTrigger>
+  78 │         </TabsList>
+  79 │ 
+  80 │         <TabsContent value="termine">
+  81 │           <Card>
+  82 │             <CardHeader>
+  83 │               <CardTitle>Terminanfragen</CardTitle>
+  84 │             </CardHeader>
+  85 │             <CardContent>
+  86 │               <AdminAppointments />
+  87 │             </CardContent>
+  88 │           </Card>
+  89 │         </TabsContent>
+  90 │ 
+  91 │         <TabsContent value="zeitfenster">
+  92 │           <Card>
+  93 │             <CardHeader>
+  94 │               <CardTitle>Verfügbare Zeitfenster</CardTitle>
+  95 │             </CardHeader>
+  96 │             <CardContent>
+  97 │               <AdminTimeSlots />
+  98 │             </CardContent>
+  99 │           </Card>
+ 100 │         </TabsContent>
+ 101 │       </Tabs>
+ 102 │     </div>
+ 103 │   );
+ 104 │ }
+ 105 │ import { useState, useEffect } from 'react';
+     ·          ────┬───
+     ·              ╰── `useState` redefined here
+ 106 │ import { useNavigate } from 'react-router-dom';
+ 107 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+ 108 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+     ╰────
+  × the name `useEffect` is defined multiple times
+     ╭─[/home/runner/workspace/src/pages/Admin.tsx:2:1]
+   1 │ 
+   2 │ import { useState, useEffect } from 'react';
+     ·                    ────┬────
+     ·                        ╰── previous definition of `useEffect` here
+   3 │ import { useNavigate } from 'react-router-dom';
+   4 │ import { Button } from '@/components/ui/button';
+   5 │ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+   6 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+   7 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+   8 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+   9 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+  10 │ import { supabase } from '@/integrations/supabase/client';
+  11 │ 
+  12 │ export default function Admin() {
+  13 │   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  14 │   const [isLoading, setIsLoading] = useState(true);
+  15 │   const navigate = useNavigate();
+  16 │ 
+  17 │   // Prüfen, ob der Benutzer authentifiziert ist
+  18 │   useEffect(() => {
+  19 │     const checkAuth = async () => {
+  20 │       setIsLoading(true);
+  21 │       
+  22 │       try {
+  23 │         const { data: { session } } = await supabase.auth.getSession();
+  24 │         
+  25 │         if (session) {
+  26 │           // Für eine einfache Implementierung: Wir prüfen nur, ob der Benutzer eingeloggt ist
+  27 │           // In einer vollständigen Implementierung würden wir Rollen prüfen
+  28 │           setIsAuthenticated(true);
+  29 │         } else {
+  30 │           setIsAuthenticated(false);
+  31 │         }
+  32 │       } catch (error) {
+  33 │         console.error('Auth check error:', error);
+  34 │         setIsAuthenticated(false);
+  35 │       } finally {
+  36 │         setIsLoading(false);
+  37 │       }
+  38 │     };
+  39 │ 
+  40 │     checkAuth();
+  41 │   }, []);
+  42 │ 
+  43 │   const handleLogout = async () => {
+  44 │     try {
+  45 │       await supabase.auth.signOut();
+  46 │       setIsAuthenticated(false);
+  47 │     } catch (error) {
+  48 │       console.error('Logout error:', error);
+  49 │     }
+  50 │   };
+  51 │ 
+  52 │   if (isLoading) {
+  53 │     return (
+  54 │       <div className="container mx-auto px-4 py-12 flex justify-center">
+  55 │         <p className="text-muted-foreground">Lade...</p>
+  56 │       </div>
+  57 │     );
+  58 │   }
+  59 │ 
+  60 │   // Wenn nicht authentifiziert, zeigen wir den Login-Screen
+  61 │   if (!isAuthenticated) {
+  62 │     return <AdminAuth onAuthSuccess={() => setIsAuthenticated(true)} />;
+  63 │   }
+  64 │ 
+  65 │   return (
+  66 │     <div className="container mx-auto px-4 py-12">
+  67 │       <div className="flex justify-between items-center mb-8">
+  68 │         <h1 className="text-3xl font-bold">Admin-Bereich</h1>
+  69 │         <Button variant="outline" onClick={handleLogout}>
+  70 │           Abmelden
+  71 │         </Button>
+  72 │       </div>
+  73 │ 
+  74 │       <Tabs defaultValue="termine">
+  75 │         <TabsList className="mb-8">
+  76 │           <TabsTrigger value="termine">Termine</TabsTrigger>
+  77 │           <TabsTrigger value="zeitfenster">Zeitfenster</TabsTrigger>
+  78 │         </TabsList>
+  79 │ 
+  80 │         <TabsContent value="termine">
+  81 │           <Card>
+  82 │             <CardHeader>
+  83 │               <CardTitle>Terminanfragen</CardTitle>
+  84 │             </CardHeader>
+  85 │             <CardContent>
+  86 │               <AdminAppointments />
+  87 │             </CardContent>
+  88 │           </Card>
+  89 │         </TabsContent>
+  90 │ 
+  91 │         <TabsContent value="zeitfenster">
+  92 │           <Card>
+  93 │             <CardHeader>
+  94 │               <CardTitle>Verfügbare Zeitfenster</CardTitle>
+  95 │             </CardHeader>
+  96 │             <CardContent>
+  97 │               <AdminTimeSlots />
+  98 │             </CardContent>
+  99 │           </Card>
+ 100 │         </TabsContent>
+ 101 │       </Tabs>
+ 102 │     </div>
+ 103 │   );
+ 104 │ }
+ 105 │ import { useState, useEffect } from 'react';
+     ·                    ────┬────
+     ·                        ╰── `useEffect` redefined here
+ 106 │ import { useNavigate } from 'react-router-dom';
+ 107 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+ 108 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+     ╰────
+  × the name `useNavigate` is defined multiple times
+     ╭─[/home/runner/workspace/src/pages/Admin.tsx:3:1]
+   1 │ 
+   2 │ import { useState, useEffect } from 'react';
+   3 │ import { useNavigate } from 'react-router-dom';
+     ·          ─────┬─────
+     ·               ╰── previous definition of `useNavigate` here
+   4 │ import { Button } from '@/components/ui/button';
+   5 │ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+   6 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+   7 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+   8 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+   9 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+  10 │ import { supabase } from '@/integrations/supabase/client';
+  11 │ 
+  12 │ export default function Admin() {
+  13 │   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  14 │   const [isLoading, setIsLoading] = useState(true);
+  15 │   const navigate = useNavigate();
+  16 │ 
+  17 │   // Prüfen, ob der Benutzer authentifiziert ist
+  18 │   useEffect(() => {
+  19 │     const checkAuth = async () => {
+  20 │       setIsLoading(true);
+  21 │       
+  22 │       try {
+  23 │         const { data: { session } } = await supabase.auth.getSession();
+  24 │         
+  25 │         if (session) {
+  26 │           // Für eine einfache Implementierung: Wir prüfen nur, ob der Benutzer eingeloggt ist
+  27 │           // In einer vollständigen Implementierung würden wir Rollen prüfen
+  28 │           setIsAuthenticated(true);
+  29 │         } else {
+  30 │           setIsAuthenticated(false);
+  31 │         }
+  32 │       } catch (error) {
+  33 │         console.error('Auth check error:', error);
+  34 │         setIsAuthenticated(false);
+  35 │       } finally {
+  36 │         setIsLoading(false);
+  37 │       }
+  38 │     };
+  39 │ 
+  40 │     checkAuth();
+  41 │   }, []);
+  42 │ 
+  43 │   const handleLogout = async () => {
+  44 │     try {
+  45 │       await supabase.auth.signOut();
+  46 │       setIsAuthenticated(false);
+  47 │     } catch (error) {
+  48 │       console.error('Logout error:', error);
+  49 │     }
+  50 │   };
+  51 │ 
+  52 │   if (isLoading) {
+  53 │     return (
+  54 │       <div className="container mx-auto px-4 py-12 flex justify-center">
+  55 │         <p className="text-muted-foreground">Lade...</p>
+  56 │       </div>
+  57 │     );
+  58 │   }
+  59 │ 
+  60 │   // Wenn nicht authentifiziert, zeigen wir den Login-Screen
+  61 │   if (!isAuthenticated) {
+  62 │     return <AdminAuth onAuthSuccess={() => setIsAuthenticated(true)} />;
+  63 │   }
+  64 │ 
+  65 │   return (
+  66 │     <div className="container mx-auto px-4 py-12">
+  67 │       <div className="flex justify-between items-center mb-8">
+  68 │         <h1 className="text-3xl font-bold">Admin-Bereich</h1>
+  69 │         <Button variant="outline" onClick={handleLogout}>
+  70 │           Abmelden
+  71 │         </Button>
+  72 │       </div>
+  73 │ 
+  74 │       <Tabs defaultValue="termine">
+  75 │         <TabsList className="mb-8">
+  76 │           <TabsTrigger value="termine">Termine</TabsTrigger>
+  77 │           <TabsTrigger value="zeitfenster">Zeitfenster</TabsTrigger>
+  78 │         </TabsList>
+  79 │ 
+  80 │         <TabsContent value="termine">
+  81 │           <Card>
+  82 │             <CardHeader>
+  83 │               <CardTitle>Terminanfragen</CardTitle>
+  84 │             </CardHeader>
+  85 │             <CardContent>
+  86 │               <AdminAppointments />
+  87 │             </CardContent>
+  88 │           </Card>
+  89 │         </TabsContent>
+  90 │ 
+  91 │         <TabsContent value="zeitfenster">
+  92 │           <Card>
+  93 │             <CardHeader>
+  94 │               <CardTitle>Verfügbare Zeitfenster</CardTitle>
+  95 │             </CardHeader>
+  96 │             <CardContent>
+  97 │               <AdminTimeSlots />
+  98 │             </CardContent>
+  99 │           </Card>
+ 100 │         </TabsContent>
+ 101 │       </Tabs>
+ 102 │     </div>
+ 103 │   );
+ 104 │ }
+ 105 │ import { useState, useEffect } from 'react';
+ 106 │ import { useNavigate } from 'react-router-dom';
+     ·          ─────┬─────
+     ·               ╰── `useNavigate` redefined here
+ 107 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+ 108 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+ 109 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+     ╰────
+  × the name `Tabs` is defined multiple times
+     ╭─[/home/runner/workspace/src/pages/Admin.tsx:6:1]
+   3 │ import { useNavigate } from 'react-router-dom';
+   4 │ import { Button } from '@/components/ui/button';
+   5 │ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+   6 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+     ·          ──┬─
+     ·            ╰── previous definition of `Tabs` here
+   7 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+   8 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+   9 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+  10 │ import { supabase } from '@/integrations/supabase/client';
+  11 │ 
+  12 │ export default function Admin() {
+  13 │   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  14 │   const [isLoading, setIsLoading] = useState(true);
+  15 │   const navigate = useNavigate();
+  16 │ 
+  17 │   // Prüfen, ob der Benutzer authentifiziert ist
+  18 │   useEffect(() => {
+  19 │     const checkAuth = async () => {
+  20 │       setIsLoading(true);
+  21 │       
+  22 │       try {
+  23 │         const { data: { session } } = await supabase.auth.getSession();
+  24 │         
+  25 │         if (session) {
+  26 │           // Für eine einfache Implementierung: Wir prüfen nur, ob der Benutzer eingeloggt ist
+  27 │           // In einer vollständigen Implementierung würden wir Rollen prüfen
+  28 │           setIsAuthenticated(true);
+  29 │         } else {
+  30 │           setIsAuthenticated(false);
+  31 │         }
+  32 │       } catch (error) {
+  33 │         console.error('Auth check error:', error);
+  34 │         setIsAuthenticated(false);
+  35 │       } finally {
+  36 │         setIsLoading(false);
+  37 │       }
+  38 │     };
+  39 │ 
+  40 │     checkAuth();
+  41 │   }, []);
+  42 │ 
+  43 │   const handleLogout = async () => {
+  44 │     try {
+  45 │       await supabase.auth.signOut();
+  46 │       setIsAuthenticated(false);
+  47 │     } catch (error) {
+  48 │       console.error('Logout error:', error);
+  49 │     }
+  50 │   };
+  51 │ 
+  52 │   if (isLoading) {
+  53 │     return (
+  54 │       <div className="container mx-auto px-4 py-12 flex justify-center">
+  55 │         <p className="text-muted-foreground">Lade...</p>
+  56 │       </div>
+  57 │     );
+  58 │   }
+  59 │ 
+  60 │   // Wenn nicht authentifiziert, zeigen wir den Login-Screen
+  61 │   if (!isAuthenticated) {
+  62 │     return <AdminAuth onAuthSuccess={() => setIsAuthenticated(true)} />;
+  63 │   }
+  64 │ 
+  65 │   return (
+  66 │     <div className="container mx-auto px-4 py-12">
+  67 │       <div className="flex justify-between items-center mb-8">
+  68 │         <h1 className="text-3xl font-bold">Admin-Bereich</h1>
+  69 │         <Button variant="outline" onClick={handleLogout}>
+  70 │           Abmelden
+  71 │         </Button>
+  72 │       </div>
+  73 │ 
+  74 │       <Tabs defaultValue="termine">
+  75 │         <TabsList className="mb-8">
+  76 │           <TabsTrigger value="termine">Termine</TabsTrigger>
+  77 │           <TabsTrigger value="zeitfenster">Zeitfenster</TabsTrigger>
+  78 │         </TabsList>
+  79 │ 
+  80 │         <TabsContent value="termine">
+  81 │           <Card>
+  82 │             <CardHeader>
+  83 │               <CardTitle>Terminanfragen</CardTitle>
+  84 │             </CardHeader>
+  85 │             <CardContent>
+  86 │               <AdminAppointments />
+  87 │             </CardContent>
+  88 │           </Card>
+  89 │         </TabsContent>
+  90 │ 
+  91 │         <TabsContent value="zeitfenster">
+  92 │           <Card>
+  93 │             <CardHeader>
+  94 │               <CardTitle>Verfügbare Zeitfenster</CardTitle>
+  95 │             </CardHeader>
+  96 │             <CardContent>
+  97 │               <AdminTimeSlots />
+  98 │             </CardContent>
+  99 │           </Card>
+ 100 │         </TabsContent>
+ 101 │       </Tabs>
+ 102 │     </div>
+ 103 │   );
+ 104 │ }
+ 105 │ import { useState, useEffect } from 'react';
+ 106 │ import { useNavigate } from 'react-router-dom';
+ 107 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+     ·          ──┬─
+     ·            ╰── `Tabs` redefined here
+ 108 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+ 109 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+ 110 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+     ╰────
+  × the name `TabsContent` is defined multiple times
+     ╭─[/home/runner/workspace/src/pages/Admin.tsx:6:1]
+   3 │ import { useNavigate } from 'react-router-dom';
+   4 │ import { Button } from '@/components/ui/button';
+   5 │ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+   6 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+     ·                ─────┬─────
+     ·                     ╰── previous definition of `TabsContent` here
+   7 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+   8 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+   9 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+  10 │ import { supabase } from '@/integrations/supabase/client';
+  11 │ 
+  12 │ export default function Admin() {
+  13 │   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  14 │   const [isLoading, setIsLoading] = useState(true);
+  15 │   const navigate = useNavigate();
+  16 │ 
+  17 │   // Prüfen, ob der Benutzer authentifiziert ist
+  18 │   useEffect(() => {
+  19 │     const checkAuth = async () => {
+  20 │       setIsLoading(true);
+  21 │       
+  22 │       try {
+  23 │         const { data: { session } } = await supabase.auth.getSession();
+  24 │         
+  25 │         if (session) {
+  26 │           // Für eine einfache Implementierung: Wir prüfen nur, ob der Benutzer eingeloggt ist
+  27 │           // In einer vollständigen Implementierung würden wir Rollen prüfen
+  28 │           setIsAuthenticated(true);
+  29 │         } else {
+  30 │           setIsAuthenticated(false);
+  31 │         }
+  32 │       } catch (error) {
+  33 │         console.error('Auth check error:', error);
+  34 │         setIsAuthenticated(false);
+  35 │       } finally {
+  36 │         setIsLoading(false);
+  37 │       }
+  38 │     };
+  39 │ 
+  40 │     checkAuth();
+  41 │   }, []);
+  42 │ 
+  43 │   const handleLogout = async () => {
+  44 │     try {
+  45 │       await supabase.auth.signOut();
+  46 │       setIsAuthenticated(false);
+  47 │     } catch (error) {
+  48 │       console.error('Logout error:', error);
+  49 │     }
+  50 │   };
+  51 │ 
+  52 │   if (isLoading) {
+  53 │     return (
+  54 │       <div className="container mx-auto px-4 py-12 flex justify-center">
+  55 │         <p className="text-muted-foreground">Lade...</p>
+  56 │       </div>
+  57 │     );
+  58 │   }
+  59 │ 
+  60 │   // Wenn nicht authentifiziert, zeigen wir den Login-Screen
+  61 │   if (!isAuthenticated) {
+  62 │     return <AdminAuth onAuthSuccess={() => setIsAuthenticated(true)} />;
+  63 │   }
+  64 │ 
+  65 │   return (
+  66 │     <div className="container mx-auto px-4 py-12">
+  67 │       <div className="flex justify-between items-center mb-8">
+  68 │         <h1 className="text-3xl font-bold">Admin-Bereich</h1>
+  69 │         <Button variant="outline" onClick={handleLogout}>
+  70 │           Abmelden
+  71 │         </Button>
+  72 │       </div>
+  73 │ 
+  74 │       <Tabs defaultValue="termine">
+  75 │         <TabsList className="mb-8">
+  76 │           <TabsTrigger value="termine">Termine</TabsTrigger>
+  77 │           <TabsTrigger value="zeitfenster">Zeitfenster</TabsTrigger>
+  78 │         </TabsList>
+  79 │ 
+  80 │         <TabsContent value="termine">
+  81 │           <Card>
+  82 │             <CardHeader>
+  83 │               <CardTitle>Terminanfragen</CardTitle>
+  84 │             </CardHeader>
+  85 │             <CardContent>
+  86 │               <AdminAppointments />
+  87 │             </CardContent>
+  88 │           </Card>
+  89 │         </TabsContent>
+  90 │ 
+  91 │         <TabsContent value="zeitfenster">
+  92 │           <Card>
+  93 │             <CardHeader>
+  94 │               <CardTitle>Verfügbare Zeitfenster</CardTitle>
+  95 │             </CardHeader>
+  96 │             <CardContent>
+  97 │               <AdminTimeSlots />
+  98 │             </CardContent>
+  99 │           </Card>
+ 100 │         </TabsContent>
+ 101 │       </Tabs>
+ 102 │     </div>
+ 103 │   );
+ 104 │ }
+ 105 │ import { useState, useEffect } from 'react';
+ 106 │ import { useNavigate } from 'react-router-dom';
+ 107 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+     ·                ─────┬─────
+     ·                     ╰── `TabsContent` redefined here
+ 108 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+ 109 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+ 110 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+     ╰────
+  × the name `TabsList` is defined multiple times
+     ╭─[/home/runner/workspace/src/pages/Admin.tsx:6:1]
+   3 │ import { useNavigate } from 'react-router-dom';
+   4 │ import { Button } from '@/components/ui/button';
+   5 │ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+   6 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+     ·                             ────┬───
+     ·                                 ╰── previous definition of `TabsList` here
+   7 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+   8 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+   9 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+  10 │ import { supabase } from '@/integrations/supabase/client';
+  11 │ 
+  12 │ export default function Admin() {
+  13 │   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  14 │   const [isLoading, setIsLoading] = useState(true);
+  15 │   const navigate = useNavigate();
+  16 │ 
+  17 │   // Prüfen, ob der Benutzer authentifiziert ist
+  18 │   useEffect(() => {
+  19 │     const checkAuth = async () => {
+  20 │       setIsLoading(true);
+  21 │       
+  22 │       try {
+  23 │         const { data: { session } } = await supabase.auth.getSession();
+  24 │         
+  25 │         if (session) {
+  26 │           // Für eine einfache Implementierung: Wir prüfen nur, ob der Benutzer eingeloggt ist
+  27 │           // In einer vollständigen Implementierung würden wir Rollen prüfen
+  28 │           setIsAuthenticated(true);
+  29 │         } else {
+  30 │           setIsAuthenticated(false);
+  31 │         }
+  32 │       } catch (error) {
+  33 │         console.error('Auth check error:', error);
+  34 │         setIsAuthenticated(false);
+  35 │       } finally {
+  36 │         setIsLoading(false);
+  37 │       }
+  38 │     };
+  39 │ 
+  40 │     checkAuth();
+  41 │   }, []);
+  42 │ 
+  43 │   const handleLogout = async () => {
+  44 │     try {
+  45 │       await supabase.auth.signOut();
+  46 │       setIsAuthenticated(false);
+  47 │     } catch (error) {
+  48 │       console.error('Logout error:', error);
+  49 │     }
+  50 │   };
+  51 │ 
+  52 │   if (isLoading) {
+  53 │     return (
+  54 │       <div className="container mx-auto px-4 py-12 flex justify-center">
+  55 │         <p className="text-muted-foreground">Lade...</p>
+  56 │       </div>
+  57 │     );
+  58 │   }
+  59 │ 
+  60 │   // Wenn nicht authentifiziert, zeigen wir den Login-Screen
+  61 │   if (!isAuthenticated) {
+  62 │     return <AdminAuth onAuthSuccess={() => setIsAuthenticated(true)} />;
+  63 │   }
+  64 │ 
+  65 │   return (
+  66 │     <div className="container mx-auto px-4 py-12">
+  67 │       <div className="flex justify-between items-center mb-8">
+  68 │         <h1 className="text-3xl font-bold">Admin-Bereich</h1>
+  69 │         <Button variant="outline" onClick={handleLogout}>
+  70 │           Abmelden
+  71 │         </Button>
+  72 │       </div>
+  73 │ 
+  74 │       <Tabs defaultValue="termine">
+  75 │         <TabsList className="mb-8">
+  76 │           <TabsTrigger value="termine">Termine</TabsTrigger>
+  77 │           <TabsTrigger value="zeitfenster">Zeitfenster</TabsTrigger>
+  78 │         </TabsList>
+  79 │ 
+  80 │         <TabsContent value="termine">
+  81 │           <Card>
+  82 │             <CardHeader>
+  83 │               <CardTitle>Terminanfragen</CardTitle>
+  84 │             </CardHeader>
+  85 │             <CardContent>
+  86 │               <AdminAppointments />
+  87 │             </CardContent>
+  88 │           </Card>
+  89 │         </TabsContent>
+  90 │ 
+  91 │         <TabsContent value="zeitfenster">
+  92 │           <Card>
+  93 │             <CardHeader>
+  94 │               <CardTitle>Verfügbare Zeitfenster</CardTitle>
+  95 │             </CardHeader>
+  96 │             <CardContent>
+  97 │               <AdminTimeSlots />
+  98 │             </CardContent>
+  99 │           </Card>
+ 100 │         </TabsContent>
+ 101 │       </Tabs>
+ 102 │     </div>
+ 103 │   );
+ 104 │ }
+ 105 │ import { useState, useEffect } from 'react';
+ 106 │ import { useNavigate } from 'react-router-dom';
+ 107 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+     ·                             ────┬───
+     ·                                 ╰── `TabsList` redefined here
+ 108 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+ 109 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+ 110 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+     ╰────
+  × the name `TabsTrigger` is defined multiple times
+     ╭─[/home/runner/workspace/src/pages/Admin.tsx:6:1]
+   3 │ import { useNavigate } from 'react-router-dom';
+   4 │ import { Button } from '@/components/ui/button';
+   5 │ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+   6 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+     ·                                       ─────┬─────
+     ·                                            ╰── previous definition of `TabsTrigger` here
+   7 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+   8 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+   9 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+  10 │ import { supabase } from '@/integrations/supabase/client';
+  11 │ 
+  12 │ export default function Admin() {
+  13 │   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  14 │   const [isLoading, setIsLoading] = useState(true);
+  15 │   const navigate = useNavigate();
+  16 │ 
+  17 │   // Prüfen, ob der Benutzer authentifiziert ist
+  18 │   useEffect(() => {
+  19 │     const checkAuth = async () => {
+  20 │       setIsLoading(true);
+  21 │       
+  22 │       try {
+  23 │         const { data: { session } } = await supabase.auth.getSession();
+  24 │         
+  25 │         if (session) {
+  26 │           // Für eine einfache Implementierung: Wir prüfen nur, ob der Benutzer eingeloggt ist
+  27 │           // In einer vollständigen Implementierung würden wir Rollen prüfen
+  28 │           setIsAuthenticated(true);
+  29 │         } else {
+  30 │           setIsAuthenticated(false);
+  31 │         }
+  32 │       } catch (error) {
+  33 │         console.error('Auth check error:', error);
+  34 │         setIsAuthenticated(false);
+  35 │       } finally {
+  36 │         setIsLoading(false);
+  37 │       }
+  38 │     };
+  39 │ 
+  40 │     checkAuth();
+  41 │   }, []);
+  42 │ 
+  43 │   const handleLogout = async () => {
+  44 │     try {
+  45 │       await supabase.auth.signOut();
+  46 │       setIsAuthenticated(false);
+  47 │     } catch (error) {
+  48 │       console.error('Logout error:', error);
+  49 │     }
+  50 │   };
+  51 │ 
+  52 │   if (isLoading) {
+  53 │     return (
+  54 │       <div className="container mx-auto px-4 py-12 flex justify-center">
+  55 │         <p className="text-muted-foreground">Lade...</p>
+  56 │       </div>
+  57 │     );
+  58 │   }
+  59 │ 
+  60 │   // Wenn nicht authentifiziert, zeigen wir den Login-Screen
+  61 │   if (!isAuthenticated) {
+  62 │     return <AdminAuth onAuthSuccess={() => setIsAuthenticated(true)} />;
+  63 │   }
+  64 │ 
+  65 │   return (
+  66 │     <div className="container mx-auto px-4 py-12">
+  67 │       <div className="flex justify-between items-center mb-8">
+  68 │         <h1 className="text-3xl font-bold">Admin-Bereich</h1>
+  69 │         <Button variant="outline" onClick={handleLogout}>
+  70 │           Abmelden
+  71 │         </Button>
+  72 │       </div>
+  73 │ 
+  74 │       <Tabs defaultValue="termine">
+  75 │         <TabsList className="mb-8">
+  76 │           <TabsTrigger value="termine">Termine</TabsTrigger>
+  77 │           <TabsTrigger value="zeitfenster">Zeitfenster</TabsTrigger>
+  78 │         </TabsList>
+  79 │ 
+  80 │         <TabsContent value="termine">
+  81 │           <Card>
+  82 │             <CardHeader>
+  83 │               <CardTitle>Terminanfragen</CardTitle>
+  84 │             </CardHeader>
+  85 │             <CardContent>
+  86 │               <AdminAppointments />
+  87 │             </CardContent>
+  88 │           </Card>
+  89 │         </TabsContent>
+  90 │ 
+  91 │         <TabsContent value="zeitfenster">
+  92 │           <Card>
+  93 │             <CardHeader>
+  94 │               <CardTitle>Verfügbare Zeitfenster</CardTitle>
+  95 │             </CardHeader>
+  96 │             <CardContent>
+  97 │               <AdminTimeSlots />
+  98 │             </CardContent>
+  99 │           </Card>
+ 100 │         </TabsContent>
+ 101 │       </Tabs>
+ 102 │     </div>
+ 103 │   );
+ 104 │ }
+ 105 │ import { useState, useEffect } from 'react';
+ 106 │ import { useNavigate } from 'react-router-dom';
+ 107 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+     ·                                       ─────┬─────
+     ·                                            ╰── `TabsTrigger` redefined here
+ 108 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+ 109 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+ 110 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+     ╰────
+  × the name `AdminAuth` is defined multiple times
+     ╭─[/home/runner/workspace/src/pages/Admin.tsx:9:1]
+   6 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+   7 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+   8 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+   9 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+     ·          ────┬────
+     ·              ╰── previous definition of `AdminAuth` here
+  10 │ import { supabase } from '@/integrations/supabase/client';
+  11 │ 
+  12 │ export default function Admin() {
+  13 │   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  14 │   const [isLoading, setIsLoading] = useState(true);
+  15 │   const navigate = useNavigate();
+  16 │ 
+  17 │   // Prüfen, ob der Benutzer authentifiziert ist
+  18 │   useEffect(() => {
+  19 │     const checkAuth = async () => {
+  20 │       setIsLoading(true);
+  21 │       
+  22 │       try {
+  23 │         const { data: { session } } = await supabase.auth.getSession();
+  24 │         
+  25 │         if (session) {
+  26 │           // Für eine einfache Implementierung: Wir prüfen nur, ob der Benutzer eingeloggt ist
+  27 │           // In einer vollständigen Implementierung würden wir Rollen prüfen
+  28 │           setIsAuthenticated(true);
+  29 │         } else {
+  30 │           setIsAuthenticated(false);
+  31 │         }
+  32 │       } catch (error) {
+  33 │         console.error('Auth check error:', error);
+  34 │         setIsAuthenticated(false);
+  35 │       } finally {
+  36 │         setIsLoading(false);
+  37 │       }
+  38 │     };
+  39 │ 
+  40 │     checkAuth();
+  41 │   }, []);
+  42 │ 
+  43 │   const handleLogout = async () => {
+  44 │     try {
+  45 │       await supabase.auth.signOut();
+  46 │       setIsAuthenticated(false);
+  47 │     } catch (error) {
+  48 │       console.error('Logout error:', error);
+  49 │     }
+  50 │   };
+  51 │ 
+  52 │   if (isLoading) {
+  53 │     return (
+  54 │       <div className="container mx-auto px-4 py-12 flex justify-center">
+  55 │         <p className="text-muted-foreground">Lade...</p>
+  56 │       </div>
+  57 │     );
+  58 │   }
+  59 │ 
+  60 │   // Wenn nicht authentifiziert, zeigen wir den Login-Screen
+  61 │   if (!isAuthenticated) {
+  62 │     return <AdminAuth onAuthSuccess={() => setIsAuthenticated(true)} />;
+  63 │   }
+  64 │ 
+  65 │   return (
+  66 │     <div className="container mx-auto px-4 py-12">
+  67 │       <div className="flex justify-between items-center mb-8">
+  68 │         <h1 className="text-3xl font-bold">Admin-Bereich</h1>
+  69 │         <Button variant="outline" onClick={handleLogout}>
+  70 │           Abmelden
+  71 │         </Button>
+  72 │       </div>
+  73 │ 
+  74 │       <Tabs defaultValue="termine">
+  75 │         <TabsList className="mb-8">
+  76 │           <TabsTrigger value="termine">Termine</TabsTrigger>
+  77 │           <TabsTrigger value="zeitfenster">Zeitfenster</TabsTrigger>
+  78 │         </TabsList>
+  79 │ 
+  80 │         <TabsContent value="termine">
+  81 │           <Card>
+  82 │             <CardHeader>
+  83 │               <CardTitle>Terminanfragen</CardTitle>
+  84 │             </CardHeader>
+  85 │             <CardContent>
+  86 │               <AdminAppointments />
+  87 │             </CardContent>
+  88 │           </Card>
+  89 │         </TabsContent>
+  90 │ 
+  91 │         <TabsContent value="zeitfenster">
+  92 │           <Card>
+  93 │             <CardHeader>
+  94 │               <CardTitle>Verfügbare Zeitfenster</CardTitle>
+  95 │             </CardHeader>
+  96 │             <CardContent>
+  97 │               <AdminTimeSlots />
+  98 │             </CardContent>
+  99 │           </Card>
+ 100 │         </TabsContent>
+ 101 │       </Tabs>
+ 102 │     </div>
+ 103 │   );
+ 104 │ }
+ 105 │ import { useState, useEffect } from 'react';
+ 106 │ import { useNavigate } from 'react-router-dom';
+ 107 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+ 108 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+     ·          ────┬────
+     ·              ╰── `AdminAuth` redefined here
+ 109 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+ 110 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+ 111 │ import { AdminDashboard } from '@/components/admin/AdminDashboard';
+     ╰────
+  × the name `AdminAppointments` is defined multiple times
+     ╭─[/home/runner/workspace/src/pages/Admin.tsx:7:1]
+   4 │ import { Button } from '@/components/ui/button';
+   5 │ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+   6 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+   7 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+     ·          ────────┬────────
+     ·                  ╰── previous definition of `AdminAppointments` here
+   8 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+   9 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+  10 │ import { supabase } from '@/integrations/supabase/client';
+  11 │ 
+  12 │ export default function Admin() {
+  13 │   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  14 │   const [isLoading, setIsLoading] = useState(true);
+  15 │   const navigate = useNavigate();
+  16 │ 
+  17 │   // Prüfen, ob der Benutzer authentifiziert ist
+  18 │   useEffect(() => {
+  19 │     const checkAuth = async () => {
+  20 │       setIsLoading(true);
+  21 │       
+  22 │       try {
+  23 │         const { data: { session } } = await supabase.auth.getSession();
+  24 │         
+  25 │         if (session) {
+  26 │           // Für eine einfache Implementierung: Wir prüfen nur, ob der Benutzer eingeloggt ist
+  27 │           // In einer vollständigen Implementierung würden wir Rollen prüfen
+  28 │           setIsAuthenticated(true);
+  29 │         } else {
+  30 │           setIsAuthenticated(false);
+  31 │         }
+  32 │       } catch (error) {
+  33 │         console.error('Auth check error:', error);
+  34 │         setIsAuthenticated(false);
+  35 │       } finally {
+  36 │         setIsLoading(false);
+  37 │       }
+  38 │     };
+  39 │ 
+  40 │     checkAuth();
+  41 │   }, []);
+  42 │ 
+  43 │   const handleLogout = async () => {
+  44 │     try {
+  45 │       await supabase.auth.signOut();
+  46 │       setIsAuthenticated(false);
+  47 │     } catch (error) {
+  48 │       console.error('Logout error:', error);
+  49 │     }
+  50 │   };
+  51 │ 
+  52 │   if (isLoading) {
+  53 │     return (
+  54 │       <div className="container mx-auto px-4 py-12 flex justify-center">
+  55 │         <p className="text-muted-foreground">Lade...</p>
+  56 │       </div>
+  57 │     );
+  58 │   }
+  59 │ 
+  60 │   // Wenn nicht authentifiziert, zeigen wir den Login-Screen
+  61 │   if (!isAuthenticated) {
+  62 │     return <AdminAuth onAuthSuccess={() => setIsAuthenticated(true)} />;
+  63 │   }
+  64 │ 
+  65 │   return (
+  66 │     <div className="container mx-auto px-4 py-12">
+  67 │       <div className="flex justify-between items-center mb-8">
+  68 │         <h1 className="text-3xl font-bold">Admin-Bereich</h1>
+  69 │         <Button variant="outline" onClick={handleLogout}>
+  70 │           Abmelden
+  71 │         </Button>
+  72 │       </div>
+  73 │ 
+  74 │       <Tabs defaultValue="termine">
+  75 │         <TabsList className="mb-8">
+  76 │           <TabsTrigger value="termine">Termine</TabsTrigger>
+  77 │           <TabsTrigger value="zeitfenster">Zeitfenster</TabsTrigger>
+  78 │         </TabsList>
+  79 │ 
+  80 │         <TabsContent value="termine">
+  81 │           <Card>
+  82 │             <CardHeader>
+  83 │               <CardTitle>Terminanfragen</CardTitle>
+  84 │             </CardHeader>
+  85 │             <CardContent>
+  86 │               <AdminAppointments />
+  87 │             </CardContent>
+  88 │           </Card>
+  89 │         </TabsContent>
+  90 │ 
+  91 │         <TabsContent value="zeitfenster">
+  92 │           <Card>
+  93 │             <CardHeader>
+  94 │               <CardTitle>Verfügbare Zeitfenster</CardTitle>
+  95 │             </CardHeader>
+  96 │             <CardContent>
+  97 │               <AdminTimeSlots />
+  98 │             </CardContent>
+  99 │           </Card>
+ 100 │         </TabsContent>
+ 101 │       </Tabs>
+ 102 │     </div>
+ 103 │   );
+ 104 │ }
+ 105 │ import { useState, useEffect } from 'react';
+ 106 │ import { useNavigate } from 'react-router-dom';
+ 107 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+ 108 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+ 109 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+     ·          ────────┬────────
+     ·                  ╰── `AdminAppointments` redefined here
+ 110 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+ 111 │ import { AdminDashboard } from '@/components/admin/AdminDashboard';
+ 112 │ import { AdminUsers } from '@/components/admin/AdminUsers';
+     ╰────
+  × the name `AdminTimeSlots` is defined multiple times
+     ╭─[/home/runner/workspace/src/pages/Admin.tsx:8:1]
+   5 │ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+   6 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+   7 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+   8 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+     ·          ───────┬──────
+     ·                 ╰── previous definition of `AdminTimeSlots` here
+   9 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+  10 │ import { supabase } from '@/integrations/supabase/client';
+  11 │ 
+  12 │ export default function Admin() {
+  13 │   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  14 │   const [isLoading, setIsLoading] = useState(true);
+  15 │   const navigate = useNavigate();
+  16 │ 
+  17 │   // Prüfen, ob der Benutzer authentifiziert ist
+  18 │   useEffect(() => {
+  19 │     const checkAuth = async () => {
+  20 │       setIsLoading(true);
+  21 │       
+  22 │       try {
+  23 │         const { data: { session } } = await supabase.auth.getSession();
+  24 │         
+  25 │         if (session) {
+  26 │           // Für eine einfache Implementierung: Wir prüfen nur, ob der Benutzer eingeloggt ist
+  27 │           // In einer vollständigen Implementierung würden wir Rollen prüfen
+  28 │           setIsAuthenticated(true);
+  29 │         } else {
+  30 │           setIsAuthenticated(false);
+  31 │         }
+  32 │       } catch (error) {
+  33 │         console.error('Auth check error:', error);
+  34 │         setIsAuthenticated(false);
+  35 │       } finally {
+  36 │         setIsLoading(false);
+  37 │       }
+  38 │     };
+  39 │ 
+  40 │     checkAuth();
+  41 │   }, []);
+  42 │ 
+  43 │   const handleLogout = async () => {
+  44 │     try {
+  45 │       await supabase.auth.signOut();
+  46 │       setIsAuthenticated(false);
+  47 │     } catch (error) {
+  48 │       console.error('Logout error:', error);
+  49 │     }
+  50 │   };
+  51 │ 
+  52 │   if (isLoading) {
+  53 │     return (
+  54 │       <div className="container mx-auto px-4 py-12 flex justify-center">
+  55 │         <p className="text-muted-foreground">Lade...</p>
+  56 │       </div>
+  57 │     );
+  58 │   }
+  59 │ 
+  60 │   // Wenn nicht authentifiziert, zeigen wir den Login-Screen
+  61 │   if (!isAuthenticated) {
+  62 │     return <AdminAuth onAuthSuccess={() => setIsAuthenticated(true)} />;
+  63 │   }
+  64 │ 
+  65 │   return (
+  66 │     <div className="container mx-auto px-4 py-12">
+  67 │       <div className="flex justify-between items-center mb-8">
+  68 │         <h1 className="text-3xl font-bold">Admin-Bereich</h1>
+  69 │         <Button variant="outline" onClick={handleLogout}>
+  70 │           Abmelden
+  71 │         </Button>
+  72 │       </div>
+  73 │ 
+  74 │       <Tabs defaultValue="termine">
+  75 │         <TabsList className="mb-8">
+  76 │           <TabsTrigger value="termine">Termine</TabsTrigger>
+  77 │           <TabsTrigger value="zeitfenster">Zeitfenster</TabsTrigger>
+  78 │         </TabsList>
+  79 │ 
+  80 │         <TabsContent value="termine">
+  81 │           <Card>
+  82 │             <CardHeader>
+  83 │               <CardTitle>Terminanfragen</CardTitle>
+  84 │             </CardHeader>
+  85 │             <CardContent>
+  86 │               <AdminAppointments />
+  87 │             </CardContent>
+  88 │           </Card>
+  89 │         </TabsContent>
+  90 │ 
+  91 │         <TabsContent value="zeitfenster">
+  92 │           <Card>
+  93 │             <CardHeader>
+  94 │               <CardTitle>Verfügbare Zeitfenster</CardTitle>
+  95 │             </CardHeader>
+  96 │             <CardContent>
+  97 │               <AdminTimeSlots />
+  98 │             </CardContent>
+  99 │           </Card>
+ 100 │         </TabsContent>
+ 101 │       </Tabs>
+ 102 │     </div>
+ 103 │   );
+ 104 │ }
+ 105 │ import { useState, useEffect } from 'react';
+ 106 │ import { useNavigate } from 'react-router-dom';
+ 107 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+ 108 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+ 109 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+ 110 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+     ·          ───────┬──────
+     ·                 ╰── `AdminTimeSlots` redefined here
+ 111 │ import { AdminDashboard } from '@/components/admin/AdminDashboard';
+ 112 │ import { AdminUsers } from '@/components/admin/AdminUsers';
+ 113 │ import { AdminSettings } from '@/components/admin/AdminSettings';
+     ╰────
+  × the name `Button` is defined multiple times
+     ╭─[/home/runner/workspace/src/pages/Admin.tsx:4:1]
+   1 │ 
+   2 │ import { useState, useEffect } from 'react';
+   3 │ import { useNavigate } from 'react-router-dom';
+   4 │ import { Button } from '@/components/ui/button';
+     ·          ───┬──
+     ·             ╰── previous definition of `Button` here
+   5 │ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+   6 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+   7 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+   8 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+   9 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+  10 │ import { supabase } from '@/integrations/supabase/client';
+  11 │ 
+  12 │ export default function Admin() {
+  13 │   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  14 │   const [isLoading, setIsLoading] = useState(true);
+  15 │   const navigate = useNavigate();
+  16 │ 
+  17 │   // Prüfen, ob der Benutzer authentifiziert ist
+  18 │   useEffect(() => {
+  19 │     const checkAuth = async () => {
+  20 │       setIsLoading(true);
+  21 │       
+  22 │       try {
+  23 │         const { data: { session } } = await supabase.auth.getSession();
+  24 │         
+  25 │         if (session) {
+  26 │           // Für eine einfache Implementierung: Wir prüfen nur, ob der Benutzer eingeloggt ist
+  27 │           // In einer vollständigen Implementierung würden wir Rollen prüfen
+  28 │           setIsAuthenticated(true);
+  29 │         } else {
+  30 │           setIsAuthenticated(false);
+  31 │         }
+  32 │       } catch (error) {
+  33 │         console.error('Auth check error:', error);
+  34 │         setIsAuthenticated(false);
+  35 │       } finally {
+  36 │         setIsLoading(false);
+  37 │       }
+  38 │     };
+  39 │ 
+  40 │     checkAuth();
+  41 │   }, []);
+  42 │ 
+  43 │   const handleLogout = async () => {
+  44 │     try {
+  45 │       await supabase.auth.signOut();
+  46 │       setIsAuthenticated(false);
+  47 │     } catch (error) {
+  48 │       console.error('Logout error:', error);
+  49 │     }
+  50 │   };
+  51 │ 
+  52 │   if (isLoading) {
+  53 │     return (
+  54 │       <div className="container mx-auto px-4 py-12 flex justify-center">
+  55 │         <p className="text-muted-foreground">Lade...</p>
+  56 │       </div>
+  57 │     );
+  58 │   }
+  59 │ 
+  60 │   // Wenn nicht authentifiziert, zeigen wir den Login-Screen
+  61 │   if (!isAuthenticated) {
+  62 │     return <AdminAuth onAuthSuccess={() => setIsAuthenticated(true)} />;
+  63 │   }
+  64 │ 
+  65 │   return (
+  66 │     <div className="container mx-auto px-4 py-12">
+  67 │       <div className="flex justify-between items-center mb-8">
+  68 │         <h1 className="text-3xl font-bold">Admin-Bereich</h1>
+  69 │         <Button variant="outline" onClick={handleLogout}>
+  70 │           Abmelden
+  71 │         </Button>
+  72 │       </div>
+  73 │ 
+  74 │       <Tabs defaultValue="termine">
+  75 │         <TabsList className="mb-8">
+  76 │           <TabsTrigger value="termine">Termine</TabsTrigger>
+  77 │           <TabsTrigger value="zeitfenster">Zeitfenster</TabsTrigger>
+  78 │         </TabsList>
+  79 │ 
+  80 │         <TabsContent value="termine">
+  81 │           <Card>
+  82 │             <CardHeader>
+  83 │               <CardTitle>Terminanfragen</CardTitle>
+  84 │             </CardHeader>
+  85 │             <CardContent>
+  86 │               <AdminAppointments />
+  87 │             </CardContent>
+  88 │           </Card>
+  89 │         </TabsContent>
+  90 │ 
+  91 │         <TabsContent value="zeitfenster">
+  92 │           <Card>
+  93 │             <CardHeader>
+  94 │               <CardTitle>Verfügbare Zeitfenster</CardTitle>
+  95 │             </CardHeader>
+  96 │             <CardContent>
+  97 │               <AdminTimeSlots />
+  98 │             </CardContent>
+  99 │           </Card>
+ 100 │         </TabsContent>
+ 101 │       </Tabs>
+ 102 │     </div>
+ 103 │   );
+ 104 │ }
+ 105 │ import { useState, useEffect } from 'react';
+ 106 │ import { useNavigate } from 'react-router-dom';
+ 107 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+ 108 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+ 109 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+ 110 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+ 111 │ import { AdminDashboard } from '@/components/admin/AdminDashboard';
+ 112 │ import { AdminUsers } from '@/components/admin/AdminUsers';
+ 113 │ import { AdminSettings } from '@/components/admin/AdminSettings';
+ 114 │ import { useAuth } from '@/hooks/useAuth';
+ 115 │ import { LayoutDashboard, Users, Calendar, Clock, Settings, LogOut } from 'lucide-react';
+ 116 │ import { Button } from '@/components/ui/button';
+     ·          ───┬──
+     ·             ╰── `Button` redefined here
+ 117 │ 
+ 118 │ export default function Admin() {
+ 119 │   const { isAuthenticated, user, logout } = useAuth();
+     ╰────
+  × the name `Admin` is defined multiple times
+     ╭─[/home/runner/workspace/src/pages/Admin.tsx:12:1]
+   9 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+  10 │ import { supabase } from '@/integrations/supabase/client';
+  11 │ 
+  12 │ export default function Admin() {
+     ·                         ──┬──
+     ·                           ╰── previous definition of `Admin` here
+  13 │   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  14 │   const [isLoading, setIsLoading] = useState(true);
+  15 │   const navigate = useNavigate();
+  16 │ 
+  17 │   // Prüfen, ob der Benutzer authentifiziert ist
+  18 │   useEffect(() => {
+  19 │     const checkAuth = async () => {
+  20 │       setIsLoading(true);
+  21 │       
+  22 │       try {
+  23 │         const { data: { session } } = await supabase.auth.getSession();
+  24 │         
+  25 │         if (session) {
+  26 │           // Für eine einfache Implementierung: Wir prüfen nur, ob der Benutzer eingeloggt ist
+  27 │           // In einer vollständigen Implementierung würden wir Rollen prüfen
+  28 │           setIsAuthenticated(true);
+  29 │         } else {
+  30 │           setIsAuthenticated(false);
+  31 │         }
+  32 │       } catch (error) {
+  33 │         console.error('Auth check error:', error);
+  34 │         setIsAuthenticated(false);
+  35 │       } finally {
+  36 │         setIsLoading(false);
+  37 │       }
+  38 │     };
+  39 │ 
+  40 │     checkAuth();
+  41 │   }, []);
+  42 │ 
+  43 │   const handleLogout = async () => {
+  44 │     try {
+  45 │       await supabase.auth.signOut();
+  46 │       setIsAuthenticated(false);
+  47 │     } catch (error) {
+  48 │       console.error('Logout error:', error);
+  49 │     }
+  50 │   };
+  51 │ 
+  52 │   if (isLoading) {
+  53 │     return (
+  54 │       <div className="container mx-auto px-4 py-12 flex justify-center">
+  55 │         <p className="text-muted-foreground">Lade...</p>
+  56 │       </div>
+  57 │     );
+  58 │   }
+  59 │ 
+  60 │   // Wenn nicht authentifiziert, zeigen wir den Login-Screen
+  61 │   if (!isAuthenticated) {
+  62 │     return <AdminAuth onAuthSuccess={() => setIsAuthenticated(true)} />;
+  63 │   }
+  64 │ 
+  65 │   return (
+  66 │     <div className="container mx-auto px-4 py-12">
+  67 │       <div className="flex justify-between items-center mb-8">
+  68 │         <h1 className="text-3xl font-bold">Admin-Bereich</h1>
+  69 │         <Button variant="outline" onClick={handleLogout}>
+  70 │           Abmelden
+  71 │         </Button>
+  72 │       </div>
+  73 │ 
+  74 │       <Tabs defaultValue="termine">
+  75 │         <TabsList className="mb-8">
+  76 │           <TabsTrigger value="termine">Termine</TabsTrigger>
+  77 │           <TabsTrigger value="zeitfenster">Zeitfenster</TabsTrigger>
+  78 │         </TabsList>
+  79 │ 
+  80 │         <TabsContent value="termine">
+  81 │           <Card>
+  82 │             <CardHeader>
+  83 │               <CardTitle>Terminanfragen</CardTitle>
+  84 │             </CardHeader>
+  85 │             <CardContent>
+  86 │               <AdminAppointments />
+  87 │             </CardContent>
+  88 │           </Card>
+  89 │         </TabsContent>
+  90 │ 
+  91 │         <TabsContent value="zeitfenster">
+  92 │           <Card>
+  93 │             <CardHeader>
+  94 │               <CardTitle>Verfügbare Zeitfenster</CardTitle>
+  95 │             </CardHeader>
+  96 │             <CardContent>
+  97 │               <AdminTimeSlots />
+  98 │             </CardContent>
+  99 │           </Card>
+ 100 │         </TabsContent>
+ 101 │       </Tabs>
+ 102 │     </div>
+ 103 │   );
+ 104 │ }
+ 105 │ import { useState, useEffect } from 'react';
+ 106 │ import { useNavigate } from 'react-router-dom';
+ 107 │ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+ 108 │ import { AdminAuth } from '@/components/admin/AdminAuth';
+ 109 │ import { AdminAppointments } from '@/components/admin/AdminAppointments';
+ 110 │ import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+ 111 │ import { AdminDashboard } from '@/components/admin/AdminDashboard';
+ 112 │ import { AdminUsers } from '@/components/admin/AdminUsers';
+ 113 │ import { AdminSettings } from '@/components/admin/AdminSettings';
+ 114 │ import { useAuth } from '@/hooks/useAuth';
+ 115 │ import { LayoutDashboard, Users, Calendar, Clock, Settings, LogOut } from 'lucide-react';
+ 116 │ import { Button } from '@/components/ui/button';
+ 117 │ 
+ 118 │ export default function Admin() {
+     ·                         ──┬──
+     ·                           ╰── `Admin` redefined here
+ 119 │   const { isAuthenticated, user, logout } = useAuth();
+ 120 │   const [activeTab, setActiveTab] = useState('dashboard');
+ 121 │   const navigate = useNavigate();
+     ╰────
+  × the name `default` is exported multiple times
+     ╭─[/home/runner/workspace/src/pages/Admin.tsx:12:1]
+   9 │     import { AdminAuth } from '@/components/admin/AdminAuth';
+  10 │     import { supabase } from '@/integrations/supabase/client';
+  11 │     
+  12 │ ╭─▶ export default function Admin() {
+  13 │ │     const [isAuthenticated, setIsAuthenticated] = useState(false);
+  14 │ │     const [isLoading, setIsLoading] = useState(true);
+  15 │ │     const navigate = useNavigate();
+  16 │ │   
+  17 │ │     // Prüfen, ob der Benutzer authentifiziert ist
+  18 │ │     useEffect(() => {
+  19 │ │       const checkAuth = async () => {
+  20 │ │         setIsLoading(true);
+  21 │ │         
+  22 │ │         try {
+  23 │ │           const { data: { session } } = await supabase.auth.getSession();
+  24 │ │           
+  25 │ │           if (session) {
+  26 │ │             // Für eine einfache Implementierung: Wir prüfen nur, ob der Benutzer eingeloggt ist
+  27 │ │             // In einer vollständigen Implementierung würden wir Rollen prüfen
+  28 │ │             setIsAuthenticated(true);
+  29 │ │           } else {
+  30 │ │             setIsAuthenticated(false);
+  31 │ │           }
+  32 │ │         } catch (error) {
+  33 │ │           console.error('Auth check error:', error);
+  34 │ │           setIsAuthenticated(false);
+  35 │ │         } finally {
+  36 │ │           setIsLoading(false);
+  37 │ │         }
+  38 │ │       };
+  39 │ │   
+  40 │ │       checkAuth();
+  41 │ │     }, []);
+  42 │ │   
+  43 │ │     const handleLogout = async () => {
+  44 │ │       try {
+  45 │ │         await supabase.auth.signOut();
+  46 │ │         setIsAuthenticated(false);
+  47 │ │       } catch (error) {
+  48 │ │         console.error('Logout error:', error);
+  49 │ │       }
+  50 │ │     };
+  51 │ │   
+  52 │ │     if (isLoading) {
+  53 │ │       return (
+  54 │ │         <div className="container mx-auto px-4 py-12 flex justify-center">
+  55 │ │           <p className="text-muted-foreground">Lade...</p>
+  56 │ │         </div>
+  57 │ │       );
+  58 │ │     }
+  59 │ │   
+  60 │ │     // Wenn nicht authentifiziert, zeigen wir den Login-Screen
+  61 │ │     if (!isAuthenticated) {
+  62 │ │       return <AdminAuth onAuthSuccess={() => setIsAuthenticated(true)} />;
+  63 │ │     }
+  64 │ │   
+  65 │ │     return (
+  66 │ │       <div className="container mx-auto px-4 py-12">
+  67 │ │         <div className="flex justify-between items-center mb-8">
+  68 │ │           <h1 className="text-3xl font-bold">Admin-Bereich</h1>
+  69 │ │           <Button variant="outline" onClick={handleLogout}>
+  70 │ │             Abmelden
+  71 │ │           </Button>
+  72 │ │         </div>
+  73 │ │   
+  74 │ │         <Tabs defaultValue="termine">
+  75 │ │           <TabsList className="mb-8">
+  76 │ │             <TabsTrigger value="termine">Termine</TabsTrigger>
+  77 │ │             <TabsTrigger value="zeitfenster">Zeitfenster</TabsTrigger>
+  78 │ │           </TabsList>
+  79 │ │   
+  80 │ │           <TabsContent value="termine">
+  81 │ │             <Card>
+  82 │ │               <CardHeader>
+  83 │ │                 <CardTitle>Terminanfragen</CardTitle>
+  84 │ │               </CardHeader>
+  85 │ │               <CardContent>
+  86 │ │                 <AdminAppointments />
+  87 │ │               </CardContent>
+  88 │ │             </Card>
+  89 │ │           </TabsContent>
+  90 │ │   
+  91 │ │           <TabsContent value="zeitfenster">
+  92 │ │             <Card>
+  93 │ │               <CardHeader>
+  94 │ │                 <CardTitle>Verfügbare Zeitfenster</CardTitle>
+  95 │ │               </CardHeader>
+  96 │ │               <CardContent>
+  97 │ │                 <AdminTimeSlots />
+  98 │ │               </CardContent>
+  99 │ │             </Card>
+ 100 │ │           </TabsContent>
+ 101 │ │         </Tabs>
+ 102 │ │       </div>
+ 103 │ │     );
+ 104 │ ├─▶ }
+     · ╰──── previous exported here
+ 105 │     import { useState, useEffect } from 'react';
+ 106 │     import { useNavigate } from 'react-router-dom';
+ 107 │     import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+ 108 │     import { AdminAuth } from '@/components/admin/AdminAuth';
+ 109 │     import { AdminAppointments } from '@/components/admin/AdminAppointments';
+ 110 │     import { AdminTimeSlots } from '@/components/admin/AdminTimeSlots';
+ 111 │     import { AdminDashboard } from '@/components/admin/AdminDashboard';
+ 112 │     import { AdminUsers } from '@/components/admin/AdminUsers';
+ 113 │     import { AdminSettings } from '@/components/admin/AdminSettings';
+ 114 │     import { useAuth } from '@/hooks/useAuth';
+ 115 │     import { LayoutDashboard, Users, Calendar, Clock, Settings, LogOut } from 'lucide-react';
+ 116 │     import { Button } from '@/components/ui/button';
+ 117 │     
+ 118 │ ╭─▶ export default function Admin() {
+ 119 │ │     const { isAuthenticated, user, logout } = useAuth();
+ 120 │ │     const [activeTab, setActiveTab] = useState('dashboard');
+ 121 │ │     const navigate = useNavigate();
+ 122 │ │   
+ 123 │ │     useEffect(() => {
+ 124 │ │       if (!isAuthenticated) {
+ 125 │ │         // Wenn nicht authentifiziert, zeige den Login-Bereich automatisch an
+ 126 │ │         setActiveTab('login');
+ 127 │ │       }
+ 128 │ │     }, [isAuthenticated]);
+ 129 │ │   
+ 130 │ │     const handleLogout = async () => {
+ 131 │ │       await logout();
+ 132 │ │       navigate('/');
+ 133 │ │     };
+ 134 │ │   
+ 135 │ │     if (!isAuthenticated && activeTab !== 'login') {
+ 136 │ │       return (
+ 137 │ │         <div className="container mx-auto px-4 py-8">
+ 138 │ │           <AdminAuth onAuthSuccess={() => setActiveTab('dashboard')} />
+ 139 │ │         </div>
+ 140 │ │       );
+ 141 │ │     }
+ 142 │ │   
+ 143 │ │     return (
+ 144 │ │       <div className="container mx-auto px-4 py-8">
+ 145 │ │         {isAuthenticated ? (
+ 146 │ │           <div className="space-y-6">
+ 147 │ │             <div className="flex justify-between items-center">
+ 148 │ │               <h1 className="text-3xl font-bold">Admin-Bereich</h1>
+ 149 │ │               <div className="flex items-center gap-4">
+ 150 │ │                 <span className="text-sm text-muted-foreground">
+ 151 │ │                   Angemeldet als: {user?.email}
+ 152 │ │                 </span>
+ 153 │ │                 <Button variant="outline" size="sm" onClick={handleLogout}>
+ 154 │ │                   <LogOut className="h-4 w-4 mr-2" />
+ 155 │ │                   Abmelden
+ 156 │ │                 </Button>
+ 157 │ │               </div>
+ 158 │ │             </div>
+ 159 │ │   
+ 160 │ │             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+ 161 │ │               <TabsList className="grid grid-cols-5 w-full">
+ 162 │ │                 <TabsTrigger value="dashboard" className="flex items-center gap-2">
+ 163 │ │                   <LayoutDashboard className="h-4 w-4" />
+ 164 │ │                   <span className="hidden md:inline">Dashboard</span>
+ 165 │ │                 </TabsTrigger>
+ 166 │ │                 <TabsTrigger value="appointments" className="flex items-center gap-2">
+ 167 │ │                   <Calendar className="h-4 w-4" />
+ 168 │ │                   <span className="hidden md:inline">Termine</span>
+ 169 │ │                 </TabsTrigger>
+ 170 │ │                 <TabsTrigger value="timeslots" className="flex items-center gap-2">
+ 171 │ │                   <Clock className="h-4 w-4" />
+ 172 │ │                   <span className="hidden md:inline">Zeitfenster</span>
+ 173 │ │                 </TabsTrigger>
+ 174 │ │                 <TabsTrigger value="users" className="flex items-center gap-2">
+ 175 │ │                   <Users className="h-4 w-4" />
+ 176 │ │                   <span className="hidden md:inline">Benutzer</span>
+ 177 │ │                 </TabsTrigger>
+ 178 │ │                 <TabsTrigger value="settings" className="flex items-center gap-2">
+ 179 │ │                   <Settings className="h-4 w-4" />
+ 180 │ │                   <span className="hidden md:inline">Einstellungen</span>
+ 181 │ │                 </TabsTrigger>
+ 182 │ │               </TabsList>
+ 183 │ │               
+ 184 │ │               <TabsContent value="dashboard" className="space-y-6">
+ 185 │ │                 <AdminDashboard />
+ 186 │ │               </TabsContent>
+ 187 │ │               
+ 188 │ │               <TabsContent value="appointments" className="space-y-6">
+ 189 │ │                 <AdminAppointments />
+ 190 │ │               </TabsContent>
+ 191 │ │               
+ 192 │ │               <TabsContent value="timeslots" className="space-y-6">
+ 193 │ │                 <AdminTimeSlots />
+ 194 │ │               </TabsContent>
+ 195 │ │               
+ 196 │ │               <TabsContent value="users" className="space-y-6">
+ 197 │ │                 <AdminUsers />
+ 198 │ │               </TabsContent>
+ 199 │ │               
+ 200 │ │               <TabsContent value="settings" className="space-y-6">
+ 201 │ │                 <AdminSettings />
+ 202 │ │               </TabsContent>
+ 203 │ │             </Tabs>
+ 204 │ │           </div>
+ 205 │ │         ) : (
+ 206 │ │           <AdminAuth onAuthSuccess={() => setActiveTab('dashboard')} />
+ 207 │ │         )}
+ 208 │ │       </div>
+ 209 │ │     );
+ 210 │ ├─▶ }
+     · ╰──── exported more than once
+     ╰────
+
+Advice:   ☞ Exported identifiers must be unique
+/home/runner/workspace/src/pages/Admin.tsx:2:1
+1  |  
+2  |  import { useState, useEffect } from 'react';
+   |            ^
+3  |  import { useNavigate } from 'react-router-dom';
+4  |  import { Button } from '@/components/ui/button';
+Click outside, press Esc key, or fix the code to dismiss.
+You can also disable this overlay by setting server.hmr.overlay to false in vite.config.ts.
