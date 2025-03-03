@@ -33,16 +33,15 @@ export default function Hero() {
 
       <div className="container mx-auto px-6 py-12 relative z-10">
         <span className="inline-block text-sm font-medium py-1 px-3 rounded-full bg-amber-100 mb-6 text-gray-800">
-          Ganzheitliche Heilung für Körper & Seele
+          Ihr Weg zu neuer Lebensenergie
         </span>
         <h1 className="heading-xl mb-6 max-w-4xl text-gray-800 font-bold">
-          Entdecken Sie den Ursprung Ihrer Beschwerden – und lösen Sie ihn auf!
+          Schluss mit Erschöpfung & Unwohlsein – Spüren Sie den Unterschied!
         </h1>
         <p className="subtitle mb-10 max-w-2xl text-gray-700">
-          Die bahnbrechende Verbindung aus Meta Vital Frequenztherapie und psychologischer Heilpraxis deckt auf, 
-          was andere übersehen: Die wahren Ursachen Ihrer gesundheitlichen Herausforderungen. 
-          <span className="font-semibold"> Egal ob chronische Schmerzen, Stimmungsschwankungen oder Energiemangel – 
-          erfahren Sie, was in Ihrem individuellen Fall wirklich hilft.</span>
+          Entdecken Sie, was tausende Menschen bereits erlebt haben: Die revolutionäre Kombination aus 
+          Meta Vital Frequenztherapie und ganzheitlicher Heilpraxis, die dort ansetzt, wo herkömmliche 
+          Methoden oft an ihre Grenzen stoßen. <span className="font-semibold">Vereinbaren Sie jetzt Ihren persönlichen Kennenlerntermin!</span>
         </p>
         <div className="flex flex-wrap gap-4">
           <Button
@@ -55,7 +54,7 @@ export default function Hero() {
                 ?.scrollIntoView({ behavior: "smooth" })
             }
           >
-            Jetzt persönlichen Analyseplan erhalten!
+            Jetzt kostenfreies Erstgespräch sichern!
           </Button>
           <Button
             variant="outline"
@@ -67,7 +66,7 @@ export default function Hero() {
                 ?.scrollIntoView({ behavior: "smooth" })
             }
           >
-            Sehen Sie, wie meine Methode funktioniert
+            Entdecken Sie Ihre Behandlungsmöglichkeiten
           </Button>
         </div>
       </div>
