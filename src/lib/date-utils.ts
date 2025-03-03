@@ -27,6 +27,15 @@ export const generateTimeSlots = (
     const endTime = `${Math.floor(endTimeHour).toString().padStart(2, '0')}:${endTimeMinutes.toString().padStart(2, '0')}`;
 
     slots.push({
+
+/**
+ * Formats a date and time for display
+ */
+export function formatDateTime(date: string, time: string): string {
+  if (!date || !time) return '';
+  return `${date} um ${time} Uhr`;
+}
+
       date: dateStr,
       startTime,
       endTime,

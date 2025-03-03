@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
+import { formatDateTime } from '@/lib/date-utils';
 import { 
   Card, 
   CardContent, 
