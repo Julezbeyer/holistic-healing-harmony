@@ -76,7 +76,7 @@ const Header = () => {
               Termin buchen
             </Link>
           )}
-          {isAuthenticated && user?.email && (
+          {isAuthenticated && user?.role === 'admin' && (
             <Link to="/admin" className="block px-4 py-2 text-primary font-medium hover:bg-gray-100">
               Admin
             </Link>
