@@ -7,7 +7,7 @@ export default function About() {
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <span className="inline-block text-sm font-medium py-1 px-3 rounded-full bg-primary/10 text-primary mb-4">
-            Über uns
+            Über Mich
           </span>
           <h2 className="heading-lg mb-6">Christiane Beyer</h2>
           <div className="flex justify-center mb-8">
@@ -19,7 +19,7 @@ export default function About() {
           </div>
           <p className="subtitle mx-auto">
             Als Heilpraktikerin für Psychotherapie (HPP) verbinde ich moderne Frequenztherapie mit
-            ganzheitlichen Heilmethoden, um Menschen zu ihrem inneren Gleichgewicht zurückzuführen.
+            ganzheitlichen Heilmethoden, um Menschen dabei zu unterstützen, mehr innere Balance und Lebensqualität zu erreichen.
           </p>
         </div>
 
@@ -27,7 +27,7 @@ export default function About() {
           <FeatureCard
             icon={HeartPulse}
             title="Ganzheitliche Analyse"
-            description="Mit Meta Vital, einem verifizierten Medizinprodukt, werden Ungleichgewichte im Körper frühzeitig erkannt und präzise behandelt."
+            description="Mit Meta Vital, einem verifizierten Medizinprodukt, werden Ungleichgewichte im Körper erkannt und präzise behandelt."
           />
           <FeatureCard
             icon={Brain}
