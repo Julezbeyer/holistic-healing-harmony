@@ -33,15 +33,16 @@ export default function Hero() {
 
       <div className="container mx-auto px-6 py-12 relative z-10">
         <span className="inline-block text-sm font-medium py-1 px-3 rounded-full bg-amber-100 mb-6 text-gray-800">
-          Ihr Weg zu neuer Lebensenergie
+          Ganzheitliche Heilung für Körper & Seele
         </span>
         <h1 className="heading-xl mb-6 max-w-4xl text-gray-800 font-bold">
-          Schluss mit Erschöpfung & Unwohlsein – Spüren Sie den Unterschied!
+          Entdecken Sie den Ursprung Ihrer Beschwerden – und lösen Sie ihn auf!
         </h1>
         <p className="subtitle mb-10 max-w-2xl text-gray-700">
-          Entdecken Sie, was tausende Menschen bereits erlebt haben: Die revolutionäre Kombination aus 
-          Meta Vital Frequenztherapie und ganzheitlicher Heilpraxis, die dort ansetzt, wo herkömmliche 
-          Methoden oft an ihre Grenzen stoßen. <span className="font-semibold">Vereinbaren Sie jetzt Ihren persönlichen Kennenlerntermin!</span>
+          Die bahnbrechende Verbindung aus Meta Vital Frequenztherapie und psychologischer Heilpraxis deckt auf, 
+          was andere übersehen: Die wahren Ursachen Ihrer gesundheitlichen Herausforderungen. 
+          <span className="font-semibold"> Egal ob chronische Schmerzen, Stimmungsschwankungen oder Energiemangel – 
+          erfahren Sie, was in Ihrem individuellen Fall wirklich hilft.</span>
         </p>
         <div className="flex flex-wrap gap-4">
           <Button
@@ -54,7 +55,7 @@ export default function Hero() {
                 ?.scrollIntoView({ behavior: "smooth" })
             }
           >
-            Jetzt kostenfreies Erstgespräch sichern!
+            Jetzt persönlichen Analyseplan erhalten!
           </Button>
           <Button
             variant="outline"
@@ -66,7 +67,7 @@ export default function Hero() {
                 ?.scrollIntoView({ behavior: "smooth" })
             }
           >
-            Entdecken Sie Ihre Behandlungsmöglichkeiten
+            Sehen Sie, wie meine Methode funktioniert
           </Button>
         </div>
       </div>
