@@ -29,53 +29,80 @@ const Header = () => {
               <Link to="/admin" className="text-primary font-medium hover:text-primary/80">Admin</Link>
             )}
           </div>
-
-          {/* Hamburger Menu Icon */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden focus:outline-none"
-          >
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+          
+          {/* Auth Links */}
+          <div className="hidden md:flex items-center">
+            {isAuthenticated ? (
+              <button 
+                onClick={() => {/* Handle sign out */}} 
+                className="px-4 py-2 text-sm text-gray-700 hover:text-gray-500"
+              >
+                Abmelden
+              </button>
+            ) : (
+              <Link 
+                to="/auth" 
+                className="px-4 py-2 text-sm bg-primary text-white rounded-md hover:bg-primary/90"
+              >
+                Anmelden
+              </Link>
+            )}
+          </div>
+          
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="p-2 text-gray-700 hover:text-gray-500"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
-              />
-            </svg>
-          </button>
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                {isMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
+        
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden py-4 space-y-2">
+            <Link to="/" className="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-md">Home</Link>
+            <Link to="/about" className="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-md">About</Link>
+            <Link to="/contact" className="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-md">Contact</Link>
+            
+            {isAuthenticated && (
+              <Link to="/booking" className="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-md">
+                Termin buchen
+              </Link>
+            )}
+            
+            {isAuthenticated && user?.email && (
+              <Link to="/admin" className="block px-4 py-2 text-primary font-medium hover:bg-gray-100 rounded-md">
+                Admin
+              </Link>
+            )}
+            
+            {isAuthenticated ? (
+              <button 
+                onClick={() => {/* Handle sign out */}} 
+                className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-md"
+              >
+                Abmelden
+              </button>
+            ) : (
+              <Link 
+                to="/auth" 
+                className="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-md"
+              >
+                Anmelden
+              </Link>
+            )}
+          </div>
+        )}
       </div>
-
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden absolute top-24 right-4 bg-white shadow-lg rounded-md"> {/* Adjusted top position */}
-          <Link to="/" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-            Home
-          </Link>
-          <Link to="/about" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-            About
-          </Link>
-          <Link to="/contact" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-            Contact
-          </Link>
-          {isAuthenticated && (
-            <Link to="/booking" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-              Termin buchen
-            </Link>
-          )}
-          {isAuthenticated && user?.email && (
-            <Link to="/admin" className="block px-4 py-2 text-primary font-medium hover:bg-gray-100">
-              Admin
-            </Link>
-          )}
-        </div>
-      )}
     </header>
   );
 };
