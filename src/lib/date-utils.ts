@@ -2,6 +2,14 @@
 import { addDays, format, parse } from 'date-fns';
 
 /**
+ * Checks if a date is a weekend day (Saturday or Sunday)
+ */
+export const isWeekend = (date: Date): boolean => {
+  const day = date.getDay();
+  return day === 0 || day === 6; // 0 is Sunday, 6 is Saturday
+};
+
+/**
  * Formats a date for display
  */
 export const formatDate = (date: string): string => {
