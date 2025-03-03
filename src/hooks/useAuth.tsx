@@ -36,9 +36,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           .eq('id', session.user.id)
           .single()
           .then(({ data: userData, error: userError }) => {
+            // Check for specific not found error
+            if (userError && userError.code === 'PGRST116') {
+              console.warn('Users table might not exist yet. Using default role.');
+            }
+            
             const authUser: AuthUser = {
               id: session.user.id,
               email: session.user.email,
+              // Default to 'user' role if table doesn't exist or no role found
               role: userData?.role || 'user',
             };
             setUser(authUser);
@@ -60,9 +66,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             .eq('id', session.user.id)
             .single()
             .then(({ data: userData, error: userError }) => {
+              // Check for specific not found error
+              if (userError && userError.code === 'PGRST116') {
+                console.warn('Users table might not exist yet. Using default role.');
+              }
+              
               const authUser: AuthUser = {
                 id: session.user.id,
                 email: session.user.email,
+                // Default to 'user' role if table doesn't exist or no role found
                 role: userData?.role || 'user',
               };
               setUser(authUser);

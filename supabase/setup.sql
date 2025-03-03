@@ -1,4 +1,3 @@
-
 -- Aktivieren der Supabase Auth Extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
@@ -135,3 +134,58 @@ CREATE POLICY "Admin kann admin_users verwalten"
 ON public.admin_users FOR ALL 
 TO authenticated 
 USING (auth.uid() IN (SELECT id FROM public.admin_users));
+
+-- Create users table
+CREATE TABLE IF NOT EXISTS public.users (
+  id UUID REFERENCES auth.users(id) PRIMARY KEY,
+  email TEXT,
+  role TEXT DEFAULT 'user',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- Enable Row Level Security
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+
+-- Create policy to allow users to read their own profile
+CREATE POLICY "Users can read their own profile" 
+  ON public.users 
+  FOR SELECT 
+  USING (auth.uid() = id);
+
+-- Create policy to allow users to update their own profile
+CREATE POLICY "Users can update their own profile" 
+  ON public.users 
+  FOR UPDATE 
+  USING (auth.uid() = id);
+
+-- Create policy for admins to read all profiles
+CREATE POLICY "Admins can read all profiles" 
+  ON public.users 
+  FOR SELECT 
+  USING (auth.jwt() ->> 'role' = 'admin');
+
+-- Create policy for admins to modify all profiles
+CREATE POLICY "Admins can modify all profiles" 
+  ON public.users 
+  FOR ALL
+  USING (auth.jwt() ->> 'role' = 'admin');
+
+-- Create trigger to automatically insert new users into users table
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.users (id, email, role)
+  VALUES (new.id, new.email, 'user');
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Create trigger for new user signup
+CREATE OR REPLACE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- Insert admin user if not exists (replace with your admin user ID)
+-- You'll need to manually set an admin user initially
+-- Example: UPDATE public.users SET role = 'admin' WHERE id = '[YOUR-USER-ID]';
