@@ -1,273 +1,366 @@
+
 import { useState, useEffect } from 'react';
-import { DatePicker } from '@/components/booking/DatePicker';
-import { TimeSlotPicker } from '@/components/booking/TimeSlotPicker';
-import { BookingForm } from '@/components/booking/BookingForm';
-import { BookingConfirmation } from '@/components/booking/BookingConfirmation';
-import { Appointment, TimeSlot, BookingFormData } from '@/lib/types';
-import { generateTimeSlots } from '@/lib/date-utils';
-import { v4 as uuidv4 } from 'uuid';
+import { Calendar } from '@/components/ui/calendar';
+import { Button } from '@/components/ui/button';
+import { format } from 'date-fns';
+import { de } from 'date-fns/locale';
+import { ChevronLeft } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
-enum BookingStep {
-  SELECT_DATE,
-  SELECT_TIME,
-  FILL_FORM,
-  CONFIRMATION
-}
+type TimeSlot = {
+  id: string;
+  start_time: string;
+  end_time: string;
+  is_available: boolean;
+  date: string;
+};
 
 export default function Booking() {
-  const [currentStep, setCurrentStep] = useState<BookingStep>(BookingStep.SELECT_DATE);
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
+  const [step, setStep] = useState(1);
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [availableTimeSlots, setAvailableTimeSlots] = useState<TimeSlot[]>([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(null);
-  const [appointment, setAppointment] = useState<Appointment | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [bookingResult, setBookingResult] = useState<{ success: boolean; appointment: any | null }>({ success: false, appointment: null });
-
-
-  // Fetch time slots for the selected date
+  const navigate = useNavigate();
+  
   useEffect(() => {
-    if (!selectedDate) return;
+    if (date) {
+      fetchAvailableTimeSlots(format(date, 'yyyy-MM-dd'));
+    }
+  }, [date]);
 
-    const fetchTimeSlots = async () => {
-      setIsLoading(true);
-
-      try {
-        // Formatiere das Datum für Supabase (YYYY-MM-DD)
-        const formattedDate = selectedDate.toISOString().split('T')[0];
-
-        // Prüfe, ob bereits Zeitfenster für diesen Tag existieren
-        const { data: existingSlots, error: fetchError } = await supabase
-          .from('time_slots')
-          .select('*')
-          .eq('date', formattedDate);
-
-        if (fetchError) throw fetchError;
-
-        // Wenn Zeitfenster existieren, verwende diese
-        if (existingSlots && existingSlots.length > 0) {
-          const mappedSlots = existingSlots.map(slot => ({
-            id: slot.id,
-            date: slot.date,
-            startTime: slot.start_time,
-            endTime: slot.end_time,
-            isAvailable: !slot.is_booked
-          }));
-
-          setTimeSlots(mappedSlots);
-        } else {
-          // Generiere neue Zeitfenster und speichere sie in Supabase
-          const generatedSlots = generateTimeSlots(selectedDate);
-
-          // Speichere die Slots in Supabase
-          const { data: savedSlots, error: insertError } = await supabase
-            .from('time_slots')
-            .insert(
-              generatedSlots.map(slot => ({
-                date: formattedDate,
-                start_time: slot.startTime,
-                end_time: slot.endTime,
-                is_booked: false
-              }))
-            )
-            .select();
-
-          if (insertError) throw insertError;
-
-          if (savedSlots) {
-            // Mappe die gespeicherten Slots zum Frontend-Format
-            const mappedSlots = savedSlots.map(slot => ({
-              id: slot.id,
-              date: slot.date,
-              startTime: slot.start_time,
-              endTime: slot.end_time,
-              isAvailable: !slot.is_booked
-            }));
-
-            setTimeSlots(mappedSlots);
-          }
-        }
-
-        setCurrentStep(BookingStep.SELECT_TIME);
-      } catch (error) {
-        console.error('Error fetching/creating time slots:', error);
-        toast.error('Fehler beim Laden der Verfügbarkeiten');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchTimeSlots();
-  }, [selectedDate]);
-
-  const handleDateSelect = (date: Date | undefined) => {
-    setSelectedDate(date);
-  };
-
-  const handleTimeSlotSelect = (timeSlot: TimeSlot) => {
-    setSelectedTimeSlot(timeSlot);
-    setCurrentStep(BookingStep.FILL_FORM);
-  };
-
-  const handleFormSubmit = async (formData: BookingFormData) => {
-    setIsSubmitting(true);
-
+  const fetchAvailableTimeSlots = async (dateString: string) => {
+    setIsLoading(true);
     try {
-      console.log('Submitting booking with time slot ID:', selectedTimeSlot?.id);
-
-      if (!selectedTimeSlot?.id) {
-        throw new Error('Kein Zeitfenster ausgewählt');
-      }
-
-      // Prüfen, ob der Zeitslot tatsächlich existiert
-      const { data: slotExists, error: slotCheckError } = await supabase
-        .from('time_slots')
-        .select('id')
-        .eq('id', selectedTimeSlot.id)
-        .single();
-
-      if (slotCheckError || !slotExists) {
-        console.error('Time slot check error:', slotCheckError);
-        throw new Error(`Das gewählte Zeitfenster existiert nicht in der Datenbank: ${JSON.stringify(slotCheckError || 'No data')}`);
-      }
-
-      // Create appointment record in Supabase
       const { data, error } = await supabase
-        .from('appointments')
-        .insert({
-          time_slot_id: selectedTimeSlot.id,
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          notes: formData.notes || null,  // Explizit null setzen wenn leer
-        })
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Appointment creation error:', error);
-        throw new Error(`Error creating appointment: ${JSON.stringify(error)}`);
-      }
-
-      // Update time slot to mark as booked
-      const { error: updateError } = await supabase
         .from('time_slots')
-        .update({ is_booked: true })
-        .eq('id', selectedTimeSlot.id);
+        .select('*')
+        .eq('date', dateString)
+        .eq('is_available', true)
+        .order('start_time');
 
-      if (updateError) {
-        console.error('Time slot update error:', updateError);
-        throw new Error(`Error updating time slot: ${JSON.stringify(updateError)}`);
-      }
-
-      setBookingResult({
-        success: true,
-        appointment: data,
-      });
-
-      setCurrentStep(BookingStep.CONFIRMATION);
+      if (error) throw error;
+      setAvailableTimeSlots(data || []);
     } catch (error: any) {
-      console.error('Error creating appointment:', error);
-      toast.error('Fehler bei der Terminbuchung: ' + (error.message || 'Unbekannter Fehler'));
+      toast.error('Fehler beim Laden der verfügbaren Termine: ' + error.message);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const resetBooking = () => {
-    setCurrentStep(BookingStep.SELECT_DATE);
-    setSelectedDate(undefined);
-    setTimeSlots([]);
-    setSelectedTimeSlot(null);
-    setAppointment(null);
-    setIsSubmitting(false);
-    setIsLoading(false);
-    setBookingResult({ success: false, appointment: null });
+  const submitBooking = async () => {
+    if (!selectedTimeSlot) {
+      toast.error('Bitte wählen Sie einen Termin aus');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // 1. Create appointment record
+      const { data: appointment, error: appointmentError } = await supabase
+        .from('appointments')
+        .insert({
+          time_slot_id: selectedTimeSlot.id,
+          name,
+          email,
+          phone,
+          message,
+          status: 'pending'
+        })
+        .select()
+        .single();
+
+      if (appointmentError) throw appointmentError;
+
+      // 2. Update time slot availability
+      const { error: timeSlotError } = await supabase
+        .from('time_slots')
+        .update({ is_available: false })
+        .eq('id', selectedTimeSlot.id);
+
+      if (timeSlotError) throw timeSlotError;
+
+      // Success
+      toast.success('Ihre Terminanfrage wurde erfolgreich übermittelt!');
+      setStep(4); // Move to success step
+    } catch (error: any) {
+      toast.error('Fehler bei der Terminbuchung: ' + error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const formatTimeSlot = (timeSlot: TimeSlot) => {
+    // Correctly format time from database format (HH:MM:SS) to display format (HH:MM)
+    const startTime = timeSlot.start_time.substring(0, 5);
+    const endTime = timeSlot.end_time.substring(0, 5);
+    return `${startTime} - ${endTime}`;
+  };
+
+  const goBack = () => {
+    if (step > 1) {
+      setStep(step - 1);
+      // Reset selection if going back to date selection
+      if (step === 3) {
+        setSelectedTimeSlot(null);
+      }
+    } else {
+      navigate('/');
+    }
   };
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold mb-4">Termin anfragen</h1>
-          <p className="text-muted-foreground">
-            Wählen Sie einen passenden Termin für Ihre persönliche Beratung oder Therapie. Ihre Anfrage wird geprüft und zeitnah bestätigt.
+    <div className="min-h-screen bg-gradient-to-b from-christiane-soft-blue/20 to-christiane-soft-purple/20 py-12">
+      <div className="container mx-auto px-4 sm:px-6 max-w-3xl">
+        <div className="bg-white rounded-xl shadow-card p-6 sm:p-8">
+          {/* Header with back button */}
+          <div className="flex items-center mb-6">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={goBack} 
+              className="mr-2"
+              aria-label="Zurück"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </Button>
+            <h1 className="heading-lg text-center flex-grow pr-8">Termin anfragen</h1>
+          </div>
+
+          <p className="text-center text-muted-foreground mb-8">
+            Wählen Sie einen passenden Termin für Ihre persönliche Beratung oder Therapie. 
+            Ihre Anfrage wird geprüft und zeitnah bestätigt.
           </p>
-        </div>
 
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-6">
-            <div className="flex space-x-2">
-              {[...Array(3)].map((_, i) => (
-                <div
-                  key={i}
-                  className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    i < currentStep ? 'bg-primary text-primary-foreground' : 
-                    i === currentStep ? 'bg-primary/20 text-primary border border-primary' : 
-                    'bg-muted text-muted-foreground'
-                  }`}
-                >
-                  {i + 1}
-                </div>
-              ))}
+          {/* Progress steps */}
+          <div className="flex justify-center mb-10">
+            <div className="flex items-center gap-2">
+              <div className={`rounded-full w-10 h-10 flex items-center justify-center ${step === 1 ? 'bg-primary text-white' : 'bg-primary/20 text-primary'}`}>1</div>
+              <div className="w-8 h-1 bg-primary/20"></div>
+              <div className={`rounded-full w-10 h-10 flex items-center justify-center ${step === 2 ? 'bg-primary text-white' : 'bg-primary/20 text-primary'}`}>2</div>
+              <div className="w-8 h-1 bg-primary/20"></div>
+              <div className={`rounded-full w-10 h-10 flex items-center justify-center ${step === 3 ? 'bg-primary text-white' : 'bg-primary/20 text-primary'}`}>3</div>
+              <div className="w-8 h-1 bg-primary/20"></div>
+              <div className={`rounded-full w-10 h-10 flex items-center justify-center ${step === 4 ? 'bg-primary text-white' : 'bg-primary/20 text-primary'}`}>4</div>
             </div>
+          </div>
 
-            <span className="text-sm text-muted-foreground">
-              Schritt {currentStep + 1} von {Object.keys(BookingStep).length / 2}
-            </span>
+          {/* Step content */}
+          <div className="mt-6">
+            {step === 1 && (
+              <div className="space-y-6">
+                <h2 className="heading-md text-center mb-6">Wählen Sie ein Datum</h2>
+                
+                <div className="flex justify-center">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    locale={de}
+                    className="rounded-md border"
+                    disabled={{
+                      before: new Date(),
+                    }}
+                  />
+                </div>
+                
+                {date && (
+                  <div className="text-center mt-4">
+                    <p className="font-medium">Ausgewähltes Datum: 
+                      <span className="ml-2 text-primary">{format(date, 'EEEE, dd. MMMM yyyy', { locale: de })}</span>
+                    </p>
+                  </div>
+                )}
+                
+                <div className="flex justify-center mt-8">
+                  <Button 
+                    size="lg" 
+                    onClick={() => setStep(2)} 
+                    disabled={!date}
+                    className="px-8"
+                  >
+                    Weiter zu verfügbaren Zeiten
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {step === 2 && (
+              <div className="space-y-6">
+                <h2 className="heading-md text-center mb-2">Verfügbare Zeiten</h2>
+                
+                <p className="text-center text-muted-foreground">
+                  Für {date && format(date, 'EEEE, dd. MMMM yyyy', { locale: de })}
+                </p>
+                
+                {isLoading ? (
+                  <div className="flex justify-center py-12">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                  </div>
+                ) : availableTimeSlots.length > 0 ? (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6">
+                    {availableTimeSlots.map((slot) => (
+                      <Button
+                        key={slot.id}
+                        variant={selectedTimeSlot?.id === slot.id ? "default" : "outline"}
+                        className={`py-6 ${selectedTimeSlot?.id === slot.id ? 'ring-2 ring-primary' : ''}`}
+                        onClick={() => setSelectedTimeSlot(slot)}
+                      >
+                        {formatTimeSlot(slot)}
+                      </Button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">Keine verfügbaren Termine an diesem Tag.</p>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => setStep(1)} 
+                      className="mt-4"
+                    >
+                      Anderes Datum wählen
+                    </Button>
+                  </div>
+                )}
+                
+                <div className="flex justify-between mt-8">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setStep(1)}
+                  >
+                    Zurück
+                  </Button>
+                  <Button 
+                    onClick={() => setStep(3)} 
+                    disabled={!selectedTimeSlot}
+                  >
+                    Weiter zur Anfragestellung
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {step === 3 && (
+              <div className="space-y-6">
+                <h2 className="heading-md text-center mb-2">Ihre Kontaktdaten</h2>
+                
+                <div className="bg-primary/10 rounded-lg p-4 mb-6">
+                  <p className="font-medium">Ausgewählter Termin:</p>
+                  <p>{date && format(date, 'EEEE, dd. MMMM yyyy', { locale: de })}</p>
+                  <p>{selectedTimeSlot && formatTimeSlot(selectedTimeSlot)}</p>
+                </div>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                      Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                      E-Mail *
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                      Telefon *
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                      required
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                      Nachricht
+                    </label>
+                    <textarea
+                      id="message"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      rows={4}
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                      placeholder="Beschreiben Sie kurz Ihr Anliegen..."
+                    />
+                  </div>
+                </div>
+                
+                <div className="flex justify-between mt-8">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setStep(2)}
+                  >
+                    Zurück
+                  </Button>
+                  <Button 
+                    onClick={submitBooking} 
+                    disabled={isLoading || !name || !email || !phone}
+                  >
+                    {isLoading ? 'Wird gesendet...' : 'Termin anfragen'}
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {step === 4 && (
+              <div className="text-center space-y-6 py-6">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 text-green-600 mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                
+                <h2 className="heading-md">Terminanfrage erfolgreich!</h2>
+                
+                <p className="text-muted-foreground max-w-md mx-auto">
+                  Vielen Dank für Ihre Anfrage. Ich werde mich zeitnah bei Ihnen melden, um den Termin zu bestätigen.
+                </p>
+                
+                <div className="bg-primary/10 rounded-lg p-4 max-w-sm mx-auto mt-8 text-left">
+                  <p className="font-medium">Angefragter Termin:</p>
+                  <p>{date && format(date, 'EEEE, dd. MMMM yyyy', { locale: de })}</p>
+                  <p>{selectedTimeSlot && formatTimeSlot(selectedTimeSlot)}</p>
+                </div>
+                
+                <Button 
+                  onClick={() => navigate('/')} 
+                  className="mt-8"
+                >
+                  Zurück zur Startseite
+                </Button>
+              </div>
+            )}
           </div>
         </div>
-
-        {currentStep === BookingStep.SELECT_DATE && (
-          <DatePicker onDateSelect={handleDateSelect} />
-        )}
-
-        {currentStep === BookingStep.SELECT_TIME && (
-          <>
-            <button
-              onClick={() => setCurrentStep(BookingStep.SELECT_DATE)}
-              className="mb-4 text-sm text-primary flex items-center"
-            >
-              ← Zurück zur Datumsauswahl
-            </button>
-
-            {isLoading ? (
-              <div className="text-center py-8">Lade Verfügbarkeiten...</div>
-            ) : (
-              <TimeSlotPicker 
-                timeSlots={timeSlots} 
-                onTimeSlotSelect={handleTimeSlotSelect} 
-              />
-            )}
-          </>
-        )}
-
-        {currentStep === BookingStep.FILL_FORM && selectedTimeSlot && (
-          <>
-            <button
-              onClick={() => setCurrentStep(BookingStep.SELECT_TIME)}
-              className="mb-4 text-sm text-primary flex items-center"
-            >
-              ← Zurück zur Zeitauswahl
-            </button>
-
-            <BookingForm 
-              selectedTimeSlot={selectedTimeSlot}
-              onSubmit={handleFormSubmit}
-              isSubmitting={isSubmitting}
-            />
-          </>
-        )}
-
-        {currentStep === BookingStep.CONFIRMATION && bookingResult.success && bookingResult.appointment && selectedTimeSlot && (
-          <BookingConfirmation 
-            appointment={bookingResult.appointment}
-            timeSlot={selectedTimeSlot}
-            onDone={resetBooking}
-          />
-        )}
       </div>
     </div>
   );

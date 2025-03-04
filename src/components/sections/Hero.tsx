@@ -50,23 +50,23 @@ export default function Hero({ title, subtitle, imageUrl, action }: HeroProps) {
           Meta Vital Frequenztherapie und ganzheitlicher Heilpraxis, die dort ansetzt, wo herkömmliche 
           Methoden oft an ihre Grenzen stoßen. <span className="font-semibold">Vereinbaren Sie jetzt Ihren persönlichen Kennenlerntermin!</span>
         </p>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap justify-center md:justify-start gap-4">
           <Button
             variant="default"
             size="lg"
-            className="text-base font-semibold px-6 py-6 hover:scale-105 transition-transform"
+            className="text-base font-semibold px-6 py-6 hover:scale-105 transition-transform shadow-lg"
             onClick={() =>
               document
                 .getElementById("contact")
                 ?.scrollIntoView({ behavior: "smooth" })
             }
           >
-            Jetzt kostenfreies Erstgespräch sichern!
+            Kostenloses Erstgespräch vereinbaren
           </Button>
           <Button
             variant="outline"
             size="lg"
-            className="text-base hover:bg-primary/10 px-6 py-6"
+            className="text-base hover:bg-white/30 px-6 py-6 backdrop-blur-sm border-white text-white"
             onClick={() =>
               document
                 .getElementById("therapy")
