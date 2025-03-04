@@ -167,6 +167,7 @@ export interface Database {
           email: string
           phone: string
           notes: string | null
+          status: string
           created_at: string
         }
         Insert: {
@@ -176,6 +177,7 @@ export interface Database {
           email: string
           phone: string
           notes?: string | null
+          status?: string
           created_at?: string
         }
         Update: {
@@ -185,6 +187,7 @@ export interface Database {
           email?: string
           phone?: string
           notes?: string | null
+          status?: string
           created_at?: string
         }
         Relationships: [
