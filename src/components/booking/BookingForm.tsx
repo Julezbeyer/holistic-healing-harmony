@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,7 +13,6 @@ interface BookingFormProps {
     name: string;
     email: string;
     phone: string;
-    message: string;
   }) => void;
   isSubmitting: boolean;
 }
@@ -27,13 +25,14 @@ export function BookingForm({
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [message, setMessage] = useState('');
-  
+  // Removed message state
+  //const [message, setMessage] = useState('');
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ name, email, phone, message });
+    onSubmit({ name, email, phone });
   };
-  
+
   return (
     <Card>
       <CardHeader>
@@ -45,7 +44,7 @@ export function BookingForm({
           <p>{formatDate(selectedTimeSlot.date)}</p>
           <p>{formatTime(selectedTimeSlot.startTime)} - {formatTime(selectedTimeSlot.endTime)}</p>
         </div>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="name">Name</Label>
@@ -56,7 +55,7 @@ export function BookingForm({
               required
             />
           </div>
-          
+
           <div>
             <Label htmlFor="email">E-Mail</Label>
             <Input 
@@ -67,7 +66,7 @@ export function BookingForm({
               required
             />
           </div>
-          
+
           <div>
             <Label htmlFor="phone">Telefon</Label>
             <Input 
@@ -76,8 +75,9 @@ export function BookingForm({
               onChange={(e) => setPhone(e.target.value)}
             />
           </div>
-          
-          <div>
+
+          {/* Removed message field */}
+          {/* <div>
             <Label htmlFor="message">Nachricht (optional)</Label>
             <Textarea 
               id="message"
@@ -85,8 +85,8 @@ export function BookingForm({
               onChange={(e) => setMessage(e.target.value)}
               rows={3}
             />
-          </div>
-          
+          </div> */}
+
           <Button 
             type="submit" 
             className="w-full"

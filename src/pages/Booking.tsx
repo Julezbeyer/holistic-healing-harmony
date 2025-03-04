@@ -75,7 +75,6 @@ export default function Booking() {
           name,
           email,
           phone,
-          message,
           status: 'pending'
         })
         .select()
