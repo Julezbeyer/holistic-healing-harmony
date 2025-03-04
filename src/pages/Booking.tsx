@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { formatTime, formatDate } from '@/lib/utils';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/booking/DatePicker';
 import { TimeSlotPicker } from '@/components/booking/TimeSlotPicker';
 import { BookingForm } from '@/components/booking/BookingForm';
 import { BookingConfirmation } from '@/components/booking/BookingConfirmation';
+import { Appointment, TimeSlot, BookingFormData } from '@/lib/types';
+import { generateTimeSlots } from '@/lib/date-utils';
+import { v4 as uuidv4 } from 'uuid';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { ChevronLeft, Calendar, Clock, Loader2 } from 'lucide-react';
 
 enum BookingStep {
   SELECT_DATE,
@@ -227,33 +226,19 @@ export default function Booking() {
 
         {currentStep === BookingStep.SELECT_TIME && (
           <>
-            <Card className="mb-4 p-3 border border-primary/20 bg-primary/5 shadow-none">
-              <div className="flex justify-between items-center">
-                <div className="flex items-center">
-                  <ChevronLeft className="h-4 w-4 mr-1 text-primary" />
-                  <button
-                    onClick={() => setCurrentStep(BookingStep.SELECT_DATE)}
-                    className="text-primary font-medium"
-                  >
-                    Zurück zur Datumsauswahl
-                  </button>
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {selectedDate ? selectedDate.toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' }) : ''}
-                </div>
-              </div>
-            </Card>
+            <button
+              onClick={() => setCurrentStep(BookingStep.SELECT_DATE)}
+              className="mb-4 text-sm text-primary flex items-center"
+            >
+              ← Zurück zur Datumsauswahl
+            </button>
 
             {isLoading ? (
-              <div className="text-center py-16 flex flex-col items-center">
-                <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
-                <p>Lade verfügbare Termine...</p>
-              </div>
+              <div className="text-center py-8">Lade Verfügbarkeiten...</div>
             ) : (
               <TimeSlotPicker 
                 timeSlots={timeSlots} 
                 onTimeSlotSelect={handleTimeSlotSelect} 
-                selectedDate={selectedDate}
               />
             )}
           </>
@@ -261,29 +246,12 @@ export default function Booking() {
 
         {currentStep === BookingStep.FILL_FORM && selectedTimeSlot && (
           <>
-            <Card className="mb-4 p-3 border border-primary/20 bg-primary/5 shadow-none">
-              <div className="flex justify-between items-center">
-                <div className="flex items-center">
-                  <ChevronLeft className="h-4 w-4 mr-1 text-primary" />
-                  <button
-                    onClick={() => setCurrentStep(BookingStep.SELECT_TIME)}
-                    className="text-primary font-medium"
-                  >
-                    Zurück zur Zeitauswahl
-                  </button>
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {selectedDate ? (
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4" />
-                      <span>{selectedDate.toLocaleDateString('de-DE', { day: 'numeric', month: 'long' })}</span>
-                      <Clock className="h-4 w-4 ml-2" />
-                      <span>{formatTime(selectedTimeSlot.startTime)} - {formatTime(selectedTimeSlot.endTime)}</span>
-                    </div>
-                  ) : ''}
-                </div>
-              </div>
-            </Card>
+            <button
+              onClick={() => setCurrentStep(BookingStep.SELECT_TIME)}
+              className="mb-4 text-sm text-primary flex items-center"
+            >
+              ← Zurück zur Zeitauswahl
+            </button>
 
             <BookingForm 
               selectedTimeSlot={selectedTimeSlot}
