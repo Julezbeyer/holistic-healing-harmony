@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
@@ -13,7 +12,7 @@ type TimeSlot = {
   id: string;
   start_time: string;
   end_time: string;
-  is_available: boolean;
+  isAvailable: boolean;
   date: string;
 };
 
@@ -28,7 +27,7 @@ export default function Booking() {
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     if (date) {
       fetchAvailableTimeSlots(format(date, 'yyyy-MM-dd'));
@@ -42,11 +41,17 @@ export default function Booking() {
         .from('time_slots')
         .select('*')
         .eq('date', dateString)
-        .eq('is_available', true)
         .order('start_time');
 
       if (error) throw error;
-      setAvailableTimeSlots(data || []);
+      const mappedTimeSlots = data.map((slot) => ({
+        id: slot.id,
+        date: slot.date,
+        start_time: slot.start_time,
+        end_time: slot.end_time,
+        isAvailable: !slot.is_booked
+      }));
+      setAvailableTimeSlots(mappedTimeSlots);
     } catch (error: any) {
       toast.error('Fehler beim Laden der verfügbaren Termine: ' + error.message);
     } finally {
@@ -81,7 +86,7 @@ export default function Booking() {
       // 2. Update time slot availability
       const { error: timeSlotError } = await supabase
         .from('time_slots')
-        .update({ is_available: false })
+        .update({ is_booked: true })
         .eq('id', selectedTimeSlot.id);
 
       if (timeSlotError) throw timeSlotError;
@@ -156,7 +161,7 @@ export default function Booking() {
             {step === 1 && (
               <div className="space-y-6">
                 <h2 className="heading-md text-center mb-6">Wählen Sie ein Datum</h2>
-                
+
                 <div className="flex justify-center">
                   <Calendar
                     mode="single"
@@ -169,7 +174,7 @@ export default function Booking() {
                     }}
                   />
                 </div>
-                
+
                 {date && (
                   <div className="text-center mt-4">
                     <p className="font-medium">Ausgewähltes Datum: 
@@ -177,7 +182,7 @@ export default function Booking() {
                     </p>
                   </div>
                 )}
-                
+
                 <div className="flex justify-center mt-8">
                   <Button 
                     size="lg" 
@@ -194,11 +199,11 @@ export default function Booking() {
             {step === 2 && (
               <div className="space-y-6">
                 <h2 className="heading-md text-center mb-2">Verfügbare Zeiten</h2>
-                
+
                 <p className="text-center text-muted-foreground">
                   Für {date && format(date, 'EEEE, dd. MMMM yyyy', { locale: de })}
                 </p>
-                
+
                 {isLoading ? (
                   <div className="flex justify-center py-12">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -228,7 +233,7 @@ export default function Booking() {
                     </Button>
                   </div>
                 )}
-                
+
                 <div className="flex justify-between mt-8">
                   <Button 
                     variant="outline" 
@@ -249,13 +254,13 @@ export default function Booking() {
             {step === 3 && (
               <div className="space-y-6">
                 <h2 className="heading-md text-center mb-2">Ihre Kontaktdaten</h2>
-                
+
                 <div className="bg-primary/10 rounded-lg p-4 mb-6">
                   <p className="font-medium">Ausgewählter Termin:</p>
                   <p>{date && format(date, 'EEEE, dd. MMMM yyyy', { locale: de })}</p>
                   <p>{selectedTimeSlot && formatTimeSlot(selectedTimeSlot)}</p>
                 </div>
-                
+
                 <div className="space-y-4">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
@@ -270,7 +275,7 @@ export default function Booking() {
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                       E-Mail *
@@ -284,7 +289,7 @@ export default function Booking() {
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
                       Telefon *
@@ -298,7 +303,7 @@ export default function Booking() {
                       required
                     />
                   </div>
-                  
+
                   <div>
                     <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
                       Nachricht
@@ -313,7 +318,7 @@ export default function Booking() {
                     />
                   </div>
                 </div>
-                
+
                 <div className="flex justify-between mt-8">
                   <Button 
                     variant="outline" 
@@ -338,19 +343,19 @@ export default function Booking() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                
+
                 <h2 className="heading-md">Terminanfrage erfolgreich!</h2>
-                
+
                 <p className="text-muted-foreground max-w-md mx-auto">
                   Vielen Dank für Ihre Anfrage. Ich werde mich zeitnah bei Ihnen melden, um den Termin zu bestätigen.
                 </p>
-                
+
                 <div className="bg-primary/10 rounded-lg p-4 max-w-sm mx-auto mt-8 text-left">
                   <p className="font-medium">Angefragter Termin:</p>
                   <p>{date && format(date, 'EEEE, dd. MMMM yyyy', { locale: de })}</p>
                   <p>{selectedTimeSlot && formatTimeSlot(selectedTimeSlot)}</p>
                 </div>
-                
+
                 <Button 
                   onClick={() => navigate('/')} 
                   className="mt-8"
