@@ -191,9 +191,9 @@ export default function Booking() {
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold mb-4">Termin buchen</h1>
+          <h1 className="text-3xl font-bold mb-4">Termin anfragen</h1>
           <p className="text-muted-foreground">
-            Wählen Sie einen passenden Termin für Ihre persönliche Beratung oder Therapie.
+            Wählen Sie einen passenden Termin für Ihre persönliche Beratung oder Therapie. Ihre Anfrage wird geprüft und zeitnah bestätigt.
           </p>
         </div>
 
