@@ -1,7 +1,14 @@
 import { Button } from "../ui/button";
 import { ArrowDown } from "lucide-react";
 
-export default function Hero() {
+interface HeroProps {
+  title: string;
+  subtitle: string;
+  imageUrl: string;
+  action?: React.ReactNode;
+}
+
+export default function Hero({ title, subtitle, imageUrl, action }: HeroProps) {
   const scrollToAbout = () => {
     document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
   };
@@ -68,6 +75,7 @@ export default function Hero() {
           >
             Entdecken Sie Ihre Behandlungsmöglichkeiten
           </Button>
+          {action}
         </div>
       </div>
 

@@ -92,7 +92,7 @@ export function BookingForm({
             className="w-full"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Wird gesendet..." : "Termin bestätigen"}
+            {isSubmitting ? "Wird gesendet..." : "Termin anfragen"}
           </Button>
         </form>
       </CardContent>
