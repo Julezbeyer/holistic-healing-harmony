@@ -2,7 +2,8 @@
 
 ## Änderungsprotokoll
 
-### Änderungsprotokoll
+### 04.03.2025
+- Aktualisierung der Dokumentation
 
 ### 09.04.2024
 - Update des WhatsApp-Links auf neuen QR-Code Link (https://wa.me/qr/7A6KMAI4APQPI1)
