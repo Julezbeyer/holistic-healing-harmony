@@ -64,7 +64,7 @@ export default function Footer() {
               <li>71636 Ludwigsburg</li>
               <li><a href="tel:+4917298709110" className="hover:text-primary transition-colors">+49 172 9870910</a></li>
               <li><a href="mailto:beyer1510@gmail.com" className="hover:text-primary transition-colors">beyer1510@gmail.com</a></li>
-              <li><a href="https://wa.me/4917298709110" target="_blank" rel="noopener noreferrer" className="hover:text-green-600 transition-colors">WhatsApp</a></li>
+              <li><a href="https://wa.me/qr/7A6KMAI4APQPI1" target="_blank" rel="noopener noreferrer" className="hover:text-green-600 transition-colors">WhatsApp</a></li>
             </ul>
           </div>
         </div>

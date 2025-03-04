@@ -1,9 +1,11 @@
-
 # Projekt-Dokumentation
 
 ## Änderungsprotokoll
 
+### Änderungsprotokoll
+
 ### 09.04.2024
+- Update des WhatsApp-Links auf neuen QR-Code Link (https://wa.me/qr/7A6KMAI4APQPI1)
 - Änderung der Terminbuchung von "Terminbestätigung" zu "Terminanfrage"
 - Anpassung der Texte in BookingConfirmation.tsx und Booking.tsx
 - Erstellung dieser Dokumentationsdatei

@@ -102,7 +102,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="font-medium mb-1">WhatsApp</h4>
-                  <a href="https://wa.me/4917298709110" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-green-600 transition-colors">Direkt kontaktieren</a>
+                  <a href="https://wa.me/qr/7A6KMAI4APQPI1" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-green-600 transition-colors">Direkt kontaktieren</a>
                 </div>
               </div>
             </div>
