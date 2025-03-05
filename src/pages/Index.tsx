@@ -6,10 +6,7 @@ import About from '@/components/sections/About';
 import TherapyApproaches from '@/components/sections/TherapyApproaches';
 import Contact from '@/components/sections/Contact';
 import { Brain, HeartPulse } from 'lucide-react';
-import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
-import { Link } from "react-router-dom";
-
 
 export default function Index() {
   // Helper function to handle smooth scrolling
@@ -41,13 +38,6 @@ export default function Index() {
         title="Psychotherapeutische Begleitung"
         subtitle="Christiane Beyer - Psychologische Psychotherapeutin und Supervisorin"
         imageUrl="/christiane-beyer.jpg"
-        action={
-          <Link to="/booking">
-            <Button size="lg" className="mt-6">
-              Termin vereinbaren
-            </Button>
-          </Link>
-        }
       />
       <About />
       <TherapyApproaches />

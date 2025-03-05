@@ -69,9 +69,8 @@ export default function Hero({ title, subtitle, imageUrl, action }: HeroProps) {
                 ?.scrollIntoView({ behavior: "smooth" })
             }
           >
-            Jetzt entdecken {/* Replaced "Entdecken Sie Ihre Behandlungsmöglichkeiten" */}
+            Jetzt entdecken
           </Button>
-          {action}
         </div>
       </div>
 
