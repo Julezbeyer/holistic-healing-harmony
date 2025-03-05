@@ -52,7 +52,6 @@ export default function Index() {
       <About />
       <TherapyApproaches />
       <Contact />
-      <Footer/>
     </Layout>
   );
 }
