@@ -41,10 +41,18 @@ export default function Footer() {
               </li>
               <li>
                 <a 
-                  href="#therapy" 
+                  href="#services" 
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Therapieansätze
+                  Angebote
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="/booking" 
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Termin buchen
                 </a>
               </li>
               <li>
@@ -60,18 +68,24 @@ export default function Footer() {
           <div>
             <h4 className="font-medium mb-4">Kontakt</h4>
             <ul className="space-y-3 text-muted-foreground">
-              <li>Wilhelm-Blos-Straße 59</li>
-              <li>71636 Ludwigsburg</li>
-              <li><a href="tel:+4917298709110" className="hover:text-primary transition-colors">+49 172 9870910</a></li>
-              <li><a href="mailto:beyer1510@gmail.com" className="hover:text-primary transition-colors">beyer1510@gmail.com</a></li>
-              <li><a href="https://wa.me/qr/7A6KMAI4APQPI1" target="_blank" rel="noopener noreferrer" className="hover:text-green-600 transition-colors">WhatsApp</a></li>
+              <li>Musterstraße 123</li>
+              <li>12345 Musterstadt</li>
+              <li>Tel: <a href="tel:+491234567890" className="hover:text-primary transition-colors">+49 123 456 7890</a></li>
+              <li>Email: <a href="mailto:contact@christianebeyer.de" className="hover:text-primary transition-colors">contact@christianebeyer.de</a></li>
+              <li>
+                <a 
+                  href="https://wa.me/qr/7A6KMAI4APQPI1" 
+                  className="flex items-center hover:text-primary transition-colors"
+                  target="_blank" 
+                  rel="noreferrer"
+                >
+                  <span className="ml-1">WhatsApp</span>
+                </a>
+              </li>
             </ul>
           </div>
         </div>
-        <div className="mt-12 pt-8 border-t border-input flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-          <p className="text-sm text-muted-foreground">
-            Designed with ❤️ for holistic health and wellbeing
-          </p>
+        <div className="mt-12 pt-8 border-t">
           <div className="flex space-x-6">
             <a 
               href="/impressum" 
