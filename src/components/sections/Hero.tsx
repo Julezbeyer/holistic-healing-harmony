@@ -1,5 +1,6 @@
 import { Button } from "../ui/button";
 import { ArrowDown } from "lucide-react";
+import Link from "next/link"; // Assuming Next.js is used for routing
 
 interface HeroProps {
   title: string;
@@ -46,22 +47,16 @@ export default function Hero({ title, subtitle, imageUrl, action }: HeroProps) {
           Schluss mit Erschöpfung & Unwohlsein – Spüren Sie den Unterschied!
         </h1>
         <p className="subtitle mb-10 max-w-2xl text-gray-700">
-          Entdecken Sie, was tausende Menschen bereits erlebt haben: Die revolutionäre Kombination aus 
-          Meta Vital Frequenztherapie und ganzheitlicher Heilpraxis, die dort ansetzt, wo herkömmliche 
+          Entdecken Sie, was tausende Menschen bereits erlebt haben: Die revolutionäre Kombination aus
+          Meta Vital Frequenztherapie und ganzheitlicher Heilpraxis, die dort ansetzt, wo herkömmliche
           Methoden oft an ihre Grenzen stoßen. <span className="font-semibold">Vereinbaren Sie jetzt Ihren persönlichen Kennenlerntermin!</span>
         </p>
         <div className="flex flex-wrap justify-center md:justify-start gap-4">
           <Button
-            variant="default"
             size="lg"
-            className="text-base font-semibold px-6 py-6 hover:scale-105 transition-transform shadow-lg"
-            onClick={() =>
-              document
-                .getElementById("contact")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
+            className="bg-white text-christiane-soft-purple hover:bg-gray-100 rounded-full shadow-lg"
           >
-            Kostenloses Erstgespräch vereinbaren
+            <Link href="/booking">Termin vereinbaren</Link> {/*  Replaced "Kostenloses Erstgespräch vereinbaren" */}
           </Button>
           <Button
             variant="outline"
@@ -73,7 +68,7 @@ export default function Hero({ title, subtitle, imageUrl, action }: HeroProps) {
                 ?.scrollIntoView({ behavior: "smooth" })
             }
           >
-            Entdecken Sie Ihre Behandlungsmöglichkeiten
+            Jetzt entdecken {/* Replaced "Entdecken Sie Ihre Behandlungsmöglichkeiten" */}
           </Button>
           {action}
         </div>
