@@ -1,9 +1,9 @@
-
 import { Link } from 'react-router-dom';
 
-export default function Footer() {
+// Eindeutiger Export zur Vermeidung von Konflikten
+export function LayoutFooter() {
   const currentYear = new Date().getFullYear();
-  
+
   return (
     <footer className="bg-white border-t border-input py-12">
       <div className="container mx-auto px-6">
@@ -105,3 +105,7 @@ export default function Footer() {
     </footer>
   );
 }
+
+// Exportiere auch den Namen als Falback für bestehende Importe
+export { LayoutFooter as Footer };
+export default LayoutFooter;

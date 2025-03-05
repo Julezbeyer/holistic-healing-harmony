@@ -82,3 +82,69 @@ export function useAuth() {
   }
   return context;
 }
+import { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import type { SupabaseSession, AuthState } from '@/types/supabase';
+
+// Create context with initial state
+const AuthContext = createContext<AuthState>({
+  session: null,
+  user: null,
+  isLoading: true,
+});
+
+export const useAuth = () => useContext(AuthContext);
+
+type AuthProviderProps = {
+  children: ReactNode;
+};
+
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [authState, setAuthState] = useState<AuthState>({
+    session: null,
+    user: null,
+    isLoading: true,
+  });
+
+  useEffect(() => {
+    // Initial session check
+    const checkSession = async () => {
+      try {
+        const { data } = await supabase.auth.getSession();
+        setAuthState({
+          session: data.session,
+          user: data.session?.user || null,
+          isLoading: false,
+        });
+      } catch (error) {
+        console.error('Error checking auth session:', error);
+        setAuthState((prev) => ({ ...prev, isLoading: false }));
+      }
+    };
+    
+    checkSession();
+
+    // Subscribe to auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setAuthState({
+          session,
+          user: session?.user || null,
+          isLoading: false,
+        });
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  // Memoize the context value to prevent unnecessary re-renders
+  const value = useMemo(
+    () => authState,
+    [authState.session, authState.user, authState.isLoading]
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};

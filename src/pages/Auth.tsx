@@ -6,6 +6,54 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 
+// Separate form component
+type AuthFormProps = {
+  isSignUp: boolean;
+  email: string;
+  setEmail: (email: string) => void;
+  password: string;
+  setPassword: (password: string) => void;
+  loading: boolean;
+  onSubmit: (e: React.FormEvent) => Promise<void>;
+};
+
+const AuthForm = ({ isSignUp, email, setEmail, password, setPassword, loading, onSubmit }: AuthFormProps) => (
+  <form onSubmit={onSubmit} className="space-y-6">
+    <div>
+      <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
+        E-Mail
+      </label>
+      <Input
+        id="email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Ihre E-Mail-Adresse"
+        required
+      />
+    </div>
+    
+    <div>
+      <label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">
+        Passwort
+      </label>
+      <Input
+        id="password"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Ihr Passwort"
+        required
+        minLength={6}
+      />
+    </div>
+    
+    <Button type="submit" className="w-full" disabled={loading}>
+      {loading ? 'Verarbeitung...' : isSignUp ? 'Registrieren' : 'Anmelden'}
+    </Button>
+  </form>
+);
+
 export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,11 +63,16 @@ export default function Auth() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (session) navigate('/');
-    });
+    // Check for existing session
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      setSession(data.session);
+      if (data.session) navigate('/');
+    };
+    
+    checkSession();
 
+    // Set up auth state change listener
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -72,40 +125,15 @@ export default function Auth() {
           </p>
         </div>
         
-        <form onSubmit={handleAuthentication} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-              E-Mail
-            </label>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Ihre E-Mail-Adresse"
-              required
-            />
-          </div>
-          
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">
-              Passwort
-            </label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Ihr Passwort"
-              required
-              minLength={6}
-            />
-          </div>
-          
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Verarbeitung...' : isSignUp ? 'Registrieren' : 'Anmelden'}
-          </Button>
-        </form>
+        <AuthForm 
+          isSignUp={isSignUp}
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          loading={loading}
+          onSubmit={handleAuthentication}
+        />
         
         <div className="mt-6 text-center">
           <button
