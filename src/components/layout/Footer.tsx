@@ -1,9 +1,8 @@
-
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  
+
   return (
     <footer className="bg-white border-t border-input py-12">
       <div className="container mx-auto px-6">
@@ -63,6 +62,14 @@ export default function Footer() {
                   Kontakt
                 </a>
               </li>
+              <li>
+                <a 
+                  href="https://wa.me/qr/7A6KMAI4APQPI1" 
+                  className="text-muted-foreground hover:text-primary transition-colors flex items-center"
+                >
+                  <span className="ml-1">WhatsApp</span>
+                </a>
+              </li>
             </ul>
           </div>
           <div>
@@ -72,16 +79,6 @@ export default function Footer() {
               <li>12345 Musterstadt</li>
               <li>Tel: <a href="tel:+491234567890" className="hover:text-primary transition-colors">+49 123 456 7890</a></li>
               <li>Email: <a href="mailto:contact@christianebeyer.de" className="hover:text-primary transition-colors">contact@christianebeyer.de</a></li>
-              <li>
-                <a 
-                  href="https://wa.me/qr/7A6KMAI4APQPI1" 
-                  className="flex items-center hover:text-primary transition-colors"
-                  target="_blank" 
-                  rel="noreferrer"
-                >
-                  <span className="ml-1">WhatsApp</span>
-                </a>
-              </li>
             </ul>
           </div>
         </div>
