@@ -8,6 +8,11 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: '0.0.0.0',
     port: 8080,
+    hmr: {
+      clientPort: 443,
+      host: 'c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev',
+      protocol: 'wss',
+    },
     proxy: {
       '/supabase-proxy': {
         target: 'https://lhmicelinsyzjhjiznqn.supabase.co',
