@@ -1,14 +1,57 @@
 
+// This file contains Supabase client configuration
 import { createClient } from '@supabase/supabase-js';
-import type { Database } from '@/types/supabase';
+import type { Database } from './types';
 
-// Supabase URL and Anon Key from environment variables
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+// Supabase Verbindungsinformationen
+const SUPABASE_URL = "https://lhmicelinsyzjhjiznqn.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxobWljZWxpbnN5empoaml6bnFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA4NzAwMTcsImV4cCI6MjA1NjQ0NjAxN30.PA_0ILn7L0cCxjk6UbzKhZpysNxJcdN8N_7OkeGMDP0";
 
-if (!supabaseUrl || !supabaseKey) {
-  console.error('Supabase URL und/oder Anon Key fehlen in den Umgebungsvariablen.');
-}
+// Import the supabase client like this:
+// import { supabase } from "@/integrations/supabase/client";
 
-// Supabase client with typing
-export const supabase = createClient<Database>(supabaseUrl, supabaseKey);
+// Direkten Client erstellen
+export const supabase = createClient<Database>(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+    },
+    global: {
+      headers: {
+        'X-Client-Info': 'supabase-js-react',
+      },
+    },
+  }
+);
+
+// Alternativer Client mit Proxy, falls der direkte Zugriff fehlschlägt
+export const createProxiedClient = () => {
+  // Bestimme, ob wir in einer Replit-Umgebung sind
+  const isReplit = window.location.hostname.includes('replit');
+  
+  // Falls wir in Replit sind, nutze den Proxy für Anfragen
+  if (isReplit) {
+    const proxyUrl = window.location.origin + '/supabase-proxy';
+    return createClient<Database>(
+      proxyUrl,
+      SUPABASE_PUBLISHABLE_KEY,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+        },
+        global: {
+          headers: {
+            'X-Client-Info': 'supabase-js-react-proxied',
+          },
+        },
+      }
+    );
+  }
+  
+  // Sonst den regulären Client zurückgeben
+  return supabase;
+};

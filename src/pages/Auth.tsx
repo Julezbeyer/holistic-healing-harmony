@@ -1,78 +1,28 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Session } from '@supabase/supabase-js';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-
-// Separate form component
-type AuthFormProps = {
-  isSignUp: boolean;
-  email: string;
-  setEmail: (email: string) => void;
-  password: string;
-  setPassword: (password: string) => void;
-  loading: boolean;
-  onSubmit: (e: React.FormEvent) => Promise<void>;
-};
-
-const AuthForm = ({ isSignUp, email, setEmail, password, setPassword, loading, onSubmit }: AuthFormProps) => (
-  <form onSubmit={onSubmit} className="space-y-6">
-    <div>
-      <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-        E-Mail
-      </label>
-      <Input
-        id="email"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Ihre E-Mail-Adresse"
-        required
-      />
-    </div>
-
-    <div>
-      <label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">
-        Passwort
-      </label>
-      <Input
-        id="password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Ihr Passwort"
-        required
-        minLength={6}
-      />
-    </div>
-
-    <Button type="submit" className="w-full" disabled={loading}>
-      {loading ? 'Verarbeitung...' : isSignUp ? 'Registrieren' : 'Anmelden'}
-    </Button>
-  </form>
-);
 
 export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
-  const [session, setSession] = useState<Session | null>(null);
+  const [session, setSession] = useState<any>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Set up auth state change listener
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       if (session) navigate('/');
     });
 
-    // Initial session check
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       if (session) navigate('/');
     });
@@ -83,14 +33,14 @@ export default function Auth() {
   const handleAuthentication = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
+    
     try {
       if (isSignUp) {
         const { error } = await supabase.auth.signUp({
           email,
           password,
         });
-
+        
         if (error) throw error;
         toast.success('Registrierung erfolgreich! Bitte überprüfen Sie Ihre E-Mail für die Bestätigung.');
       } else {
@@ -98,7 +48,7 @@ export default function Auth() {
           email,
           password,
         });
-
+        
         if (error) throw error;
         toast.success('Erfolgreich eingeloggt!');
       }
@@ -121,17 +71,42 @@ export default function Auth() {
               : 'Melden Sie sich an, um fortzufahren'}
           </p>
         </div>
-
-        <AuthForm 
-          isSignUp={isSignUp}
-          email={email}
-          setEmail={setEmail}
-          password={password}
-          setPassword={setPassword}
-          loading={loading}
-          onSubmit={handleAuthentication}
-        />
-
+        
+        <form onSubmit={handleAuthentication} className="space-y-6">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
+              E-Mail
+            </label>
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Ihre E-Mail-Adresse"
+              required
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">
+              Passwort
+            </label>
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Ihr Passwort"
+              required
+              minLength={6}
+            />
+          </div>
+          
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? 'Verarbeitung...' : isSignUp ? 'Registrieren' : 'Anmelden'}
+          </Button>
+        </form>
+        
         <div className="mt-6 text-center">
           <button
             onClick={() => setIsSignUp(!isSignUp)}
