@@ -1,0 +1,108 @@
+[plugin:vite:react-swc] × the name `Footer` is defined multiple times
+    ╭─[/home/runner/workspace/src/components/layout/Layout.tsx:4:1]
+  1 │ 
+  2 │ import React from 'react';
+  3 │ import Navbar from './Navbar';
+  4 │ import Footer from './Footer';
+    ·        ───┬──
+    ·           ╰── previous definition of `Footer` here
+  5 │ 
+  6 │ interface LayoutProps {
+  7 │   children: React.ReactNode;
+  8 │ }
+  9 │ 
+ 10 │ const Layout: React.FC<LayoutProps> = ({ children }) => {
+ 11 │   return (
+ 12 │     <div className="flex flex-col min-h-screen">
+ 13 │       <Navbar />
+ 14 │       <main className="flex-grow">
+ 15 │         {children}
+ 16 │       </main>
+ 17 │       <Footer />
+ 18 │     </div>
+ 19 │   );
+ 20 │ };
+ 21 │ 
+ 22 │ export default Layout;
+ 23 │ import { ReactNode } from 'react';
+ 24 │ import Footer from './Footer';
+    ·        ───┬──
+    ·           ╰── `Footer` redefined here
+ 25 │ 
+ 26 │ interface LayoutProps {
+ 27 │   children: ReactNode;
+    ╰────
+  × the name `Layout` is defined multiple times
+    ╭─[/home/runner/workspace/src/components/layout/Layout.tsx:10:1]
+  7 │   children: React.ReactNode;
+  8 │ }
+  9 │ 
+ 10 │ const Layout: React.FC<LayoutProps> = ({ children }) => {
+    ·       ───┬──
+    ·          ╰── previous definition of `Layout` here
+ 11 │   return (
+ 12 │     <div className="flex flex-col min-h-screen">
+ 13 │       <Navbar />
+ 14 │       <main className="flex-grow">
+ 15 │         {children}
+ 16 │       </main>
+ 17 │       <Footer />
+ 18 │     </div>
+ 19 │   );
+ 20 │ };
+ 21 │ 
+ 22 │ export default Layout;
+ 23 │ import { ReactNode } from 'react';
+ 24 │ import Footer from './Footer';
+ 25 │ 
+ 26 │ interface LayoutProps {
+ 27 │   children: ReactNode;
+ 28 │   showFooter?: boolean;
+ 29 │ }
+ 30 │ 
+ 31 │ export default function Layout({ children, showFooter = true }: LayoutProps) {
+    ·                         ───┬──
+    ·                            ╰── `Layout` redefined here
+ 32 │   return (
+ 33 │     <div className="flex flex-col min-h-screen">
+ 34 │       <main className="flex-grow">
+    ╰────
+  × the name `default` is exported multiple times
+    ╭─[/home/runner/workspace/src/components/layout/Layout.tsx:22:1]
+ 19 │       );
+ 20 │     };
+ 21 │     
+ 22 │     export default Layout;
+    ·     ───────────┬──────────
+    ·                ╰── previous exported here
+ 23 │     import { ReactNode } from 'react';
+ 24 │     import Footer from './Footer';
+ 25 │     
+ 26 │     interface LayoutProps {
+ 27 │       children: ReactNode;
+ 28 │       showFooter?: boolean;
+ 29 │     }
+ 30 │     
+ 31 │ ╭─▶ export default function Layout({ children, showFooter = true }: LayoutProps) {
+ 32 │ │     return (
+ 33 │ │       <div className="flex flex-col min-h-screen">
+ 34 │ │         <main className="flex-grow">
+ 35 │ │           {children}
+ 36 │ │         </main>
+ 37 │ │         {showFooter && <Footer />}
+ 38 │ │       </div>
+ 39 │ │     );
+ 40 │ ├─▶ }
+    · ╰──── exported more than once
+    ╰────
+
+Advice:   ☞ Exported identifiers must be unique
+/home/runner/workspace/src/components/layout/Layout.tsx:4:1
+29 |  }
+30 |  
+31 |  export default function Layout({ children, showFooter = true }: LayoutProps) {
+   |                                          ^
+32 |    return (
+33 |      <div className="flex flex-col min-h-screen">
+Click outside, press Esc key, or fix the code to dismiss.
+You can also disable this overlay by setting server.hmr.overlay to false in vite.config.ts.
