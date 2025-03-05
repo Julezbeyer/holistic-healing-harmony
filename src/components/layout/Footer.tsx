@@ -1,8 +1,9 @@
+
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-
+  
   return (
     <footer className="bg-white border-t border-input py-12">
       <div className="container mx-auto px-6">
@@ -23,79 +24,81 @@ export default function Footer() {
             <h4 className="font-medium mb-4">Navigation</h4>
             <ul className="space-y-3">
               <li>
-                <a 
-                  href="/" 
+                <Link 
+                  to="/" 
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a 
-                  href="#about" 
+                <Link 
+                  to="/#about" 
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Über Uns
-                </a>
+                </Link>
               </li>
               <li>
-                <a 
-                  href="#services" 
+                <Link 
+                  to="/#services" 
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Angebote
-                </a>
+                </Link>
               </li>
               <li>
-                <a 
-                  href="/booking" 
+                <Link 
+                  to="/termine" 
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Termin buchen
-                </a>
+                </Link>
               </li>
               <li>
-                <a 
-                  href="#contact" 
+                <Link 
+                  to="/#contact" 
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Kontakt
-                </a>
+                </Link>
               </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-medium mb-4">Kontakt</h4>
+            <ul className="space-y-3">
+              <li>Musterstraße 123</li>
+              <li>12345 Musterstadt</li>
+              <li>Tel: <a href="tel:+491234567890" className="hover:text-primary transition-colors">+49 123 456 7890</a></li>
+              <li>Email: <a href="mailto:contact@christianebeyer.de" className="hover:text-primary transition-colors">contact@christianebeyer.de</a></li>
               <li>
                 <a 
                   href="https://wa.me/qr/7A6KMAI4APQPI1" 
                   className="text-muted-foreground hover:text-primary transition-colors flex items-center"
+                  target="_blank" 
+                  rel="noreferrer"
                 >
                   <span className="ml-1">WhatsApp</span>
                 </a>
               </li>
             </ul>
           </div>
-          <div>
-            <h4 className="font-medium mb-4">Kontakt</h4>
-            <ul className="space-y-3 text-muted-foreground">
-              <li>Musterstraße 123</li>
-              <li>12345 Musterstadt</li>
-              <li>Tel: <a href="tel:+491234567890" className="hover:text-primary transition-colors">+49 123 456 7890</a></li>
-              <li>Email: <a href="mailto:contact@christianebeyer.de" className="hover:text-primary transition-colors">contact@christianebeyer.de</a></li>
-            </ul>
-          </div>
         </div>
         <div className="mt-12 pt-8 border-t">
           <div className="flex space-x-6">
-            <a 
-              href="/impressum" 
+            <Link 
+              to="/impressum" 
               className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               Impressum
-            </a>
-            <a 
-              href="/datenschutz" 
+            </Link>
+            <Link 
+              to="/datenschutz" 
               className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               Datenschutz
-            </a>
+            </Link>
           </div>
         </div>
       </div>
