@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
 import { ArrowDown } from "lucide-react";
-import Link from "next/link"; // Assuming Next.js is used for routing
+import { Link } from "react-router-dom"; // React Router Dom für Vite/React
 
 interface HeroProps {
   title: string;
@@ -55,8 +55,9 @@ export default function Hero({ title, subtitle, imageUrl, action }: HeroProps) {
           <Button
             size="lg"
             className="bg-white text-christiane-soft-purple hover:bg-gray-100 rounded-full shadow-lg"
+            onClick={() => window.location.href = '/booking'}
           >
-            <Link href="/booking">Termin vereinbaren</Link> {/*  Replaced "Kostenloses Erstgespräch vereinbaren" */}
+            Termin vereinbaren
           </Button>
           <Button
             variant="outline"
