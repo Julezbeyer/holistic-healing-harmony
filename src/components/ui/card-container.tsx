@@ -1,21 +1,20 @@
 
-import { cn } from "@/lib/utils";
-import React from "react";
+import React from 'react';
+import { cn } from '@/lib/utils';
 
 interface CardContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  className?: string;
 }
 
-export function CardContainer({ 
+export const CardContainer: React.FC<CardContainerProps> = ({ 
   children, 
   className, 
   ...props 
-}: CardContainerProps) {
+}) => {
   return (
     <div 
       className={cn(
-        "max-w-md w-full p-8 bg-white rounded-xl shadow-card", 
+        "bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300",
         className
       )} 
       {...props}
@@ -23,4 +22,4 @@ export function CardContainer({
       {children}
     </div>
   );
-}
+};

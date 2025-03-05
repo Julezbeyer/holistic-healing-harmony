@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -33,7 +32,7 @@ const AuthForm = ({ isSignUp, email, setEmail, password, setPassword, loading, o
         required
       />
     </div>
-    
+
     <div>
       <label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">
         Passwort
@@ -48,7 +47,7 @@ const AuthForm = ({ isSignUp, email, setEmail, password, setPassword, loading, o
         minLength={6}
       />
     </div>
-    
+
     <Button type="submit" className="w-full" disabled={loading}>
       {loading ? 'Verarbeitung...' : isSignUp ? 'Registrieren' : 'Anmelden'}
     </Button>
@@ -84,14 +83,14 @@ export default function Auth() {
   const handleAuthentication = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       if (isSignUp) {
         const { error } = await supabase.auth.signUp({
           email,
           password,
         });
-        
+
         if (error) throw error;
         toast.success('Registrierung erfolgreich! Bitte überprüfen Sie Ihre E-Mail für die Bestätigung.');
       } else {
@@ -99,7 +98,7 @@ export default function Auth() {
           email,
           password,
         });
-        
+
         if (error) throw error;
         toast.success('Erfolgreich eingeloggt!');
       }
@@ -122,7 +121,7 @@ export default function Auth() {
               : 'Melden Sie sich an, um fortzufahren'}
           </p>
         </div>
-        
+
         <AuthForm 
           isSignUp={isSignUp}
           email={email}
@@ -132,7 +131,7 @@ export default function Auth() {
           loading={loading}
           onSubmit={handleAuthentication}
         />
-        
+
         <div className="mt-6 text-center">
           <button
             onClick={() => setIsSignUp(!isSignUp)}
