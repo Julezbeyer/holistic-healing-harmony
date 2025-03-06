@@ -20,7 +20,7 @@ export default function Hero({ title, subtitle, imageUrl, action }: HeroProps) {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-black/20 z-10"></div>
         <video
-          src="/attached_assets/istockphoto-1308208110-640_adpp_is.mp4"
+          src="/videos/istockphoto-1308208110-640_adpp_is.mp4"
           autoPlay
           loop
           muted
@@ -28,7 +28,7 @@ export default function Hero({ title, subtitle, imageUrl, action }: HeroProps) {
           className="w-full h-full object-cover"
         >
           <source
-            src="/attached_assets/istockphoto-1308208110-640_adpp_is.mp4"
+            src="/videos/istockphoto-1308208110-640_adpp_is.mp4"
             type="video/mp4"
           />
           Ihr Browser unterstützt keine Video-Wiedergabe.
