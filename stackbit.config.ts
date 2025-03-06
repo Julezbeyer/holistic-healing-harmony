@@ -5,6 +5,16 @@ export default defineStackbitConfig({
   stackbitVersion: "~0.6.0",
   nodeVersion: "18",
   ssgName: "custom",
+  devCommand: "vite",
+  experimental: {
+    ssg: {
+      name: "Vite",
+      logPatterns: {
+        up: ["ready in", "vite"],
+      },
+      passthrough: ["/vite-hmr/**"],
+    },
+  },
   contentSources: [
     new GitContentSource({
       rootPath: __dirname,

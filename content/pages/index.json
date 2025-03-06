@@ -1,5 +1,6 @@
 {
-  "title": "Home Page",
+  "type": "Page",
+  "title": "Startseite",
   "slug": "index",
-  "content": "Welcome to my website!"
+  "content": "Willkommen auf unserer Startseite!"
 }
