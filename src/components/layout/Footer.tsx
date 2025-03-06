@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
@@ -21,57 +20,22 @@ export default function Footer() {
             </p>
           </div>
           <div>
-            <h4 className="font-medium mb-4">Navigation</h4>
-            <ul className="space-y-3">
-              <li>
-                <Link 
-                  to="/" 
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/#about" 
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Über Uns
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/#services" 
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Angebote
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/termine" 
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Termin buchen
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/#contact" 
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Kontakt
-                </Link>
+            <h4 className="font-medium mb-4">Öffnungszeiten</h4>
+            <ul className="space-y-2">
+              <li>Montag - Freitag</li>
+              <li>09:00 - 17:00 Uhr</li>
+              <li className="text-muted-foreground text-sm mt-2">
+                Termine nach Vereinbarung
               </li>
             </ul>
           </div>
           <div>
             <h4 className="font-medium mb-4">Kontakt</h4>
             <ul className="space-y-3">
-              <li>Musterstraße 123</li>
-              <li>12345 Musterstadt</li>
-              <li>Tel: <a href="tel:+491234567890" className="hover:text-primary transition-colors">+49 123 456 7890</a></li>
-              <li>Email: <a href="mailto:contact@christianebeyer.de" className="hover:text-primary transition-colors">contact@christianebeyer.de</a></li>
+              <li>Wilhelm-Blos-Straße 59</li>
+              <li>71636 Ludwigsburg</li>
+              <li>Tel: <a href="tel:+4917298709110" className="hover:text-primary transition-colors">+49 172 9870910</a></li>
+              <li>Email: <a href="mailto:beyer1510@gmail.com" className="hover:text-primary transition-colors">beyer1510@gmail.com</a></li>
               <li>
                 <a 
                   href="https://wa.me/qr/7A6KMAI4APQPI1" 

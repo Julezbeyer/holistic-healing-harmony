@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
 import { ArrowDown } from "lucide-react";
-import { Link } from "react-router-dom"; // React Router Dom für Vite/React
+import { Link } from "react-router-dom";
 
 interface HeroProps {
   title: string;
@@ -54,7 +54,7 @@ export default function Hero({ title, subtitle, imageUrl, action }: HeroProps) {
         <div className="flex flex-wrap justify-center md:justify-start gap-4">
           <Button
             size="lg"
-            className="bg-white text-christiane-soft-purple hover:bg-gray-100 rounded-full shadow-lg"
+            className="bg-[#5DA3F0] text-white hover:bg-[#5DA3F0]/90 rounded-full shadow-lg"
             onClick={() => window.location.href = '/booking'}
           >
             Termin vereinbaren
@@ -62,7 +62,7 @@ export default function Hero({ title, subtitle, imageUrl, action }: HeroProps) {
           <Button
             variant="outline"
             size="lg"
-            className="text-base hover:bg-white/30 px-6 py-6 backdrop-blur-sm border-white text-white"
+            className="bg-white text-black hover:bg-white/90 px-6 py-6 backdrop-blur-sm border-white"
             onClick={() =>
               document
                 .getElementById("therapy")
