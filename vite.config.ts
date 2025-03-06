@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     hmr: {
       clientPort: 443,
-      host: 'c98ea1c8-6224-4b26-9bec-8e2bcb0806a5-00-228frgd5ni25g.janeway.replit.dev',
+      host: '1f573f58-f805-45f8-a71b-982241cdd714.lovableproject.com',
       protocol: 'wss',
     },
     proxy: {
