@@ -1,4 +1,4 @@
-import { defineStackbitConfig } from '@stackbit/types';
+import { defineStackbitConfig, SiteMapEntry } from '@stackbit/types';
 import { GitContentSource } from '@stackbit/cms-git';
 
 export default defineStackbitConfig({
@@ -30,5 +30,20 @@ export default defineStackbitConfig({
       }
     })
   ],
+  siteMap: ({ documents, models }) => {
+    const pageModels = models.filter((m) => m.type === "page");
+
+    return documents
+      .filter((d) => pageModels.some(m => m.name === d.modelName))
+      .map((document) => {
+        return {
+          stableId: document.id,
+          urlPath: `/${document.fields.slug || ''}`,
+          document,
+          isHomePage: document.fields.slug === "index"
+        };
+      })
+      .filter(Boolean) as SiteMapEntry[];
+  },
   postInstallCommand: "npm i --no-save @stackbit/types"
 });
