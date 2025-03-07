@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
@@ -21,69 +20,49 @@ export default function Footer() {
             </p>
           </div>
           <div>
-            <h4 className="font-medium mb-4">Navigation</h4>
-            <ul className="space-y-3">
-              <li>
-                <a 
-                  href="/" 
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Home
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#about" 
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Über Uns
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#therapy" 
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Therapieansätze
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#contact" 
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Kontakt
-                </a>
+            <h4 className="font-medium mb-4">Öffnungszeiten</h4>
+            <ul className="space-y-2">
+              <li>Montag - Freitag</li>
+              <li>09:00 - 17:00 Uhr</li>
+              <li className="text-muted-foreground text-sm mt-2">
+                Termine nach Vereinbarung
               </li>
             </ul>
           </div>
           <div>
             <h4 className="font-medium mb-4">Kontakt</h4>
-            <ul className="space-y-3 text-muted-foreground">
+            <ul className="space-y-3">
               <li>Wilhelm-Blos-Straße 59</li>
               <li>71636 Ludwigsburg</li>
-              <li>+49 172 9870910</li>
-              <li>beyer1510@gmail.com</li>
+              <li>Tel: <a href="tel:+4917298709110" className="hover:text-primary transition-colors">+49 172 9870910</a></li>
+              <li>Email: <a href="mailto:beyer1510@gmail.com" className="hover:text-primary transition-colors">beyer1510@gmail.com</a></li>
+              <li>
+                <a 
+                  href="https://wa.me/qr/7A6KMAI4APQPI1" 
+                  className="text-muted-foreground hover:text-primary transition-colors flex items-center"
+                  target="_blank" 
+                  rel="noreferrer"
+                >
+                  <span className="ml-1">WhatsApp</span>
+                </a>
+              </li>
             </ul>
           </div>
         </div>
-        <div className="mt-12 pt-8 border-t border-input flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-          <p className="text-sm text-muted-foreground">
-            Designed with ❤️ for holistic health and wellbeing
-          </p>
+        <div className="mt-12 pt-8 border-t">
           <div className="flex space-x-6">
-            <a 
-              href="/impressum" 
+            <Link 
+              to="/impressum" 
               className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               Impressum
-            </a>
-            <a 
-              href="/datenschutz" 
+            </Link>
+            <Link 
+              to="/datenschutz" 
               className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               Datenschutz
-            </a>
+            </Link>
           </div>
         </div>
       </div>

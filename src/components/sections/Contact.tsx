@@ -74,7 +74,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="font-medium mb-1">Telefon</h4>
-                  <p className="text-foreground">+49 172 9870910</p>
+                  <a href="tel:+4917298709110" className="text-foreground hover:text-primary transition-colors">+49 172 9870910</a>
                 </div>
               </div>
             </div>
@@ -86,7 +86,23 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="font-medium mb-1">E-Mail</h4>
-                  <p className="text-foreground">beyer1510@gmail.com</p>
+                  <a href="mailto:beyer1510@gmail.com" className="text-foreground hover:text-primary transition-colors">beyer1510@gmail.com</a>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-subtle">
+              <div className="flex items-start">
+                <div className="w-10 h-10 flex items-center justify-center rounded-full bg-green-100 flex-shrink-0 mr-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-600">
+                    <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"></path>
+                    <path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1Zm0 0a5 5 0 0 0 5 5"></path>
+                    <path d="M13.5 14H14a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1h-2.5a1 1 0 0 0-1 1v5"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-medium mb-1">WhatsApp</h4>
+                  <a href="https://wa.me/qr/7A6KMAI4APQPI1" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-green-600 transition-colors">Direkt kontaktieren</a>
                 </div>
               </div>
             </div>
@@ -117,7 +133,7 @@ export default function Contact() {
                 Buchen Sie online einen Termin für Ihre persönliche Beratung oder Therapie.
               </p>
               <Button 
-                onClick={handleBookAppointment}
+                onClick={() => navigate('/booking')}
                 className="w-full"
               >
                 Termin vereinbaren

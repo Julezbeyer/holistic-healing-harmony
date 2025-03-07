@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -7,6 +6,7 @@ import About from '@/components/sections/About';
 import TherapyApproaches from '@/components/sections/TherapyApproaches';
 import Contact from '@/components/sections/Contact';
 import { Brain, HeartPulse } from 'lucide-react';
+import Layout from "@/components/layout/Layout";
 
 export default function Index() {
   // Helper function to handle smooth scrolling
@@ -26,25 +26,22 @@ export default function Index() {
 
     // Add listener for hash changes
     window.addEventListener('hashchange', handleHashChange);
-    
+
     return () => {
       window.removeEventListener('hashchange', handleHashChange);
     };
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      
-      {/* Main content */}
-      <main className="flex-grow">
-        <Hero />
-        <About />
-        <TherapyApproaches />
-        <Contact />
-      </main>
-
-      <Footer />
-    </div>
+    <Layout>
+      <Hero 
+        title="Psychotherapeutische Begleitung"
+        subtitle="Christiane Beyer - Psychologische Psychotherapeutin und Supervisorin"
+        imageUrl="/christiane-beyer.jpg"
+      />
+      <About />
+      <TherapyApproaches />
+      <Contact />
+    </Layout>
   );
 }

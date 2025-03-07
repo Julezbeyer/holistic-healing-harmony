@@ -1,10 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X, User, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
 
 const navItems = [
   { name: 'Home', href: '/' },
@@ -16,6 +16,7 @@ const navItems = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const { user, signOut } = useAuth();
 
   useEffect(() => {
@@ -25,6 +26,22 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      if (user) {
+        const { data } = await supabase
+          .from('admin_users')
+          .select('id')
+          .eq('id', user.id)
+          .single();
+        
+        setIsAdmin(!!data);
+      }
+    };
+
+    checkAdminStatus();
+  }, [user]);
 
   return (
     <nav 
@@ -53,6 +70,15 @@ export default function Navbar() {
               {item.name}
             </a>
           ))}
+          
+          {isAdmin && (
+            <Link 
+              to="/admin" 
+              className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+            >
+              Admin
+            </Link>
+          )}
           
           {user ? (
             <Button 
@@ -112,6 +138,16 @@ export default function Navbar() {
               {item.name}
             </a>
           ))}
+          
+          {isAdmin && (
+            <Link
+              to="/admin"
+              className="text-lg font-medium text-primary py-2"
+              onClick={() => setIsOpen(false)}
+            >
+              Admin
+            </Link>
+          )}
           
           {user ? (
             <button

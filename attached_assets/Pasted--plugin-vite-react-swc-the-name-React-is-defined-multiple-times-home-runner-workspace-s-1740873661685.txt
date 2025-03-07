@@ -1,0 +1,151 @@
+[plugin:vite:react-swc] × the name `React` is defined multiple times
+    ╭─[/home/runner/workspace/src/components/ui/textarea.tsx:1:1]
+  1 │ import * as React from "react"
+    ·             ──┬──
+    ·               ╰── previous definition of `React` here
+  2 │ 
+  3 │ import { cn } from "@/lib/utils"
+  4 │ 
+  5 │ export interface TextareaProps
+  6 │   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+  7 │ 
+  8 │ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  9 │   ({ className, ...props }, ref) => {
+ 10 │     return (
+ 11 │       <textarea
+ 12 │         className={cn(
+ 13 │           "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+ 14 │           className
+ 15 │         )}
+ 16 │         ref={ref}
+ 17 │         {...props}
+ 18 │       />
+ 19 │     )
+ 20 │   }
+ 21 │ )
+ 22 │ Textarea.displayName = "Textarea"
+ 23 │ 
+ 24 │ export { Textarea }
+ 25 │ import * as React from "react"
+    ·             ──┬──
+    ·               ╰── `React` redefined here
+ 26 │ 
+ 27 │ import { cn } from "@/lib/utils"
+    ╰────
+  × the name `cn` is defined multiple times
+    ╭─[/home/runner/workspace/src/components/ui/textarea.tsx:3:1]
+  1 │ import * as React from "react"
+  2 │ 
+  3 │ import { cn } from "@/lib/utils"
+    ·          ─┬
+    ·           ╰── previous definition of `cn` here
+  4 │ 
+  5 │ export interface TextareaProps
+  6 │   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+  7 │ 
+  8 │ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  9 │   ({ className, ...props }, ref) => {
+ 10 │     return (
+ 11 │       <textarea
+ 12 │         className={cn(
+ 13 │           "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+ 14 │           className
+ 15 │         )}
+ 16 │         ref={ref}
+ 17 │         {...props}
+ 18 │       />
+ 19 │     )
+ 20 │   }
+ 21 │ )
+ 22 │ Textarea.displayName = "Textarea"
+ 23 │ 
+ 24 │ export { Textarea }
+ 25 │ import * as React from "react"
+ 26 │ 
+ 27 │ import { cn } from "@/lib/utils"
+    ·          ─┬
+    ·           ╰── `cn` redefined here
+ 28 │ 
+ 29 │ export interface TextareaProps
+ 30 │   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+    ╰────
+  × the name `Textarea` is defined multiple times
+    ╭─[/home/runner/workspace/src/components/ui/textarea.tsx:8:1]
+  5 │ export interface TextareaProps
+  6 │   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+  7 │ 
+  8 │ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+    ·       ────┬───
+    ·           ╰── previous definition of `Textarea` here
+  9 │   ({ className, ...props }, ref) => {
+ 10 │     return (
+ 11 │       <textarea
+ 12 │         className={cn(
+ 13 │           "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+ 14 │           className
+ 15 │         )}
+ 16 │         ref={ref}
+ 17 │         {...props}
+ 18 │       />
+ 19 │     )
+ 20 │   }
+ 21 │ )
+ 22 │ Textarea.displayName = "Textarea"
+ 23 │ 
+ 24 │ export { Textarea }
+ 25 │ import * as React from "react"
+ 26 │ 
+ 27 │ import { cn } from "@/lib/utils"
+ 28 │ 
+ 29 │ export interface TextareaProps
+ 30 │   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+ 31 │ 
+ 32 │ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+    ·       ────┬───
+    ·           ╰── `Textarea` redefined here
+ 33 │   ({ className, ...props }, ref) => {
+ 34 │     return (
+ 35 │       <textarea
+    ╰────
+  × the name `Textarea` is exported multiple times
+    ╭─[/home/runner/workspace/src/components/ui/textarea.tsx:24:1]
+ 21 │ )
+ 22 │ Textarea.displayName = "Textarea"
+ 23 │ 
+ 24 │ export { Textarea }
+    ·          ────┬───
+    ·              ╰── previous exported here
+ 25 │ import * as React from "react"
+ 26 │ 
+ 27 │ import { cn } from "@/lib/utils"
+ 28 │ 
+ 29 │ export interface TextareaProps
+ 30 │   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+ 31 │ 
+ 32 │ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+ 33 │   ({ className, ...props }, ref) => {
+ 34 │     return (
+ 35 │       <textarea
+ 36 │         className={cn(
+ 37 │           "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+ 38 │           className
+ 39 │         )}
+ 40 │         ref={ref}
+ 41 │         {...props}
+ 42 │       />
+ 43 │     )
+ 44 │   }
+ 45 │ )
+ 46 │ Textarea.displayName = "Textarea"
+ 47 │ 
+ 48 │ export { Textarea }
+    ·          ────┬───
+    ·              ╰── exported more than once
+    ╰────
+
+Advice:   ☞ Exported identifiers must be unique
+/home/runner/workspace/src/components/ui/textarea.tsx:1:1
+1  |  import * as React from "react"
+   |   ^
+2  |  
+3  |  import { cn } from "@/lib/utils"

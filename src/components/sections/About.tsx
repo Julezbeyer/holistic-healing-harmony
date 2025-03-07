@@ -19,7 +19,7 @@ export default function About() {
           </div>
           <p className="subtitle mx-auto">
             Als Heilpraktikerin für Psychotherapie (HPP) verbinde ich moderne Frequenztherapie mit
-            ganzheitlichen Heilmethoden, um Menschen zu ihrem inneren Gleichgewicht zurückzuführen.
+            ganzheitlichen Heilmethoden, um Menschen dabei zu unterstützen, mehr innere Balance und Lebensqualität zu erreichen.
           </p>
         </div>
 
@@ -27,7 +27,7 @@ export default function About() {
           <FeatureCard
             icon={HeartPulse}
             title="Ganzheitliche Analyse"
-            description="Mit Meta Vital, einem verifizierten Medizinprodukt, kann ich Ungleichgewichte im Körper frühzeitig erkennen und präzise behandeln."
+            description="Mit Meta Vital, einem verifizierten Medizinprodukt, werden Ungleichgewichte im Körper erkannt und präzise behandelt."
           />
           <FeatureCard
             icon={Brain}

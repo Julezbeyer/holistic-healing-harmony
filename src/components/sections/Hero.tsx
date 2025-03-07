@@ -1,7 +1,15 @@
 import { Button } from '../ui/button';
 import { ArrowDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-export default function Hero() {
+interface HeroProps {
+  title: string;
+  subtitle: string;
+  imageUrl: string;
+  action?: React.ReactNode;
+}
+
+export default function Hero({ title, subtitle, imageUrl, action }: HeroProps) {
   const scrollToAbout = () => {
     document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -19,11 +27,11 @@ export default function Hero() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-blue-400/70 via-transparent to-purple-400/50"></div>
       </div>
-      
+
       {/* Decorative circles */}
       <div className="absolute top-[10%] right-[10%] w-60 h-60 bg-green-300 rounded-full blur-3xl opacity-40 animate-pulse" />
       <div className="absolute bottom-[15%] left-[5%] w-40 h-40 bg-purple-300 rounded-full blur-3xl opacity-30 animate-pulse" />
-      
+
       <div className="container mx-auto px-6 py-12 relative z-10">
         <div className="p-8 rounded-lg bg-white/30 backdrop-blur-sm">
           <span className="inline-block text-sm font-medium py-1 px-3 rounded-full bg-amber-50 mb-6">
@@ -46,7 +54,7 @@ export default function Hero() {
           </div>
         </div>
       </div>
-      
+
       {/* Scroll indicator */}
       <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer z-10" onClick={scrollToAbout}>
         <span className="text-sm mb-2 text-white font-medium">Mehr erfahren</span>
