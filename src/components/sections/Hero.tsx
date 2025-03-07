@@ -11,7 +11,7 @@ export default function Hero() {
       {/* Background video with overlay */}
       <div className="absolute inset-0 z-0">
         <video 
-          src="/video.mp4" 
+          src="/Herovideo.mp4" 
           autoPlay 
           loop 
           muted 

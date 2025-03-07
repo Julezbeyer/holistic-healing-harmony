@@ -7,9 +7,16 @@ export default function About() {
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <span className="inline-block text-sm font-medium py-1 px-3 rounded-full bg-primary/10 text-primary mb-4">
-            Über uns
+            Über Mich
           </span>
           <h2 className="heading-lg mb-6">Christiane Beyer</h2>
+          <div className="flex justify-center mb-8">
+            <img 
+              src="/Christiane Beyer.jpg" 
+              alt="Christiane Beyer - Heilpraktikerin" 
+              className="w-64 h-auto rounded-full shadow-lg border-4 border-white"
+            />
+          </div>
           <p className="subtitle mx-auto">
             Als Heilpraktikerin für Psychotherapie (HPP) verbinde ich moderne Frequenztherapie mit
             ganzheitlichen Heilmethoden, um Menschen zu ihrem inneren Gleichgewicht zurückzuführen.
@@ -35,17 +42,8 @@ export default function About() {
         </div>
 
         <div className="mt-20 bg-white rounded-xl p-8 md:p-12 shadow-card">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-center">
-            <div className="md:col-span-2">
-              <div className="aspect-square rounded-xl overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" 
-                  alt="Christiane Beyer Portrait" 
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            </div>
-            <div className="md:col-span-3">
+          <div className="grid grid-cols-1 gap-8">
+            <div>
               <h3 className="heading-md mb-6">Meine Philosophie</h3>
               <p className="text-pretty mb-6">
                 Ich glaube fest daran, dass wahre Heilung mehr als nur die Abwesenheit von Symptomen bedeutet. 
