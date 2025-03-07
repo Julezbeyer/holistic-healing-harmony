@@ -8,11 +8,13 @@ export default function Hero() {
 
   return (
     <div className="min-h-screen flex flex-col justify-center relative overflow-hidden">
-      {/* Background image with overlay */}
+      {/* Background video with overlay */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src="/api/placeholder/1600/900" 
-          alt="Sonnenstrahlen durch den Wald - symbolisiert Heilung und Wohlbefinden"
+        <video 
+          src="/video.mp4" 
+          autoPlay 
+          loop 
+          muted 
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-blue-400/70 via-transparent to-purple-400/50"></div>
