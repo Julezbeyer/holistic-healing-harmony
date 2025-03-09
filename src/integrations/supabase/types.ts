@@ -36,6 +36,98 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_users: {
+        Row: {
+          id: string;
+          name?: string;  // Optional, je nachdem, was Ihre Tabelle enthält
+          created_at?: string;  // Optional
+        };
+        Insert: {
+          id?: string;
+          name?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "admin_users_id_fkey";
+            columns: ["id"];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      appointments: {
+        Row: {
+          id: string;
+          time_slot_id: string;
+          name: string;
+          email: string;
+          phone: string;
+          notes: string | null;
+          status: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          time_slot_id: string;
+          name: string;
+          email: string;
+          phone: string;
+          notes?: string | null;
+          status?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          time_slot_id?: string;
+          name?: string;
+          email?: string;
+          phone?: string;
+          notes?: string | null;
+          status?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "appointments_time_slot_id_fkey";
+            columns: ["time_slot_id"];
+            referencedRelation: "time_slots";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      time_slots: {
+        Row: {
+          id: string;
+          date: string;
+          start_time: string;
+          end_time: string;
+          is_booked: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          date: string;
+          start_time: string;
+          end_time: string;
+          is_booked?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          date?: string;
+          start_time?: string;
+          end_time?: string;
+          is_booked?: boolean;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
     }
     Views: {
       [_ in never]: never
@@ -148,88 +240,3 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
-
-export interface Database {
-  public: {
-    Tables: {
-      appointments: {
-        Row: {
-          id: string
-          time_slot_id: string
-          name: string
-          email: string
-          phone: string
-          notes: string | null
-          status: string
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          time_slot_id: string
-          name: string
-          email: string
-          phone: string
-          notes?: string | null
-          status?: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          time_slot_id?: string
-          name?: string
-          email?: string
-          phone?: string
-          notes?: string | null
-          status?: string
-          created_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "appointments_time_slot_id_fkey"
-            columns: ["time_slot_id"]
-            referencedRelation: "time_slots"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      time_slots: {
-        Row: {
-          id: string
-          date: string
-          start_time: string
-          end_time: string
-          is_booked: boolean
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          date: string
-          start_time: string
-          end_time: string
-          is_booked?: boolean
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          date?: string
-          start_time?: string
-          end_time?: string
-          is_booked?: boolean
-          created_at?: string
-        }
-        Relationships: []
-      }
-    }
-    Views: {}
-    Functions: {}
-    Enums: {}
-    CompositeTypes: {}
-  }
-}

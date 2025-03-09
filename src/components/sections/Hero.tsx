@@ -38,11 +38,13 @@ export default function Hero({ title, subtitle, imageUrl, action }: HeroProps) {
             Ganzheitliches Gesundheitskonzept
           </span>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl text-white drop-shadow-md">
-            Heilung für Körper, Geist und Seele
+            Ganzheitliche Gesundheit neu erleben
           </h1>
           <p className="text-xl md:text-2xl mb-10 max-w-2xl text-white">
-            Entdecken Sie mit Christiane Beyer einen integrativen Ansatz, der modernste Frequenztherapie 
-            mit ganzheitlichen Heilmethoden verbindet – für nachhaltiges Wohlbefinden und neue Vitalität.
+            Finde dein inneres Gleichgewicht mit modernster Frequenztechnologie und bewährten ganzheitlichen Methoden. 
+            Individuell, effektiv und nachhaltig für Körper, Geist und Seele.
+            <br /><br />
+            Spüre den Unterschied – jetzt entdecken.
           </p>
           <div className="flex flex-wrap gap-4">
             <Button variant="default" size="lg" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>

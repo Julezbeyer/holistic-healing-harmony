@@ -1,5 +1,7 @@
 import { Brain, HeartPulse, Flower } from 'lucide-react';
 import FeatureCard from '../ui/FeatureCard';
+import { Button } from '../ui/button';
+import { Link } from 'react-router-dom';
 
 export default function About() {
   return (
@@ -18,16 +20,29 @@ export default function About() {
             />
           </div>
           <p className="subtitle mx-auto">
-            Als Heilpraktikerin für Psychotherapie (HPP) verbinde ich moderne Frequenztherapie mit
-            ganzheitlichen Heilmethoden, um Menschen dabei zu unterstützen, mehr innere Balance und Lebensqualität zu erreichen.
+            Als Heilpraktikerin für Psychotherapie (HPP) ist es meine Leidenschaft, Menschen auf ihrem Weg zu mehr 
+            innerer Balance und Lebensqualität zu begleiten. Dabei schöpfe ich aus einem breiten Erfahrungsschatz 
+            verschiedener Heilmethoden und kombiniere moderne Frequenztherapie mit bewährten ganzheitlichen Ansätzen.
+            <br /><br />
+            Mein Konzept basiert auf einer tiefgehenden Analyse aller Ebenen – körperlich, mental, seelisch und energetisch. 
+            Denn wahres Wohlbefinden entsteht, wenn alle Aspekte des Seins in Einklang gebracht werden. Durch meine individuell 
+            abgestimmten Methoden unterstütze ich dich dabei, Blockaden zu lösen, neue Energie zu gewinnen und dein volles 
+            Potenzial zu entfalten.
+            <br /><br />
+            Lass uns gemeinsam deinen persönlichen Weg zu mehr Balance und Lebensqualität finden.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8" id="features-section">
           <FeatureCard
             icon={HeartPulse}
-            title="Ganzheitliche Analyse"
-            description="Mit Meta Vital, einem verifizierten Medizinprodukt, werden Ungleichgewichte im Körper erkannt und präzise behandelt."
+            title="Ganzheitliche Analyse mit Meta Vital"
+            description="Mit Meta Vital, einem verifizierten Medizinprodukt, wird dein Körper auf allen Ebenen – physisch, mental, seelisch und energetisch – präzise analysiert. Durch modernste Frequenztechnologie erkennt das System feinste Ungleichgewichte, noch bevor sie sich als spürbare Beschwerden äußern."
+            action={
+              <Button variant="outline" size="sm" className="w-full" asChild>
+                <Link to="/meta-vital">Mehr erfahren</Link>
+              </Button>
+            }
           />
           <FeatureCard
             icon={Brain}

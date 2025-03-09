@@ -1,7 +1,6 @@
-
 // This file contains Supabase client configuration
 import { createClient } from '@supabase/supabase-js';
-import type { Database } from './types';
+import { Database } from './types';  // Sie werden diese Datei im nächsten Schritt erstellen
 
 // Supabase Verbindungsinformationen
 const SUPABASE_URL = "https://lhmicelinsyzjhjiznqn.supabase.co";
@@ -12,19 +11,8 @@ const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 
 // Direkten Client erstellen
 export const supabase = createClient<Database>(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-    },
-    global: {
-      headers: {
-        'X-Client-Info': 'supabase-js-react',
-      },
-    },
-  }
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
 // Alternativer Client mit Proxy, falls der direkte Zugriff fehlschlägt
