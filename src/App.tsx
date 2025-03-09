@@ -9,8 +9,12 @@ import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import TestPanel from "./components/TestPanel";
 import Booking from "./pages/Booking";
-import Admin from "./pages/Admin"; // Added import for Admin component
-import MetaVital from './pages/MetaVital'; // Neue Seite importieren
+import Admin from "./pages/Admin";
+import MetaVital from './pages/MetaVital';
+import Pricing from './pages/Pricing';
+import Knowledge from './pages/Knowledge';
+import ArticleDetail from './pages/ArticleDetail';
+import Contact from './pages/Contact'; // Neue Kontaktseite importieren
 
 const queryClient = new QueryClient();
 
@@ -27,8 +31,12 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/test-panel" element={<TestPanel />} />
               <Route path="/booking" element={<Booking />} />
-              <Route path="/admin" element={<Admin />} /> {/* Added Admin route */}
-              <Route path="/meta-vital" element={<MetaVital />} /> {/* Neue Route hinzufügen */}
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/meta-vital" element={<MetaVital />} />
+              <Route path="/preise" element={<Pricing />} />
+              <Route path="/wissen" element={<Knowledge />} />
+              <Route path="/wissen/:articleId" element={<ArticleDetail />} />
+              <Route path="/contact" element={<Contact />} /> {/* Neue Route für die Kontaktseite */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
